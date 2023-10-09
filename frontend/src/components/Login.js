@@ -2,21 +2,23 @@ import React, { useState } from 'react';
 import { Input, Button } from '@nextui-org/react'
 import { Link } from 'react-router-dom';
 import login_api from '../api_strings/admin/login_api';
-
+import { useNavigate } from 'react-router-dom';
 
 
 function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  async function handleLogin(e){
+   function handleLogin(e){
       e.preventDefault();
-      login_api(email,password,(success) => {
-          if(success){
-            console.log('Login successfully');
+      login_api(email,password,(error,res) => {
+          if(error){
+            alert("Login Failed");
           }
           else{
-            console.log('Login failed');
+            navigate('/');
+            alert("Login Successfully");
           }
       })
   }

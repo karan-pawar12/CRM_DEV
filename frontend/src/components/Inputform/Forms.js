@@ -1,67 +1,99 @@
-import { Input,Select } from "@nextui-org/react";
-import { useRef } from "react";
+import { Input, Select, SelectItem, Button } from "@nextui-org/react";
+import { useRef, useState } from "react";
 export default function Forms(props) {
-    const { fields } = props;
-    const commonClassName = "flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4";
+    const { fields, onSubmit, sizeProps } = props;
+
     const formValues = useRef(getRefValues());
+    const [inputValues, setInputValues] = useState(getRefValues());
+    const size = sizeProps ?? "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1"
+    
 
     function getRefValues() {
         let temp = {};
         for (let i = 0; i < fields.length; i++) {
-            temp[fields[i].name] = null;
+            temp[fields[i].name] = "";
         }
         return temp;
     }
 
     function onChange(e) {
-        formValues.current[e.target.name] = e.target.value;
+        const { name, value } = e.target;
+        formValues.current[name] = value;
+        setInputValues((prevInputValues) => ({
+            ...prevInputValues,
+            [name]: value,
+        }));
+
     }
-    function returnFormValues() {
-        return formValues.current;
+
+    function handleSaveClick() {
+
+        onSubmit(formValues.current);
+        formValues.current = getRefValues();
+        setInputValues(getRefValues());
     }
 
     return (
-        <div className="flex flex-col gap-10 m-10 mt-10">
-            {fields.map(f => {
-            
-                if (f.type === "Select") {
+        <>
+            <div className="flex justify-end mt-5">
+                <Button color="primary" onClick={handleSaveClick}>
+                    Save
+                </Button>
+            </div>
 
-                    return <Select
-
-                        onChange={onChange}
-
-                        label={f.label}
-
-                        name={f.name}
-
-                        className={commonClassName}
-
-                    />
-
-                }
+            <div className={`grid w-full ${size} gap-10 mt-6`}>
 
 
+                {fields.map(f => {
 
-                if (f.type === "Input") {
+                    if (f.type === "Input") {
 
-                    return <Input
+                        return (
+                            <div>
+                                <Input
+                                    type="text"
+                                    label={f.label}
+                                    placeholder={`Enter ${f.label.toLowerCase()}`}
+                                    labelPlacement="outside"
+                                    name={f.name}
+                                    onChange={onChange}
+                                    value={inputValues[f.name]}
+                                />
+                            </div>
 
-                        onChange={onChange}
 
-                        label={f.label}
+                        )
 
-                        name={f.name}
+                    }
 
-                        className= "flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
+                    if (f.type === "Select" && f.options) {
+                        return (
+                            <div>
+                                <Select
+                                    label={f.label}
+                                    placeholder={`Choose ${f.label.toLowerCase()}`}
+                                    labelPlacement="outside"
+                                    name={f.name}
+                                    onChange={onChange}
+                                    value={inputValues[f.name]}
+                                >
+                                    {f.options.map(option => (
+                                        <SelectItem key={option} value={option}>
+                                            {option}
+                                        </SelectItem>
+                                    ))}
+                                </Select>
+                            </div>
 
-                        
-                    />
+                        )
+                    }
 
-                }
 
-            })}
-           
 
-        </div>
+                })}
+
+
+            </div>
+        </>
     )
 }

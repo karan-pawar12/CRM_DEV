@@ -1,33 +1,28 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Input } from '@nextui-org/react';
-import LeadTable from './LeadTable';
-import AddLead from './AddLead';
+import React from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
+import LeadTable from "./LeadTable";
+import CreateLead from "./CreateLead";
+
 
 function Lead() {
-  return (
-    <div>
-      <div className='flex justify-between'>
-        <div>
-          <Input placeholder='Search users' className='w-auto' />
-        </div>
-        <div>
-        <Link to="/add-leads">
-            <Button color='primary' className='mr-4'>
-              Create Leads
-            </Button>
-          </Link>
+  const query = useQuery();
+  console.log("id from query:", query.get("id"));
 
-          <Button color='primary'>
-            Export to CSV
-          </Button>
-        </div>
-      </div>
-      <div className='mt-6'>
-        <LeadTable />
-      </div>
+  return <>
+    <div hidden={query.get("id") === "" || !query.get("id") ? false : true}>
+      <LeadTable />
     </div>
-  );
+
+    {(query.get("id") === "new" ) ?  <CreateLead /> : "" }
+
+  </>
+
 }
 
 export default Lead;
+
+export function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}

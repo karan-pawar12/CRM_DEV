@@ -4,19 +4,13 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Sidebar from './components/Sidebar';
 import Layout from './components/Layout';
-import Lead from './components/Leads/Lead';
-import AddLead from './components/Leads/AddLead';
-import Tasks from './components/Tasks/Task';
+import { AdminContextProvider } from './AdminContext';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
-            <Route path="leads" element={ <Lead /> } />
-            <Route path="add-leads" element={<AddLead />} />
-            <Route path="tasks" element={<Tasks />} />
-        </Route>
+        <Route path="/cpanel/:module" element={<AdminContextProvider><Layout /></AdminContextProvider>}></Route>
 
         
         

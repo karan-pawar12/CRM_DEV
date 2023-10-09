@@ -20,10 +20,10 @@ module.exports = async function (req, res, next) {
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (passwordMatch) {
-            const {_id,firstName,lastName,email,phone,role,managers,createdBy,updatedBy} = user;
+            const {_id,firstName,lastName,email,phone,role,createdBy,updatedBy} = user;
             // If the passwords match, create a JWT token for authentication
             const token = await signAccessToken({
-                _id,firstName,lastName,email,phone,role,managers,createdBy,updatedBy
+                _id,firstName,lastName,email,phone,role,createdBy,updatedBy
             })
             
             res.json({token: token,role:role});

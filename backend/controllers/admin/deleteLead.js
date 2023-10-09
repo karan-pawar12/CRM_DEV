@@ -1,15 +1,18 @@
+const mongoose = require('mongoose');
 const Lead = require('../../schema/lead');
 
 module.exports = async function (req, res, next) {
+    let lead = null;
     try {
-        const { _id, deleted } = req.body;
+        const { _id, softDelete } = req.body;
 
-        // Update the 'deleted' field based on the value provided
-        const update = { deleted };
+        const update = { softDelete };
 
         // Find and update the user by ID
         const options = { new: true };
-        const lead = await Lead.findByIdAndUpdate(_id, update, options);
+
+        lead = await Lead.findByIdAndUpdate(_id, update, options);
+
 
         if (!lead) {
             return res.status(404).json({ error: 'Lead not found.' });
