@@ -1,26 +1,26 @@
 import React from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
-import LeadTable from "./LeadTable";
-import CreateLead from "./CreateLead";
-import LeadDetails from "./LeadDetails";
+import UserTable from "./UserTable";
+import CreateUser from "./CreateUser";
+import UserDetails from "./UserDetails";
 
 
-function Lead() {
+function User() {
   const query = useQuery();
   console.log("id from query:", query.get("id"));
 
   return <>
     <div hidden={query.get("id") === "" || !query.get("id") ? false : true}>
-      <LeadTable />
+      <UserTable />
     </div>
 
-    {(query.get("id") === "new") ? <CreateLead /> : (query.get("id") !== null && query.get("id") !== "") && <LeadDetails />}
+    {(query.get("id") === "new") ? <CreateUser /> : (query.get("id") !== null && query.get("id") !== "") && <UserDetails />}
 
   </>
 
 }
 
-export default Lead;
+export default User;
 
 export function useQuery() {
   const { search } = useLocation();

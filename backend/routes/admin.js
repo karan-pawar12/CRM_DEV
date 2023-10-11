@@ -13,7 +13,9 @@ router.post('/createUser',verifyAccessToken,require('../controllers/admin/create
 
 router.post('/updateUser',verifyAccessToken,require('../controllers/admin/updateUser'));
 
-router.post('deleteUser',verifyAccessToken,require('../controllers/admin/deleteUser'));
+router.post('/deleteUser',verifyAccessToken,require('../controllers/admin/deleteUser'));
+
+router.get('/getUser',verifyAccessToken,require('../controllers/admin/getUser'));
 
 router.post('/createRole',verifyAccessToken,require('../controllers/admin/createRole'));
 
@@ -30,6 +32,8 @@ router.get('/getAllLead',verifyAccessToken,require('../controllers/admin/getAllL
 router.post('/updateLead',verifyAccessToken,require('../controllers/admin/updateLead'));
 
 router.post('/deleteLead',verifyAccessToken,require('../controllers/admin/deleteLead'));
+
+router.get('/getLead',verifyAccessToken,require('../controllers/admin/getLead'));
 
 router.post('/createClient',verifyAccessToken,require('../controllers/admin/createClient'));
 

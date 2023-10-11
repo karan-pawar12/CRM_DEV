@@ -17,12 +17,14 @@ function checkedLogged(){
 
 export function AdminContextProvider(props){
     const [lead,setLead] = useState([])
+    const [user,setUser] = useState([])
     const [isLogged,setIsLogged] = useState(checkedLogged());
     const httpRequest = useRef(axios);
 
 
     const context = {
         lead,setLead,
+        user,setUser,
         isLogged,setIsLogged,
         httpRequest
     }

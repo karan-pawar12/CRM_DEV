@@ -3,13 +3,13 @@ import { EditIcon, DeleteIcon, EyeIcon } from "../../resources/icons/icons";
 import { Button, Input } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Pagination } from "@nextui-org/react";
 import AdminContext from "../../AdminContext";
-import getAllLead_api from "../../api_strings/admin/getAllLead_api";
-import deleteLead_api from "../../api_strings/admin/deleteLead_api";
+import getAllUser_api from "../../api_strings/admin/getAllUser_api";
+import deleteUser_api from "../../api_strings/admin/deleteUser_api";
 import { useNavigate } from 'react-router-dom';
 
 const itemsPerPage = 10;
 
-export default function LeadTable() {
+export default function UserTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -18,18 +18,17 @@ export default function LeadTable() {
 
 
     useEffect(() => {
-        getAllLead();
+        getAllUser();
     }, []);
 
-    function getAllLead() {
+    function getAllUser() {
 
-        getAllLead_api((error, res) => {
+        getAllUser_api((error, res) => {
             if (error) {
                 console.log("Error:", error);
             } else {
 
-                adminContext.setLead(res.data);
-                console.log(adminContext.lead, "line no 30");
+                adminContext.setUser(res.data);
 
             }
         });
@@ -40,44 +39,44 @@ export default function LeadTable() {
         navigate(`?id=new`);
     };
 
-    function handleDeleteLeadClick(leadId) {
-        deleteLead_api(leadId, (error, res) => {
+    function handleDeleteUserClick(userId) {
+        deleteUser_api(userId, (error, res) => {
             if (error) {
                 console.log("Error:", error);
             } else {
 
-                adminContext.setLead((leads) => leads.filter((lead) => lead._id !== leadId))
+                adminContext.setUser((users) => users.filter((user) => user._id !== userId))
             }
         })
     }
 
-    function handleDetailsLeadClick(leadId){
-        navigate(`?id=${leadId}`);
+    function handleDetailsUserClick(userId){
+        navigate(`?id=${userId}`);
     }
 
-    const renderCell = useCallback((lead, columnKey) => {
+    const renderCell = useCallback((user, columnKey) => {
         switch (columnKey) {
             case "fullName": // Concatenate first name and last name
-                return <span>{`${lead.firstName} ${lead.lastName}`}</span>;
+                return <span>{`${user.firstName} ${user.lastName}`}</span>;
             case "email":
-                return <span>{lead.email}</span>;
+                return <span>{user.email}</span>;
             case "phone":
-                return <span>{lead.phone[0]}</span>;
-            case "leadSource":
-                return <span>{lead.leadSource}</span>;
+                return <span>{user.phone[0]}</span>;
+            case "role":
+                return <span>{user.role[0]}</span>;
             case "actions":
                 return (
                     <div className="relative flex items-center gap-3">
                         <Tooltip content="Details">
                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                <EyeIcon onClick={() => handleDetailsLeadClick(lead._id)}/>
+                                <EyeIcon onClick={() => handleDetailsUserClick(user._id)}/>
                             </span>
-                        </Tooltip>
+                </Tooltip>
                         <Tooltip color="danger" content="Delete user">
                             <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                <DeleteIcon onClick={() => handleDeleteLeadClick(lead._id)} />
+                                <DeleteIcon onClick={() => handleDeleteUserClick(user._id)} />
                             </span>
-                        </Tooltip>
+                        </Tooltip> 
                     </div>
                 );
             default:
@@ -89,7 +88,7 @@ export default function LeadTable() {
         { name: "Name", key: "fullName" }, // Use "fullName" column for full name
         { name: "Email", key: "email" },
         { name: "Phone", key: "phone" },
-        { name: "Lead Source", key: "leadSource" },
+        { name: "Role", key: "role" },
         { name: "ACTIONS", key: "actions" },
     ];
 
@@ -105,7 +104,7 @@ export default function LeadTable() {
                     <div>
 
                         <Button color='primary' className='mr-4' onClick={handleCreateLeadClick}>
-                            Create Leads
+                            Create Users
                         </Button>
 
 
@@ -123,19 +122,19 @@ export default function LeadTable() {
                         </TableColumn>
                     )}
                 </TableHeader>
-                <TableBody items={adminContext.lead.filter(lead => !lead.softDelete).slice(startIndex, endIndex)}>
-                    {(lead) => (
+                <TableBody items={adminContext.user.slice(startIndex, endIndex)}>
+                    {(user) => (
 
-                        <TableRow key={lead._id}>
+                        <TableRow key={user._id}>
 
-                            {(columnKey) => <TableCell>{renderCell(lead, columnKey)}</TableCell>}
+                            {(columnKey) => <TableCell>{renderCell(user, columnKey)}</TableCell>}
                         </TableRow>
                     )}
                 </TableBody>
             </Table>
             <Pagination
                 className="flex justify-center"
-                total={adminContext.lead.length}
+                total={adminContext.user.length}
                 pageSize={itemsPerPage}
                 current={currentPage}
                 onChange={(newPage) => setCurrentPage(newPage)}

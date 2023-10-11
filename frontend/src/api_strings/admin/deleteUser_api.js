@@ -1,13 +1,14 @@
-import { DELETE_LEAD } from "../../resources/urls/admin";
+import { DELETE_USER } from "../../resources/urls/admin";
 import axios from "../../Interceptor";
 
-async function deleteLead_api(leadId, callback) {
+async function deleteUser_api(userId, callback) {
     try {
-
+         
+        console.log(userId);
         const softDelete = true;
 
-        const res = await axios.post(DELETE_LEAD, {
-            _id: leadId, softDelete
+        const res = await axios.post(DELETE_USER, {
+            _id: userId, softDelete
         });
 
         if (res) {
@@ -21,4 +22,4 @@ async function deleteLead_api(leadId, callback) {
 
 }
 
-export default deleteLead_api;
+export default deleteUser_api;

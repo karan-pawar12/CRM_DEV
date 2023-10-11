@@ -9,3 +9,17 @@ export const CREATE_LEAD = BASE+ "createLead";
 export const GETALL_LEAD = BASE+ "getAllLead";
 
 export const DELETE_LEAD = BASE+ "deleteLead";
+
+export const GET_LEAD = BASE+ "getLead";
+
+export const UPDATE_LEAD = BASE+ "updateLead";
+
+export const GETALL_USER = BASE+ "getAllUser";
+
+export const CREATE_USER = BASE+ "createUser";
+
+export const DELETE_USER = BASE+ "deleteUser";
+
+export const GET_USER = BASE+ "getUser";
+
+export const UPDATE_USER = BASE+ "updateUser";

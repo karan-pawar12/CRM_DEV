@@ -17,7 +17,7 @@ function Login() {
             alert("Login Failed");
           }
           else{
-            navigate('/');
+            navigate('/cpanel/dashboard');
             alert("Login Successfully");
           }
       })

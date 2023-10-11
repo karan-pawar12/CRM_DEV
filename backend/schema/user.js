@@ -11,7 +11,7 @@ const userSchema = new Schema({
     phone: { type: Array,default:[]},
     password: { type: String },
     role: { type: [String], default: ['admin'] }, //make it array by default it will be admin
-    // managers:{type:Array},
+    managers:{type:Array,default:[]},
     createdBy:{type:mongoose.Types.ObjectId,default: null},
     updatedBy:{type:mongoose.Types.ObjectId,default: null},
     username:{type:String,required:true,default:()=>nanoid()},
@@ -19,6 +19,8 @@ const userSchema = new Schema({
 }, {
     timestamps: true,
 });
+
+//platform access - read,write
 
 userSchema.pre("save", function (next) {
     let user = this;

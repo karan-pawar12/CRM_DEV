@@ -1,6 +1,7 @@
 import { ADMIN_SIGNUP } from '../../resources/urls/admin'
-import axios from 'axios';
-export default async function signup_api(firstName, lastName, email, phone, password, callback) {
+import axios from "../../Interceptor";
+
+ async function signup_api(firstName, lastName, email, phone, password, callback) {
   try {
     const res = await axios.post(ADMIN_SIGNUP, {
         firstName, lastName, email, phone, password,
@@ -12,3 +13,5 @@ export default async function signup_api(firstName, lastName, email, phone, pass
     callback(error, null)
   }
 }
+
+export default signup_api;

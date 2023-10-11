@@ -1,15 +1,10 @@
 import { GETALL_LEAD } from "../../resources/urls/admin";
-import axios from "axios";
+import axios from '../../Interceptor'
 
-export default async function getAllLead_api(callback) {
+async function getAllLead_api(callback) {
     try {
-        const token = localStorage.getItem('token');
 
-        const headers = {
-            Authorization: `Bearer ${token}`,
-        };
-
-        const res = await axios.get(GETALL_LEAD, { headers });
+        const res = await axios.get(GETALL_LEAD);
 
         if(res){
             callback(null,res);
@@ -20,3 +15,5 @@ export default async function getAllLead_api(callback) {
         callback(error,null);
     }
 }
+
+export default getAllLead_api;

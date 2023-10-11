@@ -15,8 +15,8 @@ function App() {
         
         
 
-        <Route exact path={"/login"} element={<Login />} />
-        <Route exact path={"/signup"} element={<Signup />} />
+        <Route exact path={"/cpanel/login"} element={<Login />} />
+        <Route exact path={"/cpanel/signup"} element={<Signup />} />
 
       </Routes>
 

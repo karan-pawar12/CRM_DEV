@@ -1,31 +1,21 @@
-const User = require('../../schema/user');
+const USER = require('../../schema/user');
+// const LeadLogs = require('../../methods/leadLogs');
 
 module.exports = async function (req, res, next) {
 
     try {
+        const { _id: payloadId } = req.payload; // Rename _id to payloadId
+        const { _id, fieldName, fieldValue } = req.body;
+
+        console.log(_id, fieldName, fieldValue);
+
+        const user = await USER.findByIdAndUpdate(_id, { $set: { [fieldName]: fieldValue } });
 
 
-        const { _id, firstName, lastName, email, phone, role, managers, createdBy, updatedBy } = req.body;
-        const updatedUser = {
-            firstName,
-            lastName, // Be cautious when updating passwords; you might want to hash it before updating
-            email,
-            phone,
-            role,
-            managers,
-            createdBy,
-            updatedBy,
-        };
+        // Call the LeadLogs function and pass the required parameters
+        // await LeadLogs(payloadId, lead[fieldName], fieldValue, fieldName);
 
-        const options = { new: true };
-        const user = await User.findByIdAndUpdate(_id, updatedUser, options);
-
-        if (!user) {
-            return res.status(404).json({ error: 'User not found.' });
-        }
-
-        res.json(user);
-
+        res.status(200).end();
     } catch (e) {
         console.log(e.message);
         return res.status(500).end();

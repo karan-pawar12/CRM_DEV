@@ -1,7 +1,7 @@
 import { ADMIN_LOGIN } from '../../resources/urls/admin'
+import axios from "../../Interceptor";
 
-import axios from 'axios';
-export default async function login_api(email, password, callback) {
+async function login_api(email, password, callback) {
   try {
     const res = await axios.post(ADMIN_LOGIN, {
       email,
@@ -17,3 +17,5 @@ export default async function login_api(email, password, callback) {
     callback(error, null)
   }
 }
+
+export default login_api;

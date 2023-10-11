@@ -3,7 +3,7 @@ const Role = require('../../schema/role')
 
 module.exports = async function (req, res, next) {
     try {
-        const users = await User.find({},"firstName lastName email phone role");
+        const users = await User.find({});
             
             
         res.json(users);
