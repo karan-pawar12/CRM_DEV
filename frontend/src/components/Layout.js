@@ -3,10 +3,12 @@ import { Outlet,useParams  } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Lead from './Leads/Lead'
 import User from './Users/User'
+import Role from './Roles/Role'
 
 const moduleMap = {
 	leads:<Lead />,
-	users:<User />
+	users:<User />,
+	roles:<Role />
 }
 
 

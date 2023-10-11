@@ -34,7 +34,7 @@ export default function UserTable() {
         });
     }
 
-    const handleCreateLeadClick = () => {
+    const handleCreateUserClick = () => {
         // Use the navigate function to navigate to the new URL
         navigate(`?id=new`);
     };
@@ -103,7 +103,7 @@ export default function UserTable() {
                     </div>
                     <div>
 
-                        <Button color='primary' className='mr-4' onClick={handleCreateLeadClick}>
+                        <Button color='primary' className='mr-4' onClick={handleCreateUserClick}>
                             Create Users
                         </Button>
 
