@@ -4,6 +4,7 @@ module.exports = async function(req,res,next){
     try{
         const {_id} = req.payload;
         const {name,permissions,hirerachy,createdBy=_id,updatedBy=_id} = req.body;
+        console.log(permissions);
         let role = null;
         try{
             role = await new Role({name,permissions,hirerachy,createdBy,updatedBy}).save();

@@ -1,12 +1,12 @@
-import { UPDATE_USER } from "../../resources/urls/admin";
+import { UPDATE_ROLE } from "../../resources/urls/admin";
 import axios from "../../Interceptor";
 
-async function updateUser_api(id,fieldName,fieldValue, callback) {
+async function updateRole_api(id,fieldName,fieldValue, callback) {
     
     try {
         
 
-        const res = await axios.post(UPDATE_USER, {
+        const res = await axios.post(UPDATE_ROLE, {
             _id:id,fieldName,fieldValue
         });
 
@@ -24,4 +24,4 @@ async function updateUser_api(id,fieldName,fieldValue, callback) {
     }
 }
 
-export default updateUser_api;
+export default updateRole_api;

@@ -114,7 +114,7 @@ export default function UserTable() {
                     </div>
                 </div>
             </div>
-            <Table selectionMode="multiple">
+            <Table aria-label="Example static collection table" selectionMode="multiple">
                 <TableHeader columns={columns}>
                     {(column) => (
                         <TableColumn key={column.key} align="start">

@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import RoleTable from "./RoleTable";
+import CreateRole from "./CreateRole";
+import RoleDetails from "./RoleDetails";
 
 
 function Role() {
@@ -12,7 +14,7 @@ function Role() {
       <RoleTable />
     </div>
 
-    {/* {(query.get("id") === "new") ? <CreateLead /> : (query.get("id") !== null && query.get("id") !== "") && <LeadDetails />} */}
+    {(query.get("id") === "new") ? <CreateRole /> : (query.get("id") !== null && query.get("id") !== "") && <RoleDetails />}
 
   </>
 

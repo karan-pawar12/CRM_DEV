@@ -23,3 +23,11 @@ export const DELETE_USER = BASE+ "deleteUser";
 export const GET_USER = BASE+ "getUser";
 
 export const UPDATE_USER = BASE+ "updateUser";
+
+export const CREATE_ROLE = BASE+ "createRole";
+
+export const GETALL_ROLE = BASE+ "getAllRole";
+
+export const GET_ROLE = BASE+ "getRole";
+
+export const UPDATE_ROLE = BASE+ "updateRole";

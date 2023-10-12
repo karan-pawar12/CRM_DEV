@@ -1,36 +1,41 @@
 import { Input, Select, SelectItem, Button } from "@nextui-org/react";
 import { useRef, useState } from "react";
-export default function Forms(props) {
-    const { fields, onSubmit, sizeProps } = props;
 
-    const formValues = useRef(getRefValues());
-    const [inputValues, setInputValues] = useState(getRefValues());
-    const size = sizeProps ?? "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1"
-    
+export default function Forms(props) {
+    const { fields, onSubmit, sizeProps, selectionModeProps } = props;
+    const formData = useRef(getRefValues());
+    const size = sizeProps ?? "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1";
 
     function getRefValues() {
         let temp = {};
         for (let i = 0; i < fields.length; i++) {
-            temp[fields[i].name] = "";
+            const isMultiSelect = fields[i].multiSelect === true;
+            temp[fields[i].name] = isMultiSelect ? [] : "";
         }
         return temp;
     }
 
     function onChange(e) {
         const { name, value } = e.target;
-        formValues.current[name] = value;
-        setInputValues((prevInputValues) => ({
-            ...prevInputValues,
+        let temp = formData.current
+        formData.current = {
+            ...temp,
             [name]: value,
-        }));
-
+        }
     }
 
     function handleSaveClick() {
+        onSubmit(formData.current);
+        formData.current = getRefValues();
+    }
 
-        onSubmit(formValues.current);
-        formValues.current = getRefValues();
-        setInputValues(getRefValues());
+    function handleSelectChange(e) {
+       const {name,value} = e.target;
+       let temp = formData.current
+        formData.current = {
+            ...temp,
+            [name]: selectionModeProps === "multiple" ? value : value[0],
+        }
     }
 
     return (
@@ -42,14 +47,11 @@ export default function Forms(props) {
             </div>
 
             <div className={`grid w-full ${size} gap-10 mt-6`}>
-
-
-                {fields.map(f => {
-
+                {fields.map((f, index) => {
+                    const key = `${f.name}-${index}`; //  unique key
                     if (f.type === "Input") {
-
                         return (
-                            <div>
+                            <div key={key}>
                                 <Input
                                     type="text"
                                     label={f.label}
@@ -57,43 +59,34 @@ export default function Forms(props) {
                                     labelPlacement="outside"
                                     name={f.name}
                                     onChange={onChange}
-                                    value={inputValues[f.name]}
+                                    defaultValue={formData.current[f.name]}
                                 />
                             </div>
-
-
-                        )
-
+                        );
                     }
-
                     if (f.type === "Select" && f.options) {
                         return (
-                            <div>
+                            <div key={key}>
                                 <Select
                                     label={f.label}
                                     placeholder={`Choose ${f.label.toLowerCase()}`}
                                     labelPlacement="outside"
                                     name={f.name}
-                                    onChange={onChange}
-                                    value={inputValues[f.name]}
+                                    onSelectionChange={(keys) => handleSelectChange({target:{name:f.name,value:Array.from(keys)}})}
+                                    selectedKeys={formData.current[f.name]}
+                                    selectionMode={selectionModeProps === "multiple" ? "multiple" : "single"}
                                 >
-                                    {f.options.map(option => (
+                                    {f.options.map((option) => (
                                         <SelectItem key={option} value={option}>
                                             {option}
                                         </SelectItem>
                                     ))}
                                 </Select>
                             </div>
-
-                        )
+                        );
                     }
-
-
-
                 })}
-
-
             </div>
         </>
-    )
+    );
 }
