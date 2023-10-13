@@ -31,3 +31,5 @@ export const GETALL_ROLE = BASE+ "getAllRole";
 export const GET_ROLE = BASE+ "getRole";
 
 export const UPDATE_ROLE = BASE+ "updateRole";
+
+export const DELETE_ROLE = BASE+ "deleteRole";

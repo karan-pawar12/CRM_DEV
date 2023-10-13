@@ -7,6 +7,7 @@ const roleSchema = new Schema({
     hirerachy: { type: String, default: null },
     createdBy: { type: mongoose.Schema.Types.ObjectId, default: null },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, default: null },
+    softDelete: { type: Boolean, default: false }
 }, {
     timestamps: true,
 });

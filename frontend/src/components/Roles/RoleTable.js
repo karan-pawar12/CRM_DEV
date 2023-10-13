@@ -5,6 +5,7 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, 
 import AdminContext from '../../AdminContext';
 import { useNavigate } from "react-router-dom";
 import getAllRole_api from "../../api_strings/admin/getAllRole";
+import deleteRole_api from "../../api_strings/admin/deleteRole_api";
 const itemsPerPage = 10;
 
 
@@ -34,7 +35,18 @@ function RoleTable() {
 
     function handleDetailsRoleClick(roleId){
         navigate(`?id=${roleId}`);
-    }   
+    }  
+    
+    function handleDeleteRoleClick(roleId) {
+        deleteRole_api(roleId, (error, res) => {
+            if (error) {
+                console.log("Error:", error);
+            } else {
+
+                adminContext.setRole((roles) => roles.filter((role) => role._id !== roleId))
+            }
+        })
+    }
 
 
     const columns = [
@@ -69,7 +81,7 @@ function RoleTable() {
                         </Tooltip>
                         <Tooltip color="danger" content="Delete user">
                             <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                <DeleteIcon />
+                                <DeleteIcon onClick={() => handleDeleteRoleClick(role._id)}/>
                             </span>
                         </Tooltip>
                     </div>
@@ -111,7 +123,7 @@ function RoleTable() {
                         )
                     }
                 </TableHeader>
-                <TableBody items={adminContext.role.slice(startIndex, endIndex)}>
+                <TableBody items={adminContext.role.filter(role => !role.softDelete).slice(startIndex, endIndex)}>
                     {(role) => (
 
                         <TableRow key={role._id}>
