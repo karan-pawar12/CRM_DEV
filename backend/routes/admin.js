@@ -81,4 +81,6 @@ router.get('/getAllProjectTask',verifyAccessToken,require('../controllers/admin/
 
 router.post('/uploadCampagin',verifyAccessToken,require('../controllers/admin/uploadCampaigns'));
 
+router.get('/getPermission',verifyAccessToken,require('../controllers/admin/getPermission'));
+
 module.exports = router;
