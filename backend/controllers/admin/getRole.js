@@ -40,7 +40,7 @@ module.exports = async function (req, res, next) {
                     _id: 1,
                     name: 1,
                     permissions: 1,
-                    hirerachy: 1,
+                    description: 1,
                     roleOwner: {
                         $concat: ['$createdByUser.firstName', ' ', '$createdByUser.lastName']
                     },

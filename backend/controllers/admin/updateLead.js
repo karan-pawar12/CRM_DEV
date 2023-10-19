@@ -12,7 +12,7 @@ module.exports = async function (req, res, next) {
 
 
         // Call the LeadLogs function and pass the required parameters
-        // await LeadLogs(payloadId, lead[fieldName], fieldValue, fieldName);
+        await LeadLogs(payloadId, lead[fieldName], fieldValue, fieldName);
 
         res.status(200).end();
     } catch (e) {

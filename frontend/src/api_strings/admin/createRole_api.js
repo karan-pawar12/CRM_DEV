@@ -1,19 +1,21 @@
 import { CREATE_ROLE } from "../../resources/urls/admin";
 import axios from '../../Interceptor';
 
-async function CreateRole_api(name,permissions,callback){
+async function CreateRole_api(name,description, callback) {
     try {
-        const res = await axios.post(CREATE_ROLE,{
-            name,permissions
+        // role name and description add them 
+        const res = await axios.post(CREATE_ROLE, {
+            name,
+            description
         });
 
-        if(res){
-            callback(null,res);
+        if (res) {
+            callback(null, res);
         }
 
     } catch (error) {
-        console.log("Unable to create role",error);
-        callback(error,null);
+        console.log("Unable to create role", error);
+        callback(error, null);
     }
 }
 

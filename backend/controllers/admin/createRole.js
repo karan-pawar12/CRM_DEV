@@ -1,13 +1,12 @@
 const Role = require('../../schema/role');
-
+const defaultPermissions = require('../../config/defaultConfig');
 module.exports = async function(req,res,next){
     try{
         const {_id} = req.payload;
-        const {name,permissions,hirerachy,createdBy=_id,updatedBy=_id} = req.body;
-        console.log(permissions);
+        const {name,description,createdBy=_id,updatedBy=_id} = req.body;
         let role = null;
         try{
-            role = await new Role({name,permissions,hirerachy,createdBy,updatedBy}).save();
+            role = await new Role({name,description,permissions:defaultPermissions,createdBy,updatedBy}).save();
             res.json(role);
         }catch(e){
             console.log(e.message);

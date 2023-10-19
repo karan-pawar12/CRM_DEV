@@ -2,13 +2,27 @@ const Role = require('../../schema/role');
 
 module.exports = async function (req, res, next) {
     try {
-        const { _id: payloadId } = req.payload; // Rename _id to payloadId
-        const { _id, fieldName, fieldValue } = req.body;
+        const { _id: payloadId } = req.payload;
+        const { _id, fieldName, fieldValue, permissionType, value } = req.body;
+        
+        let role;
 
-        const role = await Role.findByIdAndUpdate(_id, { $set: { [fieldName]: fieldValue } });
+        if (fieldName && fieldValue) {
+            const update = { $set: { [fieldName]: fieldValue } };
+            role = await Role.findByIdAndUpdate(_id, update);
+        } else if (permissionType) {
+            const update = {
+                $set: {
+                    [`permissions.${fieldName}.${permissionType}`]: value,
+                },
+            };
+            role = await Role.findOneAndUpdate({ _id }, update, { new: true });
+        } else {
+            return res.status(400).json({ error: 'Invalid request.' });
+        }
 
         if (!role) {
-            return res.status(404).json({ error: 'role not found.' });
+            return res.status(404).json({ error: 'Role not found.' });
         }
 
         res.json(role);

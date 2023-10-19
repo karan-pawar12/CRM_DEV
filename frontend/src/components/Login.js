@@ -1,26 +1,34 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Input, Button } from '@nextui-org/react'
 import { Link } from 'react-router-dom';
 import login_api from '../api_strings/admin/login_api';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../AuthContext';
 
 
 function Login() {
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-   function handleLogin(e){
-      e.preventDefault();
-      login_api(email,password,(error,res) => {
-          if(error){
-            alert("Login Failed");
-          }
-          else{
-            navigate('/cpanel/dashboard');
-            alert("Login Successfully");
-          }
-      })
+  function handleLogin(e) {
+    e.preventDefault();
+    login_api(email, password, (error, res) => {
+      if (error) {
+        alert("Login Failed");
+      }
+      else {
+        const { role,permissions } = res.data;
+        authContext.setAuth({
+          user: role, 
+          permissions: permissions,
+        });
+
+        navigate('/cpanel/dashboard');
+        alert("Login Successfully");
+      }
+    })
   }
 
   return (
@@ -42,7 +50,7 @@ function Login() {
           </Button>
         </form>
         <p className="mt-4 text-gray-600 text-sm text-center">
-          Don't have an account? <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
+          Don't have an account? <Link to="/cpanel/signup" className="text-blue-500 hover:underline">Sign up</Link>
         </p>
       </div>
     </div>

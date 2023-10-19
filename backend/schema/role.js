@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const roleSchema = new Schema({
     name: { type: String },
-    permissions: { type: Array, default: [] }, // Array of permissions
-    hirerachy: { type: String, default: null },
+    description: {type:String, default:null},
+    permissions: {type:{}},
     createdBy: { type: mongoose.Schema.Types.ObjectId, default: null },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, default: null },
     softDelete: { type: Boolean, default: false }

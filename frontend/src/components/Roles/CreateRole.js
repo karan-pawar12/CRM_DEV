@@ -1,22 +1,18 @@
 import Forms from "../Inputform/Forms";
-import AdminContext from "../../AdminContext";
 import CreateRole_api from "../../api_strings/admin/createRole_api";
-import { useContext } from "react";
 
-function CreateRole() {
-    const adminContext = useContext(AdminContext);
+function CreateRole({role,setRole}) {
 
     const onSubmit = (formData) => {
-        const { name, permissions } = formData;
-        console.log(name,permissions);
-        CreateRole_api(name, permissions, (error, res) => {
+        const { name,description } = formData;
+        CreateRole_api(name,description,  (error, res) => {
             if (error) {
                 alert("Role Creation Failed");
             }
             else {
-                const currentRoleArray = adminContext.role;
+                const currentRoleArray = role;
                 const newRoleArray = [...currentRoleArray, res.data];
-                adminContext.setRole(newRoleArray);
+                setRole(newRoleArray);
             }
         })
 
@@ -33,20 +29,14 @@ function CreateRole() {
                             type: "Input"
                         },
                         {
-                            name: "permissions",
-                            label: "Permission",
-                            type: "Select",
-                            options: [
-                                "Create",
-                                "Read",
-                                "Update",
-                                "Delete"
-                            ],
-                            multiSelect :"true"
+                            name:"description",
+                            label: "Description",
+                            type:"Input"
                         }
+            
                     ]
                 }
-                selectionModeProps = "multiple"
+                
                 onSubmit={onSubmit}
             />
         </div>

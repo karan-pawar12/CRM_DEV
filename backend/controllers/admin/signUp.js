@@ -1,10 +1,12 @@
 const User = require('../../schema/user');
+const adminPermissions = require('../../config/adminConfig');
 
 module.exports = async function(req,res,next){
     try{
         console.log(req.body);
         const { firstName, lastName, email, phone, password } = req.body;
 
+        let permissions = adminPermissions;
        
         if (!firstName || !lastName || !email || !phone || !password) {
             return res.status(400).json({ error: 'Missing required fields' });
@@ -17,6 +19,7 @@ module.exports = async function(req,res,next){
             email,
             phone,
             password,
+            permissions
         });
 
         // Save the user data to the database
