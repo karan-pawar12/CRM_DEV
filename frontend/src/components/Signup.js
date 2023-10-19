@@ -25,7 +25,7 @@ function Signup() {
       }
       else {
         alert("Signup Successfully");
-        navigate('/login');
+        navigate('/cpanel/login');
 
       }
     })
