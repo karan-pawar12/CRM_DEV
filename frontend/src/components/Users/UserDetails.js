@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import userDetails_api from "../../api_strings/admin/userDetails_api";
-import { Input } from '@nextui-org/react';
+import { Input, Select, SelectItem } from '@nextui-org/react';
 import { EditIcon } from "../../resources/icons/icons";
 import { FaCheckCircle } from 'react-icons/fa'
 import { BsFillFileExcelFill } from 'react-icons/bs'
 import updateUser_api from "../../api_strings/admin/updateUser_api";
+import getAllRole_api from "../../api_strings/admin/getAllRole";
 
-function UserDetails() {
+function UserDetails({user,setUser}) {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
@@ -16,6 +17,7 @@ function UserDetails() {
     const [userDetailsData, setUserDetailsData] = useState({});
     const [editingStates, setEditingStates] = useState({});
     const [currentField, setCurrentField] = useState(""); // State to track the current field
+    const [roleOptions, setRoleOptions] = useState([]);
 
     useEffect(() => {
         if (id) {
@@ -28,6 +30,18 @@ function UserDetails() {
                     setUserDetailsData(userDetailsData);
                 }
             });
+
+            getAllRole_api((error, res) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    const roles = res.data.map((role) => ({
+                        name: role.name,
+                        id: role._id,
+                    }));
+                    setRoleOptions(roles);
+                }
+            })
         }
     }, [id]);
 
@@ -47,7 +61,6 @@ function UserDetails() {
     };
 
     const handleSaveClick = (field) => {
-        // Check if the field is valid
         if (currentField === field) {
             const updatedValue = userDetailsData[field];
             updateUser_api(id, field, updatedValue, (error, res) => {
@@ -57,12 +70,27 @@ function UserDetails() {
                     alert("User details updated successfully");
                 }
             });
-            // Disable editing after saving
+
             setEditingStates((prevEditingStates) => ({
                 ...prevEditingStates,
                 [field]: false,
             }));
         }
+    };
+
+    const handleSelectChange = (field, selectedKeys) => {
+        selectedKeys = selectedKeys.target.value;
+        const updatedData = { ...userDetailsData };
+        updatedData[field] = selectedKeys;
+        setUserDetailsData(updatedData);
+        
+        updateUser_api(id, field, selectedKeys, (error, res) => {
+            if (error) {
+                alert("User updation failed");
+            } else {
+                alert("User updated successfully");
+            }
+        });
     };
 
     const createInputField = (field, label) => {
@@ -97,16 +125,39 @@ function UserDetails() {
         );
     };
 
-    return (
-        <div className={`grid w-full ${size} gap-10 mt-6`}>
-            {createInputField("firstName", "First Name")}
-            {createInputField("lastName", "Last Name")}
-            {createInputField("email", "Email")}
-            {createInputField("phone", "Phone No")}
-            {createInputField("role", "Role")}
-            {createInputField("managers", "Managers")}
-        </div>
-    );
-}
+    const selectField = (field, label, options) => {
+        const fieldValue = userDetailsData[field];
+        console.log(fieldValue);
+        if (fieldValue !== undefined) {
+            return (
+                <Select
+                    label={label}
+                    selectedKeys={fieldValue}
+                    selectionMode="single"
+                    labelPlacement="outside"
+                    className="mt-6"
+                    onChange={(selectedKeys) => handleSelectChange(field, selectedKeys)}
+                >
+                    {options.map((option) => (
+                        <SelectItem key={option.id} value={option.id}>
+                            {option.name}
+                        </SelectItem>
+                    ))}
+                </Select>
+            );
+        }
+    }
+
+        return (
+            <div className={`grid w-full ${size} gap-10 mt-6`}>
+                {createInputField("firstName", "First Name")}
+                {createInputField("lastName", "Last Name")}
+                {createInputField("email", "Email")}
+                {createInputField("phone", "Phone No")}
+                {createInputField("managers", "Managers")}
+                {selectField("role", "Roles", roleOptions)}
+            </div>
+        );
+    }
 
 export default UserDetails;

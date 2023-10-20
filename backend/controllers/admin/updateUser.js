@@ -1,21 +1,24 @@
-const USER = require('../../schema/user');
+const User = require('../../schema/user');
+const mongoose = require('mongoose')
 // const LeadLogs = require('../../methods/leadLogs');
 
 module.exports = async function (req, res, next) {
 
     try {
         const { _id: payloadId } = req.payload; // Rename _id to payloadId
-        const { _id, fieldName, fieldValue } = req.body;
+        let { _id, fieldName, fieldValue } = req.body;
 
-        console.log(_id, fieldName, fieldValue);
+        if (fieldName === "role") {
+            fieldValue = new mongoose.Types.ObjectId(fieldValue);
+        }
 
-        const user = await USER.findByIdAndUpdate(_id, { $set: { [fieldName]: fieldValue } });
+        const user = await User.findByIdAndUpdate(_id, { $set: { [fieldName]: fieldValue } });
 
 
         // Call the LeadLogs function and pass the required parameters
         // await LeadLogs(payloadId, lead[fieldName], fieldValue, fieldName);
 
-        res.status(200).end();
+        res.json(user);
     } catch (e) {
         console.log(e.message);
         return res.status(500).end();

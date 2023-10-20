@@ -47,7 +47,7 @@ export default function UserTable({ user, setUser }) {
             case "phone":
                 return <span>{user.phone[0]}</span>;
             case "role":
-                return <span>{user.role[0]}</span>;
+                return <span>{user.role}</span>;
             case "actions":
                 return (
                     <div className="relative flex items-center gap-3">

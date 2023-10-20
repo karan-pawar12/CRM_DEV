@@ -77,8 +77,8 @@ export default function Forms(props) {
                                     selectionMode={selectionModeProps === "multiple" ? "multiple" : "single"}
                                 >
                                     {f.options.map((option) => (
-                                        <SelectItem key={option} value={option}>
-                                            {option}
+                                        <SelectItem key={option.id} value={option.id}>
+                                            {option.name}
                                         </SelectItem>
                                     ))}
                                 </Select>

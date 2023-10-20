@@ -28,7 +28,7 @@ module.exports = async function (req, res, next) {
             if(role[0] === 'admin'){
                 permissions = adminPermissions;
             }else{
-                let roleData = await Role.findOne({name:role});
+                let roleData = await Role.findOne({_id:role});
                 console.log(roleData);
                 permissions = roleData.permissions;
             }
@@ -37,7 +37,7 @@ module.exports = async function (req, res, next) {
             const token = await signAccessToken({
                 _id, firstName, lastName, email, phone, role, createdBy, updatedBy, permissions
             })
-            res.json({ token: token, role: role, permissions });
+            res.json({ token: token, role: role[0], permissions });
         }
         else{
             return res.status(401).json({ error: 'Invalid credentials' });

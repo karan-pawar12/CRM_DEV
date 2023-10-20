@@ -10,7 +10,7 @@ const userSchema = new Schema({
     email: { type: String },
     phone: { type: Array,default:[]},
     password: { type: String },
-    role: { type: [String], default: ['admin'] }, 
+    role: { type: Array, default: ['admin'] }, 
     managers:{type:Array,default:[]},
     createdBy:{type:mongoose.Types.ObjectId,default: null},
     updatedBy:{type:mongoose.Types.ObjectId,default: null},

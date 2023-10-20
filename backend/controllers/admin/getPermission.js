@@ -21,7 +21,7 @@ module.exports = async function (req, res, next) {
         }
         else {
             
-            const role = await Role.findOne({ name: userRole });
+            const role = await Role.findOne({ _id: userRole });
 
             if (!role) {
                 return res.status(404).json({ message: 'Role not found' });

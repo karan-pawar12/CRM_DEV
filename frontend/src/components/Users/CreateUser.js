@@ -1,11 +1,28 @@
-import React, { useRef, useContext, useState } from "react";
+import React, { useRef, useContext, useState, useEffect } from "react";
 import Forms from "../Inputform/Forms";
 import createUser_api from "../../api_strings/admin/createUser_api";
 import AuthContext from "../../AuthContext";
 import NotAuthorized from "../NotAuthorized";
+import getAllRole_api from "../../api_strings/admin/getAllRole";
 
 export default function CreateUser({ user, setUser }) {
     const authContext = useContext(AuthContext);
+    const [roleOptions, setRoleOptions] = useState([]);
+
+    useEffect(() => {
+        getAllRole_api((error, res) => {
+            if (error) {
+                console.log(error);
+            } else {
+                const roles = res.data.map((role) => ({
+                    name: role.name, 
+                    id: role._id,    
+                }));
+                setRoleOptions(roles);
+            }
+        })
+    }, [])
+
     const onSubmit = (formData) => {
 
         const {
@@ -66,7 +83,7 @@ export default function CreateUser({ user, setUser }) {
                                 name: "role",
                                 label: "Roles",
                                 type: "Select",
-                                options: ["hello", "test"]
+                                options: roleOptions
                             },
                             {
                                 name: "managers",

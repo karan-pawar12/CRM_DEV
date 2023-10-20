@@ -29,10 +29,22 @@ module.exports = async function (req, res, next) {
                 }
             },
             {
+                $lookup: {
+                    from: 'roles', 
+                    localField: 'role', 
+                    foreignField: '_id',
+                    as: 'userRole'
+                }
+            },
+            {
                 $unwind: '$createdByUser' // Unwind the createdByUser array
             },
             {
                 $unwind: '$updatedByUser' // Unwind the updatedByUser array
+            },
+            
+            {
+                $unwind: '$userRole' // Unwind the userRole array
             },
             {
                 $project: {
@@ -41,7 +53,7 @@ module.exports = async function (req, res, next) {
                     lastName: 1,
                     email: 1,
                     phone: 1,
-                    role: 1,
+                    role: '$userRole.name',
                     managers: 1,
                     createdBy: {
                         $concat: ['$createdByUser.firstName', ' ', '$createdByUser.lastName']
