@@ -9,7 +9,7 @@ export default function Forms(props) {
     function getRefValues() {
         let temp = {};
         for (let i = 0; i < fields.length; i++) {
-            const isMultiSelect = fields[i].multiSelect === true;
+            const isMultiSelect = fields[i].selectionMode === true;
             temp[fields[i].name] = isMultiSelect ? [] : "";
         }
         return temp;
@@ -30,11 +30,20 @@ export default function Forms(props) {
     }
 
     function handleSelectChange(e) {
-       const {name,value} = e.target;
-       let temp = formData.current
-        formData.current = {
-            ...temp,
-            [name]: selectionModeProps === "multiple" ? value : value[0],
+        const { name, value } = e.target;
+        const field = fields.find((f) => f.name === name);
+
+        let temp = formData.current;
+        if (field.selectionMode === "multiple") {
+            formData.current = {
+                ...temp,
+                [name]: value,
+            };
+        } else {
+            formData.current = {
+                ...temp,
+                [name]: value[0],
+            };
         }
     }
 
@@ -72,9 +81,9 @@ export default function Forms(props) {
                                     placeholder={`Choose ${f.label.toLowerCase()}`}
                                     labelPlacement="outside"
                                     name={f.name}
-                                    onSelectionChange={(keys) => handleSelectChange({target:{name:f.name,value:Array.from(keys)}})}
+                                    onSelectionChange={(keys) => handleSelectChange({ target: { name: f.name, value: Array.from(keys) } })}
                                     selectedKeys={formData.current[f.name]}
-                                    selectionMode={selectionModeProps === "multiple" ? "multiple" : "single"}
+                                    selectionMode={f.selectionMode}
                                 >
                                     {f.options.map((option) => (
                                         <SelectItem key={option.id} value={option.id}>

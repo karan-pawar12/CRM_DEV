@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { HiOutlineLogout } from 'react-icons/hi'
 import { DASHBOARD_SIDEBAR_BOTTOM_LINKS, DASHBOARD_SIDEBAR_LINKS } from "../resources/icons/icons";
 import AuthContext from "../AuthContext";
+import { Badge } from '@nextui-org/react';
 
 
 function Sidebar() {
@@ -32,9 +33,9 @@ function Sidebar() {
                 {
                     authContext.auth.permissions.length !== 0 && <>
                         {DASHBOARD_SIDEBAR_LINKS.map((link) => {
-                            if(authContext.auth.permissions[link.key]?.view){
+                            if (authContext.auth.permissions[link.key]?.view) {
 
-                                return <SidebarLink key={link.key} link={link} pathname={pathname} />;
+                                return <SidebarLink key={link.key} link={link} pathname={pathname} icon={link.icon} />;
                             }
                         })}
                     </>
@@ -53,16 +54,23 @@ function Sidebar() {
     )
 }
 
-function SidebarLink({ link, pathname }) {
+function SidebarLink({ link, pathname, icon }) {
     const linkPath = `/cpanel${link.path}`;
 
     return (
         <Link
             to={linkPath}
-            className={(pathname === link.path ? 'bg-neutral-700 text-white flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base' : 'text-neutral-400 flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base')}
+            className={`flex items-center ${pathname === linkPath ? 'bg-neutral-700 text-white' : 'text-neutral-400'} hover:bg-neutral-700 hover:no-underline gap-2 font-light px-3 py-2`}
         >
-            <span className="text-xl">{link.icon}</span>
-            {link.label}
+              <div className="flex items-center justify-between w-full gap-2">
+                <div className="flex items-center gap-2">
+                    <span className="text-xl">{icon}</span>
+                    {link.label}
+                </div>
+                {linkPath === '/cpanel/notification' && (
+                    <div className="flex items-center mr-3"><Badge content={2} color="danger" shape="circle"></Badge></div>
+                )}
+            </div>
         </Link>
     )
 }
