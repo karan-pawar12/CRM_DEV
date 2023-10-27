@@ -1,16 +1,32 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FcBullish } from 'react-icons/fc';
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { HiOutlineLogout } from 'react-icons/hi'
 import { DASHBOARD_SIDEBAR_BOTTOM_LINKS, DASHBOARD_SIDEBAR_LINKS } from "../resources/icons/icons";
 import AuthContext from "../AuthContext";
 import { Badge } from '@nextui-org/react';
+import getAllNotification_api from "../api_strings/admin/getAllNotification";
 
 
 function Sidebar() {
+    const [notificationCount,setnotificationcount] = useState(0);
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const authContext = useContext(AuthContext);
+
+    useEffect(() => {
+        getAllNotification();
+    },[]);
+
+    function getAllNotification() {
+        getAllNotification_api((error,res) => {
+            if(error){
+                console.log("Error",error);
+            }else{
+                setnotificationcount(res.data.length);
+            }
+        })
+    }   
 
 
     if (!authContext.auth) {
@@ -35,7 +51,7 @@ function Sidebar() {
                         {DASHBOARD_SIDEBAR_LINKS.map((link) => {
                             if (authContext.auth.permissions[link.key]?.view) {
 
-                                return <SidebarLink key={link.key} link={link} pathname={pathname} icon={link.icon} />;
+                                return <SidebarLink key={link.key} link={link} pathname={pathname} icon={link.icon} notificationCount={notificationCount}/>;
                             }
                         })}
                     </>
@@ -54,7 +70,7 @@ function Sidebar() {
     )
 }
 
-function SidebarLink({ link, pathname, icon }) {
+function SidebarLink({ link, pathname, icon,notificationCount }) {
     const linkPath = `/cpanel${link.path}`;
 
     return (
@@ -68,7 +84,7 @@ function SidebarLink({ link, pathname, icon }) {
                     {link.label}
                 </div>
                 {linkPath === '/cpanel/notification' && (
-                    <div className="flex items-center mr-3"><Badge content={2} color="danger" shape="circle"></Badge></div>
+                    <div className="flex items-center mr-3"><Badge content={notificationCount} color="danger" shape="circle"></Badge></div>
                 )}
             </div>
         </Link>

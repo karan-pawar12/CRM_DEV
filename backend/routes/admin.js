@@ -83,4 +83,8 @@ router.post('/uploadCampagin',verifyAccessToken,require('../controllers/admin/up
 
 router.get('/getPermission',verifyAccessToken,require('../controllers/admin/getPermission'));
 
+router.post('/createNotification',verifyAccessToken,require('../controllers/admin/createNotification'));
+
+router.get('/getAllNotification',verifyAccessToken,require('../controllers/admin/getAllNotification'));
+
 module.exports = router;

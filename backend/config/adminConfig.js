@@ -34,6 +34,12 @@ const adminPermissions = {
         "create": true,
         "delete": true,
         "update": true
+    },
+    "notification": {
+        "view": true,
+        "create": true,
+        "delete": true,
+        "update": true
     }
 };
 

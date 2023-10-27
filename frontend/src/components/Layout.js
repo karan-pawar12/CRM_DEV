@@ -4,13 +4,15 @@ import { Outlet, useParams } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Lead from './Leads/Lead'
 import User from './Users/User'
+import Notification from './Notifications/Notification'
 import Role from './Roles/Role'
 import AuthContext from '../AuthContext'
 
 const moduleMap = {
 	leads: <Lead />,
 	users: <User />,
-	roles: <Role />
+	roles: <Role />,
+	notification: <Notification />
 }
 
 

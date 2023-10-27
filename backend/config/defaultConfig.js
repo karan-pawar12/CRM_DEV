@@ -34,6 +34,12 @@ const defaultPermissions = {
         "create": false,
         "delete": false,
         "update": false
+    },
+    "notification": {
+        "view": true,
+        "create": false,
+        "delete": false,
+        "update": false
     }
 };
 

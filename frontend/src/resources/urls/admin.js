@@ -35,3 +35,7 @@ export const UPDATE_ROLE = BASE+ "updateRole";
 export const DELETE_ROLE = BASE+ "deleteRole";
 
 export const GET_PERMISSIONS = BASE+ "getPermission";
+
+export const CREATE_NOTIFICATION = BASE+ "createNotification";
+
+export const GET_ALLNOTIFICATION = BASE+ "getAllNotification";
