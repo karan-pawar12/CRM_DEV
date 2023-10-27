@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 export default function Forms(props) {
     const { fields, onSubmit, sizeProps, selectionModeProps } = props;
     const formData = useRef(getRefValues());
+    const [formEmpty,setFormEmpty] = useState(true);
     const size = sizeProps ?? "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1";
 
     function getRefValues() {
@@ -27,6 +28,8 @@ export default function Forms(props) {
     function handleSaveClick() {
         onSubmit(formData.current);
         formData.current = getRefValues();
+        console.log(formData.current);
+        setFormEmpty(old => !old);
     }
 
     function handleSelectChange(e) {

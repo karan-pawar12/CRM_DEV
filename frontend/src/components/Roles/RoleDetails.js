@@ -142,7 +142,7 @@ function RoleDetails() {
     const permissionItems = Object.keys(roleDetailsData.permissions || {}).map((moduleName) => (
         <AccordionItem key={moduleName} aria-label={moduleName} title={moduleName}>
             {
-                
+
                 Object.keys(roleDetailsData.permissions[moduleName]).map((permissionType) => (
                     <div key={permissionType} className="flex justify-between mt-4">
                         {permissionType}
@@ -158,13 +158,18 @@ function RoleDetails() {
 
 
     return (
-        <div className={`grid w-full ${size} gap-10 mt-6`}>
-            {createInputField("roleOwner", "Role Owner")}
-            {createInputField("name", "Role Name")}
-            {createInputField("description", "Description")}
-            {roleDetailsData && <Accordion variant="shadow">{permissionItems}</Accordion>}
+        <>
+            <div className={`grid w-full ${size} gap-10 mt-6`}>
+                {createInputField("roleOwner", "Role Owner")}
+                {createInputField("name", "Role Name")}
+                {createInputField("description", "Description")}
 
-        </div>
+            </div>
+            <div className="mt-16">
+                {roleDetailsData && <Accordion variant="shadow">{permissionItems}</Accordion>}
+
+            </div>
+        </>
     )
 }
 

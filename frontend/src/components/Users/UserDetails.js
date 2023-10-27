@@ -14,7 +14,7 @@ function UserDetails({user,setUser}) {
     const id = searchParams.get('id');
     const size = "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1"
 
-    const [userDetailsData, setUserDetailsData] = useState({});
+    const [userDetailsData, setUserDetailsData] = useState(false);
     const [editingStates, setEditingStates] = useState({});
     const [currentField, setCurrentField] = useState(""); // State to track the current field
     const [roleOptions, setRoleOptions] = useState([]);
@@ -25,23 +25,13 @@ function UserDetails({user,setUser}) {
                 if (error) {
                     console.log("Error:", error);
                 } else {
-                    const userDetailsData = res.data;
                     setEditingStates({}); // Initialize editing states for each field to false
-                    setUserDetailsData(userDetailsData);
+                    setUserDetailsData(res.data.userDetails);
+                    setRoleOptions(res.data.roles);
                 }
             });
 
-            getAllRole_api((error, res) => {
-                if (error) {
-                    console.log(error);
-                } else {
-                    const roles = res.data.map((role) => ({
-                        name: role.name,
-                        id: role._id,
-                    }));
-                    setRoleOptions(roles);
-                }
-            })
+           
         }
     }, [id]);
 
@@ -126,14 +116,14 @@ function UserDetails({user,setUser}) {
     };
 
     const selectField = (field, label, options) => {
-        const fieldValue = userDetailsData[field];
-        console.log(fieldValue);
-        if (fieldValue !== undefined) {
+        if ( userDetailsData && roleOptions.length > 0) {
+            const fieldValue = userDetailsData[field];
+            console.log(fieldValue);
             return (
                 <Select
                     label={label}
-                    selectedKeys={fieldValue}
-                    selectionMode="single"
+                    defaultSelectedKeys={fieldValue}
+                    selectionMode="multiple"
                     labelPlacement="outside"
                     className="mt-6"
                     onChange={(selectedKeys) => handleSelectChange(field, selectedKeys)}

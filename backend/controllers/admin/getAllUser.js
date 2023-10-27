@@ -6,6 +6,15 @@ module.exports = async function (req, res, next) {
     try {
         const users = await User.aggregate([
             {
+                $match: {
+                    $expr: {
+                        $ne: [
+                            '$_id', new mongoose.Types.ObjectId(req.payload._id)
+                        ]
+                    }
+                }
+            },
+            {
                 $lookup: {
                     from: 'roles', // Replace with the actual name of the Role collection
                     localField: 'role',

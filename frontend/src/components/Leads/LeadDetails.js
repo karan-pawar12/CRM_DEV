@@ -166,9 +166,9 @@ function LeadDetails() {
                 className="mt-6"
                 onChange={(selectedKeys) => handleSelectChange(field, selectedKeys)}
             >
-                {options.map((animal) => (
-                    <SelectItem key={animal} value={animal}>
-                        {animal}
+                {options.map((option) => (
+                    <SelectItem key={option} value={option}>
+                        {option}
                     </SelectItem>
                 ))}
             </Select>
