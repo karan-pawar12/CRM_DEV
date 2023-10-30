@@ -8,6 +8,12 @@ import getAllRole_api from "../../api_strings/admin/getAllRole";
 export default function CreateUser({ user, setUser }) {
     const authContext = useContext(AuthContext);
     const [roleOptions, setRoleOptions] = useState([]);
+    const [error, setError] = useState({
+        password: '', // Password error message
+        email: '', // Email error message
+        phone:'',
+        role: ''
+    });
 
     useEffect(() => {
         getAllRole_api((error, res) => {
@@ -15,8 +21,8 @@ export default function CreateUser({ user, setUser }) {
                 console.log(error);
             } else {
                 const roles = res.data.map((role) => ({
-                    name: role.name, 
-                    id: role._id,    
+                    name: role.name,
+                    id: role._id,
                 }));
                 setRoleOptions(roles);
             }
@@ -29,6 +35,63 @@ export default function CreateUser({ user, setUser }) {
             firstName, lastName, password, email, phone, role, managers
 
         } = formData;
+
+        console.log(password.length);
+
+        if (password.length < 8) {
+            setError((prevError) => ({
+                ...prevError,
+                password: 'Password must be at least 8 characters long'
+            }))
+            return;
+        } else {
+            setError((prevError) => ({
+                ...prevError,
+                password: '',
+            }));
+        }
+
+        if (!isEmailValid(email)) {
+            setError((prevError) => ({
+                ...prevError,
+                email: 'Please enter a valid email address'
+            }))
+            return;
+        } else {
+            setError((prevError) => ({
+                ...prevError,
+                email: '',
+            }));
+        }
+
+        if (!isNumeric(phone)) {
+            setError((prevError) => ({
+                ...prevError,
+                phone: 'Phone number must contain only numbers'
+            }))
+            return;
+        } else {
+            setError((prevError) => ({
+                ...prevError,
+                phone: '',
+            }));
+        }
+
+        if (role === "") {
+            setError((prevError) => ({
+                ...prevError,
+                role: 'Please select a role or first create a role'
+            }));
+            return;
+        } else {
+            setError((prevError) => ({
+                ...prevError,
+                role: '',
+            }));
+        }
+
+        
+
 
         createUser_api(firstName, lastName, password, email, phone, role, managers, (error, res) => {
 
@@ -45,6 +108,16 @@ export default function CreateUser({ user, setUser }) {
 
 
     };
+
+
+    function isEmailValid(email) {
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        return emailPattern.test(email);
+    }
+
+    function isNumeric(input) {
+        return /^\d+$/.test(input);
+    }
 
     if (authContext.auth.permissions["users"].create)
         return (
@@ -93,6 +166,7 @@ export default function CreateUser({ user, setUser }) {
 
 
                         ]}
+                    error={error}
                     onSubmit={onSubmit}
 
                 />

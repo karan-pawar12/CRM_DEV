@@ -6,6 +6,11 @@ import NotAuthorized from "../NotAuthorized";
 
 export default function CreateLead({ lead, setLead }) {
   const authContext = useContext(AuthContext);
+  const [error, setError] = useState({
+    password: '', // Password error message
+    email: '', // Email error message
+    phone:''
+});
 
 
   const onSubmit = (formData) => {
@@ -162,6 +167,7 @@ export default function CreateLead({ lead, setLead }) {
 
 
             ]}
+            error={error}
           onSubmit={onSubmit}
 
         />

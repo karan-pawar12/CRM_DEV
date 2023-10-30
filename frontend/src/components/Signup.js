@@ -14,11 +14,36 @@ function Signup() {
     phone: '',
     password: '',
   });
+  const [passwordError, setPasswordError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
 
   function handleSignup(e) {
     e.preventDefault();
-
     const { firstName, lastName, email, phone, password } = formData;
+
+    if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long");
+      return;
+    } else {
+      setPasswordError('');
+    }
+
+    if (!isEmailValid(email)) {
+      setEmailError('Please enter a valid email address');
+      return;
+    } else {
+      setEmailError('');
+    }
+
+    if (!isNumeric(phone)) {
+      setPhoneError('Phone number must contain only numbers');
+      return;
+    } else {
+      setPhoneError('');
+    }
+
+
     signup_api(firstName, lastName, email, phone, password, (error, res) => {
       if (error) {
         alert("Signup Failed");
@@ -41,6 +66,15 @@ function Signup() {
       ...prevData,
       [name]: value,
     }));
+  }
+
+  function isEmailValid(email) {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(email);
+  }
+
+  function isNumeric(input) {
+    return /^\d+$/.test(input);
   }
 
   return (
@@ -76,6 +110,8 @@ function Signup() {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
+              isInvalid={emailError !== ''}
+              errorMessage={emailError}
             />
           </div>
           <div className="mb-4">
@@ -86,6 +122,8 @@ function Signup() {
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
+              isInvalid={phoneError !== ''}
+              errorMessage={phoneError}
             />
           </div>
           <div className="mb-4">
@@ -96,6 +134,8 @@ function Signup() {
               name="password"
               value={formData.password}
               onChange={handleInputChange}
+              isInvalid={passwordError !== ""}
+              errorMessage={passwordError}
             />
           </div>
           <Button
@@ -107,7 +147,7 @@ function Signup() {
         </form>
         <p className="mt-4 text-gray-600 text-sm text-center">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-500 hover:underline">
+          <Link to="/cpanel/login" className="text-blue-500 hover:underline">
             Login
           </Link>
         </p>

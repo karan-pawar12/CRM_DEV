@@ -2,9 +2,9 @@ import { Input, Select, SelectItem, Button } from "@nextui-org/react";
 import { useRef, useState } from "react";
 
 export default function Forms(props) {
-    const { fields, onSubmit, sizeProps, selectionModeProps } = props;
+    const { fields, onSubmit, sizeProps, error } = props;
     const formData = useRef(getRefValues());
-    const [formEmpty,setFormEmpty] = useState(true);
+    const [formEmpty, setFormEmpty] = useState(true);
     const size = sizeProps ?? "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1";
 
     function getRefValues() {
@@ -27,7 +27,7 @@ export default function Forms(props) {
 
     function handleSaveClick() {
         onSubmit(formData.current);
-        formData.current = getRefValues();
+        // formData.current = getRefValues();
         console.log(formData.current);
         setFormEmpty(old => !old);
     }
@@ -62,6 +62,10 @@ export default function Forms(props) {
                 {fields.map((f, index) => {
                     const key = `${f.name}-${index}`; //  unique key
                     if (f.type === "Input") {
+                        let isFieldValidated = false;
+                        if (["email", "password", "phone"].includes(f.name)) {
+                            isFieldValidated = true;
+                        }
                         return (
                             <div key={key}>
                                 <Input
@@ -72,12 +76,19 @@ export default function Forms(props) {
                                     name={f.name}
                                     onChange={onChange}
                                     defaultValue={formData.current[f.name]}
+                                    isInvalid={isFieldValidated && error[f.name] !== ''}
+                                    errorMessage={isFieldValidated ? error[f.name] : ''}
                                 />
                             </div>
                         );
                     }
                     if (f.type === "Select" && f.options) {
+                        let isFieldValidated = false;
+                        if (["role"].includes(f.name)) {
+                            isFieldValidated = true;
+                        }
                         return (
+                           
                             <div key={key}>
                                 <Select
                                     label={f.label}
@@ -87,6 +98,8 @@ export default function Forms(props) {
                                     onSelectionChange={(keys) => handleSelectChange({ target: { name: f.name, value: Array.from(keys) } })}
                                     selectedKeys={formData.current[f.name]}
                                     selectionMode={f.selectionMode}
+                                    isInvalid={isFieldValidated && error[f.name] !== ''}
+                                    errorMessage={isFieldValidated ? error[f.name]: ''}
                                 >
                                     {f.options.map((option) => (
                                         <SelectItem key={option.id} value={option.id}>
