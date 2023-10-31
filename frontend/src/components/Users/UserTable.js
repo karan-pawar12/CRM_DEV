@@ -5,6 +5,7 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, 
 import deleteUser_api from "../../api_strings/admin/deleteUser_api";
 import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
+import AdminContext from "../../AdminContext";
 
 const itemsPerPage = 10;
 
@@ -13,6 +14,7 @@ export default function UserTable({ user, setUser }) {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const authContext = useContext(AuthContext);
+    const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
 
 
@@ -24,13 +26,15 @@ export default function UserTable({ user, setUser }) {
     };
 
     function handleDeleteUserClick(userId) {
-        deleteUser_api(userId, (error, res) => {
-            if (error) {
-                console.log("Error:", error);
-            } else {
+        openConfirmationModal('Are you sure you want to delete this user ?', () => {
+            deleteUser_api(userId, (error, res) => {
+                if (error) {
+                    console.log("Error:", error);
+                } else {
 
-                setUser((users) => users.filter((user) => user._id !== userId))
-            }
+                    setUser((users) => users.filter((user) => user._id !== userId))
+                }
+            })
         })
     }
 

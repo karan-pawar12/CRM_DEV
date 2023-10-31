@@ -5,6 +5,7 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, 
 import deleteLead_api from "../../api_strings/admin/deleteLead_api";
 import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
+import AdminContext from "../../AdminContext";
 
 const itemsPerPage = 10;
 
@@ -14,6 +15,7 @@ export default function LeadTable({ lead, setLead }) {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const authContext = useContext(AuthContext);
+    const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
 
 
@@ -25,13 +27,17 @@ export default function LeadTable({ lead, setLead }) {
     };
 
     function handleDeleteLeadClick(leadId) {
-        deleteLead_api(leadId, (error, res) => {
-            if (error) {
-                console.log("Error:", error);
-            } else {
-                setLead((leads) => leads.filter((lead) => lead._id !== leadId));
-            }
-        })
+        openConfirmationModal('Are you sure you want to delete this lead?', () => {
+            deleteLead_api(leadId, (error, res) => {
+                if (error) {
+                    console.log("Error:", error);
+                } else {
+                    setLead((leads) => leads.filter((lead) => lead._id !== leadId));
+                }
+            })
+          });
+
+      
     }
 
     function handleDetailsLeadClick(leadId) {
@@ -110,7 +116,7 @@ export default function LeadTable({ lead, setLead }) {
                         </TableColumn>
                     )}
                 </TableHeader>
-                <TableBody items={lead.filter(lead => !lead.softDelete).slice(startIndex, endIndex)}>
+                <TableBody items={lead.slice(startIndex, endIndex)}>
                     {(lead) => (
 
                         <TableRow key={lead._id}>

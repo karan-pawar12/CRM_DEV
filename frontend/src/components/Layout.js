@@ -7,6 +7,8 @@ import User from './Users/User'
 import Notification from './Notifications/Notification'
 import Role from './Roles/Role'
 import AuthContext from '../AuthContext'
+import AdminContext from '../AdminContext'
+import ConfirmationModal from '../ConfirmationModal'
 
 const moduleMap = {
 	leads: <Lead />,
@@ -19,10 +21,12 @@ const moduleMap = {
 export default function Layout() {
 	const { module } = useParams();
 	const authContext = useContext(AuthContext);
+	const admincontext = useContext(AdminContext);
 
 	return (
 		<div className="h-screen w-screen overflow-hidden flex flex-row">
 			<Sidebar />
+			<ConfirmationModal data={admincontext.confirmModalData} open={admincontext.confirmModalOpen} closeConfirmationModal={admincontext.closeConfirmationModal} openConfirmationModal={admincontext.openConfirmationModal}/>
 			<div className="flex flex-col flex-1 border-red-300">
 
 				<div className="flex-1 p-4 min-h-0 overflow-auto">

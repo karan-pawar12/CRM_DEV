@@ -5,31 +5,35 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, 
 import { useNavigate } from "react-router-dom";
 import deleteRole_api from "../../api_strings/admin/deleteRole_api";
 import AuthContext from "../../AuthContext";
+import AdminContext from "../../AdminContext";
 const itemsPerPage = 10;
 
 
 
-function RoleTable({role,setRole}) {
+function RoleTable({ role, setRole }) {
     const [currentPage, setCurrentPage] = useState(1);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const authContext = useContext(AuthContext);
+    const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
 
 
 
     function handleDetailsRoleClick(roleId){
         navigate(`?id=${roleId}`);
-    }  
-    
-    function handleDeleteRoleClick(roleId) {
-        deleteRole_api(roleId, (error, res) => {
-            if (error) {
-                console.log("Error:", error);
-            } else {
+    }
 
-                setRole((roles) => roles.filter((role) => role._id !== roleId))
-            }
+    function handleDeleteRoleClick(roleId) {
+        openConfirmationModal('Are you sure you want to delete this role ?', () => {
+            deleteRole_api(roleId, (error, res) => {
+                if (error) {
+                    console.log("Error:", error);
+                } else {
+
+                    setRole((roles) => roles.filter((role) => role._id !== roleId))
+                }
+            })
         })
     }
 
@@ -108,7 +112,7 @@ function RoleTable({role,setRole}) {
                         )
                     }
                 </TableHeader>
-                <TableBody items={role.filter(role => !role.softDelete).slice(startIndex, endIndex)}>
+                <TableBody items={role.slice(startIndex, endIndex)}>
                     {(role) => (
 
                         <TableRow key={role._id}>
