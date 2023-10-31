@@ -2,7 +2,7 @@ const Role = require('../../schema/role')
 
 module.exports = async function (req, res, next) {
     try {
-        const roles = await Role.find({});
+        const roles = await Role.find({softDelete: false});
             
             
         res.json(roles);

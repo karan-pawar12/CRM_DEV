@@ -7,6 +7,7 @@ module.exports = async function (req, res, next) {
         const users = await User.aggregate([
             {
                 $match: {
+                    softDelete: false, 
                     $expr: {
                         $ne: [
                             '$_id', new mongoose.Types.ObjectId(req.payload._id)

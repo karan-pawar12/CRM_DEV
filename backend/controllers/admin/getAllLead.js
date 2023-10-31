@@ -5,7 +5,7 @@ module.exports = async function (req, res, next) {
     
 
         // Use Mongoose's select method to retrieve only the specified fields
-        const leads = await Lead.find({});
+        const leads = await Lead.find({softDelete: false});
 
         res.json(leads);
 
