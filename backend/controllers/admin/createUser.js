@@ -8,6 +8,10 @@ module.exports = async function (req, res, next) {
         const { firstName, lastName, password, email, phone, role, managers, createdBy = _id, updatedBy = _id } = req.body;
         let user = null;
 
+        if (!role || role.trim() === '') {
+            return res.status(400).json({ error: 'Role is required' });
+        }
+
         if (!isEmailValid(email)) {
             return res.status(400).json({ error: 'Invalid email address' });
         }

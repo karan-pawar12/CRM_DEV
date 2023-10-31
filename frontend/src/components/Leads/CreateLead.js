@@ -6,11 +6,6 @@ import NotAuthorized from "../NotAuthorized";
 
 export default function CreateLead({ lead, setLead }) {
   const authContext = useContext(AuthContext);
-  const [error, setError] = useState({
-    password: '', // Password error message
-    email: '', // Email error message
-    phone:''
-});
 
 
   const onSubmit = (formData) => {
@@ -59,22 +54,29 @@ export default function CreateLead({ lead, setLead }) {
               {
                 name: "firstName",
                 label: "First Name",
-                type: "Input"
+                type: "Input",
+                rules:{required:true},
+                errorMsg:"Please enter valid first Name"
               },
               {
                 name: "lastName",
                 label: "Last Name",
-                type: "Input"
+                type: "Input",
+                rules:{required:true},
+                errorMsg:"Please enter valid last Name"
               },
               {
                 name: "email",
                 label: "Email",
-                type: "Input"
+                type: "Input",
+                rules:{required:true,isEmail:true}
               },
               {
                 name: "phone",
                 label: "Phone No",
-                type: "Input"
+                type: "Input",
+                rules:{required:true,isPhone:true},
+                errorMsg:"Enter numbers only"
               },
               {
                 name: "company",
@@ -167,7 +169,7 @@ export default function CreateLead({ lead, setLead }) {
 
 
             ]}
-            error={error}
+         
           onSubmit={onSubmit}
 
         />

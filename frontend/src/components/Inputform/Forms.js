@@ -2,10 +2,20 @@ import { Input, Select, SelectItem, Button } from "@nextui-org/react";
 import { useRef, useState } from "react";
 
 export default function Forms(props) {
-    const { fields, onSubmit, sizeProps, error } = props;
+    const { fields, onSubmit, sizeProps } = props;
     const formData = useRef(getRefValues());
     const [formEmpty, setFormEmpty] = useState(true);
     const size = sizeProps ?? "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1";
+    const [errors,setErrors] = useState(getNullErrors());
+
+    function getNullErrors(){
+        let temp = {};
+        for (let i = 0; i < fields.length; i++) {
+           
+            temp[fields[i].name] = false;
+        }
+        return temp;
+    }
 
     function getRefValues() {
         let temp = {};
@@ -26,9 +36,55 @@ export default function Forms(props) {
     }
 
     function handleSaveClick() {
+
+        let hasError = false;
+        let tempErrors = JSON.parse(JSON.stringify(errors));
+        for(let i=0;i<fields.length;i++){
+
+            if(!fields[i].hasOwnProperty('rules')){
+                fields[i].rules = {};
+            }
+            let {required=false,min=null,max=null,isEmail=false,isPhone=false,isName=false} = fields[i].rules;
+            let value = formData.current[fields[i].name];
+            console.log(required);
+
+            let error = false;
+            if(required && value.length==0){
+                error = true;
+            }
+             else if(isEmail && !isEmailValid(value)){
+                error =true;
+            }
+            else if(isPhone && !isNumeric(value)){
+                error = true;
+            }
+            else if(min!=null){
+               console.log(min);
+                if(value.length<min){
+                    error = true
+                }   
+            }
+            else if(isName && isValidName){
+                error = true;
+            }
+
+
+            if(error){
+                tempErrors[fields[i].name] = fields[i].errorMsg?? "Invalid input for "+fields[i].name;
+                hasError = true;
+            }else{
+                tempErrors[fields[i].name] = false;
+            }
+        }   
+
+        if(hasError){
+            setErrors(tempErrors);
+            return;
+        }
+
+    
         onSubmit(formData.current);
         // formData.current = getRefValues();
-        console.log(formData.current);
         setFormEmpty(old => !old);
     }
 
@@ -50,6 +106,20 @@ export default function Forms(props) {
         }
     }
 
+    
+    function isEmailValid(email) {
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        return emailPattern.test(email);
+    }
+
+    function isNumeric(input) {
+        return /^\d+$/.test(input);
+    }
+
+    function isValidName(name) {
+        return /^[A-Za-z]+$/.test(name);
+    }
+
     return (
         <>
             <div className="flex justify-end mt-5">
@@ -62,10 +132,6 @@ export default function Forms(props) {
                 {fields.map((f, index) => {
                     const key = `${f.name}-${index}`; //  unique key
                     if (f.type === "Input") {
-                        let isFieldValidated = false;
-                        if (["email", "password", "phone"].includes(f.name)) {
-                            isFieldValidated = true;
-                        }
                         return (
                             <div key={key}>
                                 <Input
@@ -76,8 +142,8 @@ export default function Forms(props) {
                                     name={f.name}
                                     onChange={onChange}
                                     defaultValue={formData.current[f.name]}
-                                    isInvalid={isFieldValidated && error[f.name] !== ''}
-                                    errorMessage={isFieldValidated ? error[f.name] : ''}
+                                    isInvalid = {errors[f.name]}
+                                    errorMessage = {errors[f.name]}
                                 />
                             </div>
                         );
@@ -98,8 +164,8 @@ export default function Forms(props) {
                                     onSelectionChange={(keys) => handleSelectChange({ target: { name: f.name, value: Array.from(keys) } })}
                                     selectedKeys={formData.current[f.name]}
                                     selectionMode={f.selectionMode}
-                                    isInvalid={isFieldValidated && error[f.name] !== ''}
-                                    errorMessage={isFieldValidated ? error[f.name]: ''}
+                                    isInvalid = {errors[f.name]}
+                                    errorMessage = {errors[f.name]}
                                 >
                                     {f.options.map((option) => (
                                         <SelectItem key={option.id} value={option.id}>

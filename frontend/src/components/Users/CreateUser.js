@@ -8,12 +8,6 @@ import getAllRole_api from "../../api_strings/admin/getAllRole";
 export default function CreateUser({ user, setUser }) {
     const authContext = useContext(AuthContext);
     const [roleOptions, setRoleOptions] = useState([]);
-    const [error, setError] = useState({
-        password: '', // Password error message
-        email: '', // Email error message
-        phone:'',
-        role: ''
-    });
 
     useEffect(() => {
         getAllRole_api((error, res) => {
@@ -35,61 +29,6 @@ export default function CreateUser({ user, setUser }) {
             firstName, lastName, password, email, phone, role, managers
 
         } = formData;
-
-        console.log(password.length);
-
-        if (password.length < 8) {
-            setError((prevError) => ({
-                ...prevError,
-                password: 'Password must be at least 8 characters long'
-            }))
-            return;
-        } else {
-            setError((prevError) => ({
-                ...prevError,
-                password: '',
-            }));
-        }
-
-        if (!isEmailValid(email)) {
-            setError((prevError) => ({
-                ...prevError,
-                email: 'Please enter a valid email address'
-            }))
-            return;
-        } else {
-            setError((prevError) => ({
-                ...prevError,
-                email: '',
-            }));
-        }
-
-        if (!isNumeric(phone)) {
-            setError((prevError) => ({
-                ...prevError,
-                phone: 'Phone number must contain only numbers'
-            }))
-            return;
-        } else {
-            setError((prevError) => ({
-                ...prevError,
-                phone: '',
-            }));
-        }
-
-        if (role === "") {
-            setError((prevError) => ({
-                ...prevError,
-                role: 'Please select a role or first create a role'
-            }));
-            return;
-        } else {
-            setError((prevError) => ({
-                ...prevError,
-                role: '',
-            }));
-        }
-
         
 
 
@@ -110,14 +49,8 @@ export default function CreateUser({ user, setUser }) {
     };
 
 
-    function isEmailValid(email) {
-        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        return emailPattern.test(email);
-    }
 
-    function isNumeric(input) {
-        return /^\d+$/.test(input);
-    }
+   
 
     if (authContext.auth.permissions["users"].create)
         return (
@@ -130,33 +63,44 @@ export default function CreateUser({ user, setUser }) {
                             {
                                 name: "firstName",
                                 label: "First Name",
-                                type: "Input"
+                                type: "Input",
+                                rules:{required:true},
+                                errorMsg:"Please enter valid first Name"
                             },
                             {
                                 name: "lastName",
                                 label: "Last Name",
-                                type: "Input"
+                                type: "Input",
+                                rules:{required:true},
+                                errorMsg:"Please enter valid last Name"
                             },
                             {
                                 name: "email",
                                 label: "Email",
-                                type: "Input"
+                                type: "Input",
+                                rules:{required:true,isEmail:true}
                             },
                             {
                                 name: "phone",
                                 label: "Phone No",
-                                type: "Input"
+                                type: "Input",
+                                rules:{required:true,isPhone:true},
+                                errorMsg:"Enter numbers only"
                             },
                             {
                                 name: "password",
                                 label: "Password",
-                                type: "Input"
+                                type: "Input",
+                                rules:{min:8},
+                                errorMsg:"Password length should be greater than 8 Character"
                             },
                             {
                                 name: "role",
                                 label: "Roles",
                                 type: "Select",
-                                options: roleOptions
+                                options: roleOptions,
+                                rules:{required:true},
+                                errorMsg:'Please select a role or first create a role'
                             },
                             {
                                 name: "managers",
@@ -166,7 +110,6 @@ export default function CreateUser({ user, setUser }) {
 
 
                         ]}
-                    error={error}
                     onSubmit={onSubmit}
 
                 />
