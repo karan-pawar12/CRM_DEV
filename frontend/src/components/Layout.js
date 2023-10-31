@@ -8,7 +8,7 @@ import Notification from './Notifications/Notification'
 import Role from './Roles/Role'
 import AuthContext from '../AuthContext'
 import AdminContext from '../AdminContext'
-import ConfirmationModal from '../ConfirmationModal'
+import ConfirmationModal from './ConfirmationModal'
 
 const moduleMap = {
 	leads: <Lead />,
