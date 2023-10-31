@@ -3,6 +3,7 @@ import Forms from "../Inputform/Forms";
 import createLead_api from "../../api_strings/admin/createLead_api";
 import AuthContext from "../../AuthContext";
 import NotAuthorized from "../NotAuthorized";
+import Backbutton from "../Backbutton";
 
 export default function CreateLead({ lead, setLead }) {
   const authContext = useContext(AuthContext);
@@ -45,6 +46,8 @@ export default function CreateLead({ lead, setLead }) {
   if (authContext.auth.permissions["leads"].create)
 
     return (
+      <>
+      <Backbutton />
       <div className="w-full">
 
         <Forms
@@ -175,6 +178,7 @@ export default function CreateLead({ lead, setLead }) {
         />
 
       </div>
+      </>
     )
   else {
     return (

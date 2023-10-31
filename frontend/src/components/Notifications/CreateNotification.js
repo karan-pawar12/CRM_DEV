@@ -2,6 +2,7 @@ import { useEffect,useState } from "react";
 import Forms from "../Inputform/Forms";
 import getAllUser_api from "../../api_strings/admin/getAllUser_api";
 import Createnotification_api from "../../api_strings/admin/createNotification_api";
+import Backbutton from "../Backbutton";
 
 function CreateNotification({notification,setNotification}){
     const[userArr,setuserArr] = useState([]);
@@ -39,6 +40,8 @@ function CreateNotification({notification,setNotification}){
     },[])
 
     return(
+        <>
+        <Backbutton />
         <div className="w-full">
             <Forms
                 fields={
@@ -83,6 +86,7 @@ function CreateNotification({notification,setNotification}){
                 onSubmit={onSubmit}
             />
         </div>
+        </>
     )
 }
 

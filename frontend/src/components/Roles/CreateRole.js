@@ -1,5 +1,6 @@
 import Forms from "../Inputform/Forms";
 import CreateRole_api from "../../api_strings/admin/createRole_api";
+import Backbutton from "../Backbutton";
 
 function CreateRole({role,setRole}) {
 
@@ -19,6 +20,8 @@ function CreateRole({role,setRole}) {
     }
 
     return (
+        <>
+        <Backbutton />
         <div className="w-full">
             <Forms
                 fields={
@@ -40,6 +43,7 @@ function CreateRole({role,setRole}) {
                 onSubmit={onSubmit}
             />
         </div>
+        </>
     )
 }
 

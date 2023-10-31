@@ -7,6 +7,7 @@ import { FaCheckCircle } from 'react-icons/fa'
 import { BsFillFileExcelFill } from 'react-icons/bs'
 import updateRole_api from "../../api_strings/admin/updateRole_api";
 import { Accordion, AccordionItem, Switch } from "@nextui-org/react";
+import Backbutton from "../Backbutton";
 const size = "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1"
 
 
@@ -159,6 +160,7 @@ function RoleDetails() {
 
     return (
         <>
+            <Backbutton />
             <div className={`grid w-full ${size} gap-10 mt-6`}>
                 {createInputField("roleOwner", "Role Owner")}
                 {createInputField("name", "Role Name")}

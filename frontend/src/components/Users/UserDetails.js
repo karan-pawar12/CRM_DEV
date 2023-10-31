@@ -6,7 +6,7 @@ import { EditIcon } from "../../resources/icons/icons";
 import { FaCheckCircle } from 'react-icons/fa'
 import { BsFillFileExcelFill } from 'react-icons/bs'
 import updateUser_api from "../../api_strings/admin/updateUser_api";
-import getAllRole_api from "../../api_strings/admin/getAllRole";
+import Backbutton from "../Backbutton";
 
 function UserDetails({user,setUser}) {
     const location = useLocation();
@@ -139,6 +139,8 @@ function UserDetails({user,setUser}) {
     }
 
         return (
+            <>
+            <Backbutton />
             <div className={`grid w-full ${size} gap-10 mt-6`}>
                 {createInputField("firstName", "First Name")}
                 {createInputField("lastName", "Last Name")}
@@ -147,6 +149,7 @@ function UserDetails({user,setUser}) {
                 {createInputField("managers", "Managers")}
                 {selectField("role", "Roles", roleOptions)}
             </div>
+            </>
         );
     }
 

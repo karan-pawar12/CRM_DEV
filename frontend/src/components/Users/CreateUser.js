@@ -4,6 +4,7 @@ import createUser_api from "../../api_strings/admin/createUser_api";
 import AuthContext from "../../AuthContext";
 import NotAuthorized from "../NotAuthorized";
 import getAllRole_api from "../../api_strings/admin/getAllRole";
+import Backbutton from '../Backbutton';
 
 export default function CreateUser({ user, setUser }) {
     const authContext = useContext(AuthContext);
@@ -54,8 +55,9 @@ export default function CreateUser({ user, setUser }) {
 
     if (authContext.auth.permissions["users"].create)
         return (
-            <div className="w-full">
-
+            <>
+                <Backbutton />
+                <div className="w-full">
                 <Forms
 
                     fields={
@@ -115,6 +117,7 @@ export default function CreateUser({ user, setUser }) {
                 />
 
             </div>
+            </>
         )
     else {
         return (
