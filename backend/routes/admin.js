@@ -89,4 +89,6 @@ router.get('/getAllNotification',verifyAccessToken,require('../controllers/admin
 
 router.get('/getAllUserWithoutskip',verifyAccessToken,require('../controllers/admin/getAllUserWithouskip'));
 
+router.get('/getAllRoleWithoutskip',verifyAccessToken,require('../controllers/admin/getAllRoleWithoutskip'));
+
 module.exports = router;

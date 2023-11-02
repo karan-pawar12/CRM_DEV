@@ -3,7 +3,7 @@ import Forms from "../Inputform/Forms";
 import createUser_api from "../../api_strings/admin/createUser_api";
 import AuthContext from "../../AuthContext";
 import NotAuthorized from "../NotAuthorized";
-import getAllRole_api from "../../api_strings/admin/getAllRole";
+import getAllRoleWithoutskip from "../../api_strings/admin/getAllRoleWithoutskip";
 import Backbutton from '../Backbutton';
 
 export default function CreateUser({ onCreateSuccess }) {
@@ -11,15 +11,11 @@ export default function CreateUser({ onCreateSuccess }) {
     const [roleOptions, setRoleOptions] = useState([]);
 
     useEffect(() => {
-        getAllRole_api({},(error, res) => {
+        getAllRoleWithoutskip((error, res) => {
             if (error) {
                 console.log(error);
             } else {
-                const roles = res.data.map((role) => ({
-                    name: role.name,
-                    id: role._id,
-                }));
-                setRoleOptions(roles);
+                setRoleOptions(res.data);
             }
         })
     }, [])

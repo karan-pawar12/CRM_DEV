@@ -28,11 +28,7 @@ function CreateNotification({onCreateSuccess}){
             if (error) {
               console.log("Error:", error);
             } else {
-                const users = res.data.map((user) => ({
-                    name: `${user.firstName} ${user.lastName}`,
-                    id:user._id
-                }))
-                setuserArr(users);
+                setuserArr(res.data);
             }
           });
     },[])

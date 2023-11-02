@@ -40,4 +40,6 @@ export const CREATE_NOTIFICATION = BASE+ "createNotification";
 
 export const GET_ALLNOTIFICATION = BASE+ "getAllNotification";
 
-export const GET_ALLUSERWITHOUT = BASE+ "getAllUserWithoutskip"
+export const GET_ALLUSERWITHOUTSKIP = BASE+ "getAllUserWithoutskip";
+
+export const GET_ALLROLEWITHOUTSKIP = BASE+ "getAllRoleWithoutskip"
