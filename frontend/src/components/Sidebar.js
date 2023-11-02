@@ -19,11 +19,11 @@ function Sidebar() {
     },[]);
 
     function getAllNotification() {
-        getAllNotification_api((error,res) => {
+        getAllNotification_api({},(error,res) => {
             if(error){
                 console.log("Error",error);
             }else{
-                setnotificationcount(res.data.length);
+                setnotificationcount(res.data.notifications.length);
             }
         })
     }   

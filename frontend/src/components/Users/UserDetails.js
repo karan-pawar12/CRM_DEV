@@ -8,7 +8,7 @@ import { BsFillFileExcelFill } from 'react-icons/bs'
 import updateUser_api from "../../api_strings/admin/updateUser_api";
 import Backbutton from "../Backbutton";
 
-function UserDetails({user,setUser}) {
+function UserDetails({onUpdateSuccess}) {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
@@ -57,6 +57,7 @@ function UserDetails({user,setUser}) {
                 if (error) {
                     alert("User details updation failed");
                 } else {
+                    onUpdateSuccess(res.data)
                     alert("User details updated successfully");
                 }
             });
@@ -78,6 +79,7 @@ function UserDetails({user,setUser}) {
             if (error) {
                 alert("User updation failed");
             } else {
+                onUpdateSuccess(res.data)
                 alert("User updated successfully");
             }
         });
@@ -123,7 +125,7 @@ function UserDetails({user,setUser}) {
                 <Select
                     label={label}
                     defaultSelectedKeys={fieldValue}
-                    selectionMode="multiple"
+                    selectionMode="single"
                     labelPlacement="outside"
                     className="mt-6"
                     onChange={(selectedKeys) => handleSelectChange(field, selectedKeys)}

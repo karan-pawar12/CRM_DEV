@@ -1,10 +1,10 @@
 import { GET_ALLNOTIFICATION } from "../../resources/urls/admin";
 import axios from '../../Interceptor'
 
-async function getAllNotification_api(callback) {
+async function getAllNotification_api({skip,limit},callback) {
     try {
 
-        const res = await axios.get(GET_ALLNOTIFICATION);
+        const res = await axios.get(`${GET_ALLNOTIFICATION}?skip=${skip}&limit=${limit}`);
 
         if(res){
             callback(null,res);

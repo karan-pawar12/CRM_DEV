@@ -1,10 +1,10 @@
-import { GETALL_USER } from "../../resources/urls/admin";
+import { GET_ALLUSERWITHOUT } from "../../resources/urls/admin";
 import axios from '../../Interceptor'
 
-async function getAllUser_api({skip,limit},callback) {
+async function getAllUserWithoutskip(callback) {
     try {
 
-        const res = await axios.get(`${GETALL_USER}?skip=${skip}&limit=${limit}`);
+        const res = await axios.get(GET_ALLUSERWITHOUT);
 
         if(res){
             callback(null,res);
@@ -16,4 +16,4 @@ async function getAllUser_api({skip,limit},callback) {
     }
 }
 
-export default getAllUser_api;
+export default getAllUserWithoutskip;

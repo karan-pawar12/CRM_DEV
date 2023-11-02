@@ -7,15 +7,18 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
 
-const itemsPerPage = 10;
+const limit = 10;
 
-export default function UserTable({ user, setUser }) {
+export default function UserTable({ users, setUsers,onPageChange, count }) {
     const [currentPage, setCurrentPage] = useState(1);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    const [totalPage,setTotalPage] = useState(1);
     const authContext = useContext(AuthContext);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
+    useEffect(()=>{
+        calculateTotalPage();
+    },[count])
+
 
 
 
@@ -32,7 +35,7 @@ export default function UserTable({ user, setUser }) {
                     console.log("Error:", error);
                 } else {
 
-                    setUser((users) => users.filter((user) => user._id !== userId))
+                    setUsers((users) => users.filter((user) => user._id !== userId))
                 }
             })
         })
@@ -40,6 +43,17 @@ export default function UserTable({ user, setUser }) {
 
     function handleDetailsUserClick(userId) {
         navigate(`?id=${userId}`);
+    }
+
+    function calculateTotalPage(){
+        let temp = (count/limit);
+        if(temp>parseInt(temp)){
+            temp = parseInt(temp) + 1;
+        }else{
+            temp = parseInt(temp);
+            
+        }
+        setTotalPage(temp);
     }
 
     const renderCell = useCallback((user, columnKey) => {
@@ -110,7 +124,7 @@ export default function UserTable({ user, setUser }) {
                         </TableColumn>
                     )}
                 </TableHeader>
-                <TableBody items={user.slice(startIndex, endIndex)}>
+                <TableBody items={users}>
                     {(user) => (
 
                         <TableRow key={user._id}>
@@ -122,10 +136,9 @@ export default function UserTable({ user, setUser }) {
             </Table>
             <Pagination
                 className="flex justify-center"
-                total={user.length}
-                pageSize={itemsPerPage}
+                total={totalPage}
                 current={currentPage}
-                onChange={(newPage) => setCurrentPage(newPage)}
+                onChange={onPageChange}
             />
         </>
     );

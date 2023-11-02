@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,useRef} from "react";
 import { useLocation } from 'react-router-dom';
 import RoleTable from "./RoleTable";
 import CreateRole from "./CreateRole";
@@ -7,8 +7,11 @@ import getAllRole_api from "../../api_strings/admin/getAllRole";
 
 
 function Role() {
-  const [role, setRole] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [count,settotalCount] = useState(0)
   const query = useQuery();
+  const skip = useRef(0);
+  const limit = useRef(10);
 
 
   useEffect(() => {
@@ -16,22 +19,47 @@ function Role() {
   }, [])
 
   function getAllRole() {
-    getAllRole_api((error, res) => {
+    getAllRole_api({skip:skip.current,limit:limit.current},(error, res) => {
       if (error) {
         console.log("Error:", error);
       }
       else {
-        setRole(res.data);
+        setRoles(res.data.roles);
+        settotalCount(res.data.totalCount);
+
       }
     })
   }
 
+  function onPageChange(pageNumber){
+    skip.current = (pageNumber-1) * limit.current;
+    getAllRole();
+  }
+
+  function onCreateSuccess(newlyCreatedData){
+    setRoles(old=>[newlyCreatedData,...old]);
+  }
+
+  function onUpdateSuccess(data){
+    setRoles(old=>{
+      let temp = JSON.parse(JSON.stringify(old));
+      for(let i=0;i<temp.length;i++){
+          if(data._id==temp[i]._id){
+            temp[i] = data;
+            break;
+          }
+      }
+      return temp;
+
+    });
+  }
+
   return <>
     <div hidden={query.get("id") === "" || !query.get("id") ? false : true}>
-      <RoleTable role={role} setRole={setRole}/>
+      <RoleTable roles={roles} setRoles={setRoles} onPageChange={onPageChange} count={count}/>
     </div>
 
-    {(query.get("id") === "new") ? <CreateRole role={role} setRole={setRole}/> : (query.get("id") !== null && query.get("id") !== "") && <RoleDetails role={role} setRole={setRole}/>}
+    {(query.get("id") === "new") ? <CreateRole  onCreateSuccess={onCreateSuccess}/> : (query.get("id") !== null && query.get("id") !== "") && <RoleDetails onUpdateSuccess={onUpdateSuccess}/>}
 
   </>
 

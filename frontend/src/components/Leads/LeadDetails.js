@@ -39,7 +39,7 @@ const leadstatusArr = [
 
 const ratingArr = ["Acquired", "Active", "Market Failed", "Project Cancelled", "Shut Down"];
 
-function LeadDetails() {
+function LeadDetails({onUpdateSuccess}) {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
@@ -97,6 +97,7 @@ function LeadDetails() {
                 if (error) {
                     alert("Lead updation failed");
                 } else {
+                     onUpdateSuccess(res.data)
                     alert("Lead updated successfully");
                 }
             });
@@ -120,6 +121,7 @@ function LeadDetails() {
             if (error) {
                 alert("Lead updation failed");
             } else {
+                onUpdateSuccess(res.data)
                 alert("Lead updated successfully");
             }
         });

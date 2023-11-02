@@ -87,4 +87,6 @@ router.post('/createNotification',verifyAccessToken,require('../controllers/admi
 
 router.get('/getAllNotification',verifyAccessToken,require('../controllers/admin/getAllNotification'));
 
+router.get('/getAllUserWithoutskip',verifyAccessToken,require('../controllers/admin/getAllUserWithouskip'));
+
 module.exports = router;

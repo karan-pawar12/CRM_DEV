@@ -1,10 +1,10 @@
 import { useEffect,useState } from "react";
 import Forms from "../Inputform/Forms";
-import getAllUser_api from "../../api_strings/admin/getAllUser_api";
+import getAllUserWithoutskip from "../../api_strings/admin/getallUserWithoutskip";
 import Createnotification_api from "../../api_strings/admin/createNotification_api";
 import Backbutton from "../Backbutton";
 
-function CreateNotification({notification,setNotification}){
+function CreateNotification({onCreateSuccess}){
     const[userArr,setuserArr] = useState([]);
 
     const onSubmit = (formData) => {
@@ -15,9 +15,7 @@ function CreateNotification({notification,setNotification}){
                 alert("Unable to push notification")
             }
             else{
-                const currentnotificationArr = notification;
-                const newnotificationArr = [...currentnotificationArr,res.data];
-                setNotification(newnotificationArr)
+                onCreateSuccess(res.data);
                 alert("Successfully pushed notification")
             }
         })
@@ -26,7 +24,7 @@ function CreateNotification({notification,setNotification}){
     }
 
     useEffect(() => {
-        getAllUser_api((error, res) => {
+        getAllUserWithoutskip((error, res) => {
             if (error) {
               console.log("Error:", error);
             } else {

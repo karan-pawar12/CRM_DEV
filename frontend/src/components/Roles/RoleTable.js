@@ -6,18 +6,19 @@ import { useNavigate } from "react-router-dom";
 import deleteRole_api from "../../api_strings/admin/deleteRole_api";
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
-const itemsPerPage = 10;
+const limit = 10;
 
 
 
-function RoleTable({ role, setRole }) {
+function RoleTable({ roles, setRoles,onPageChange,count }) {
     const [currentPage, setCurrentPage] = useState(1);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    const [totalPage,setTotalPage] = useState(1);
     const authContext = useContext(AuthContext);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
-
+    useEffect(()=>{
+        calculateTotalPage();
+    },[count])
 
 
     function handleDetailsRoleClick(roleId){
@@ -31,10 +32,21 @@ function RoleTable({ role, setRole }) {
                     console.log("Error:", error);
                 } else {
 
-                    setRole((roles) => roles.filter((role) => role._id !== roleId))
+                    setRoles((roles) => roles.filter((role) => role._id !== roleId))
                 }
             })
         })
+    }
+
+    function calculateTotalPage(){
+        let temp = (count/limit);
+        if(temp>parseInt(temp)){
+            temp = parseInt(temp) + 1;
+        }else{
+            temp = parseInt(temp);
+            
+        }
+        setTotalPage(temp);
     }
 
 
@@ -112,7 +124,7 @@ function RoleTable({ role, setRole }) {
                         )
                     }
                 </TableHeader>
-                <TableBody items={role.slice(startIndex, endIndex)}>
+                <TableBody items={roles}>
                     {(role) => (
 
                         <TableRow key={role._id}>
@@ -124,10 +136,9 @@ function RoleTable({ role, setRole }) {
             </Table>
             <Pagination
                 className="flex justify-center"
-                total={role.length}
-                pageSize={itemsPerPage}
+                total={totalPage}
                 current={currentPage}
-                onChange={(newPage) => setCurrentPage(newPage)}
+                onChange={onPageChange}
             />
         </>
 

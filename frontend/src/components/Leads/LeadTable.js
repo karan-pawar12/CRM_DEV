@@ -7,17 +7,18 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
 
-const itemsPerPage = 10;
+const limit = 10;
 
-export default function LeadTable({ lead, setLead }) {
+export default function LeadTable({ leads, setLeads, onPageChange,count }) {
     const [currentPage, setCurrentPage] = useState(1);
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    const [totalPage,setTotalPage] = useState(1);
     const authContext = useContext(AuthContext);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
 
+    useEffect(()=>{
+        calculateTotalPage();
+    },[count])
 
 
 
@@ -32,12 +33,23 @@ export default function LeadTable({ lead, setLead }) {
                 if (error) {
                     console.log("Error:", error);
                 } else {
-                    setLead((leads) => leads.filter((lead) => lead._id !== leadId));
+                    setLeads((leads) => leads.filter((lead) => lead._id !== leadId));
                 }
             })
           });
 
       
+    }
+
+    function calculateTotalPage(){
+        let temp = (count/limit);
+        if(temp>parseInt(temp)){
+            temp = parseInt(temp) + 1;
+        }else{
+            temp = parseInt(temp);
+            
+        }
+        setTotalPage(temp);
     }
 
     function handleDetailsLeadClick(leadId) {
@@ -116,7 +128,7 @@ export default function LeadTable({ lead, setLead }) {
                         </TableColumn>
                     )}
                 </TableHeader>
-                <TableBody items={lead.slice(startIndex, endIndex)}>
+                <TableBody items={leads}>
                     {(lead) => (
 
                         <TableRow key={lead._id}>
@@ -128,10 +140,9 @@ export default function LeadTable({ lead, setLead }) {
             </Table>
             <Pagination
                 className="flex justify-center"
-                total={lead.length}
-                pageSize={itemsPerPage}
+                total={totalPage}
                 page={currentPage}
-                onChange={(newPage) => setCurrentPage(newPage)}
+                onChange={onPageChange}
             />
         </>
     );

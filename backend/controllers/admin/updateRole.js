@@ -9,7 +9,7 @@ module.exports = async function (req, res, next) {
 
         if (fieldName && fieldValue) {
             const update = { $set: { [fieldName]: fieldValue } };
-            role = await Role.findByIdAndUpdate(_id, update);
+            role = await Role.findByIdAndUpdate(_id, update,{ new: true });
         } else if (permissionType) {
             const update = {
                 $set: {
@@ -25,7 +25,7 @@ module.exports = async function (req, res, next) {
             return res.status(404).json({ error: 'Role not found.' });
         }
 
-        res.json(role);
+        res.status(200).json(role);
 
     } catch (e) {
         console.log(e.message);

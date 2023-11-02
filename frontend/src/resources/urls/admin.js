@@ -39,3 +39,5 @@ export const GET_PERMISSIONS = BASE+ "getPermission";
 export const CREATE_NOTIFICATION = BASE+ "createNotification";
 
 export const GET_ALLNOTIFICATION = BASE+ "getAllNotification";
+
+export const GET_ALLUSERWITHOUT = BASE+ "getAllUserWithoutskip"

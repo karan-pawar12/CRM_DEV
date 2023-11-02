@@ -149,10 +149,6 @@ export default function Forms(props) {
                         );
                     }
                     if (f.type === "Select" && f.options) {
-                        let isFieldValidated = false;
-                        if (["role"].includes(f.name)) {
-                            isFieldValidated = true;
-                        }
                         return (
                            
                             <div key={key}>
@@ -161,8 +157,8 @@ export default function Forms(props) {
                                     placeholder={`Choose ${f.label.toLowerCase()}`}
                                     labelPlacement="outside"
                                     name={f.name}
+                                    defaultSelectedKeys={formData.current[f.name]}
                                     onSelectionChange={(keys) => handleSelectChange({ target: { name: f.name, value: Array.from(keys) } })}
-                                    selectedKeys={formData.current[f.name]}
                                     selectionMode={f.selectionMode}
                                     isInvalid = {errors[f.name]}
                                     errorMessage = {errors[f.name]}

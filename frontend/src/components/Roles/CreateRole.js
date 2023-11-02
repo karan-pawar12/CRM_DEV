@@ -2,7 +2,7 @@ import Forms from "../Inputform/Forms";
 import CreateRole_api from "../../api_strings/admin/createRole_api";
 import Backbutton from "../Backbutton";
 
-function CreateRole({role,setRole}) {
+function CreateRole({onCreateSuccess}) {
 
     const onSubmit = (formData) => {
         const { name,description } = formData;
@@ -11,9 +11,7 @@ function CreateRole({role,setRole}) {
                 alert("Role Creation Failed");
             }
             else {
-                const currentRoleArray = role;
-                const newRoleArray = [...currentRoleArray, res.data];
-                setRole(newRoleArray);
+                onCreateSuccess(res.data);
             }
         })
 

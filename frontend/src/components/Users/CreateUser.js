@@ -6,12 +6,12 @@ import NotAuthorized from "../NotAuthorized";
 import getAllRole_api from "../../api_strings/admin/getAllRole";
 import Backbutton from '../Backbutton';
 
-export default function CreateUser({ user, setUser }) {
+export default function CreateUser({ onCreateSuccess }) {
     const authContext = useContext(AuthContext);
     const [roleOptions, setRoleOptions] = useState([]);
 
     useEffect(() => {
-        getAllRole_api((error, res) => {
+        getAllRole_api({},(error, res) => {
             if (error) {
                 console.log(error);
             } else {
@@ -40,9 +40,8 @@ export default function CreateUser({ user, setUser }) {
                 alert("User Creation Failed");
             }
             else {
-                const currentUserArray = user;
-                const newUserArray = [...currentUserArray, res.data];
-                setUser(newUserArray);
+                onCreateSuccess(res.data);
+                alert("User Created successfully");
             }
         })
 

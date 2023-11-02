@@ -1,9 +1,10 @@
 const User = require('../../schema/user');
-const Role = require('../../schema/role');
 const mongoose = require('mongoose');
 
 module.exports = async function (req, res, next) {
     try {
+        let {skip=0,limit=10} = req.query;
+
         const users = await User.aggregate([
             {
                 $match: {
@@ -14,6 +15,12 @@ module.exports = async function (req, res, next) {
                         ]
                     }
                 }
+            },
+            {
+                $skip: parseInt(skip)
+            },
+            {
+                $limit: parseInt(limit)
             },
             {
                 $lookup: {
@@ -30,6 +37,7 @@ module.exports = async function (req, res, next) {
                 }
             },
             {
+
                 $project: {
                     _id: 1,
                     firstName: 1,
@@ -40,10 +48,13 @@ module.exports = async function (req, res, next) {
                         $ifNull: ['$userRole.name', 'admin']
                     }
                 }
-            }
+            },
+            
         ]);
 
-        res.json(users);
+        const totalCount = await User.countDocuments({ softDelete: false });
+
+        res.json({users,totalCount});
     } catch (e) {
         console.log(e.message);
         return res.status(500).end();

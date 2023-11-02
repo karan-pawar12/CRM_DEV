@@ -1,10 +1,10 @@
 import { GETALL_ROLE } from "../../resources/urls/admin";
 import axios from '../../Interceptor'
 
-async function getAllRole_api(callback) {
+async function getAllRole_api({skip,limit},callback) {
     try {
 
-        const res = await axios.get(GETALL_ROLE);
+        const res = await axios.get(`${GETALL_ROLE}?skip=${skip}&limit=${limit}`);
 
         if(res){
             callback(null,res);

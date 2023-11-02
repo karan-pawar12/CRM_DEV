@@ -5,7 +5,7 @@ import AuthContext from "../../AuthContext";
 import NotAuthorized from "../NotAuthorized";
 import Backbutton from "../Backbutton";
 
-export default function CreateLead({ lead, setLead }) {
+export default function CreateLead({ onCreateSuccess }) {
   const authContext = useContext(AuthContext);
 
 
@@ -34,9 +34,7 @@ export default function CreateLead({ lead, setLead }) {
         alert("Lead Creation Failed");
       }
       else {
-        const currentLeadArray = lead;
-        const newLeadArray = [...currentLeadArray, res.data];
-        setLead(newLeadArray);
+        onCreateSuccess(res.data);
       }
     })
 

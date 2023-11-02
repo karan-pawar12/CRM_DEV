@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useRef } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import LeadTable from "./LeadTable";
 import CreateLead from "./CreateLead";
@@ -8,7 +8,11 @@ import getAllLead_api from "../../api_strings/admin/getAllLead_api";
 
 function Lead() {
   const query = useQuery();
-  const [lead, setLead] = useState([]);
+  const [leads, setLeads] = useState([]);
+  const [count,settotalCount] = useState()
+  const skip = useRef(0);
+  const limit = useRef(10);
+
 
   useEffect(() => {
     getAllLead();
@@ -16,24 +20,48 @@ function Lead() {
 
   function getAllLead() {
 
-    getAllLead_api((error, res) => {
+    getAllLead_api({skip:skip.current,limit:limit.current},(error, res) => {
       if (error) {
         console.log("Error:", error);
       } else {
 
-        setLead(res.data);
-
+        setLeads(res.data.leads);
+        settotalCount(res.data.totalCount);
 
       }
     });
   }
 
+  function onPageChange(pageNumber){
+    skip.current = (pageNumber-1) * limit.current;
+    getAllLead();
+  }
+
+
+  function onCreateSuccess(newlyCreatedData){
+    setLeads(old=>[newlyCreatedData,...old]);
+  }
+
+  function onUpdateSuccess(data){
+    setLeads(old=>{
+      let temp = JSON.parse(JSON.stringify(old));
+      for(let i=0;i<temp.length;i++){
+          if(data._id==temp[i]._id){
+            temp[i] = data;
+            break;
+          }
+      }
+      return temp;
+
+    });
+  }
+
   return <>
     <div hidden={query.get("id") === "" || !query.get("id") ? false : true}>
-      <LeadTable lead={lead} setLead={setLead}/>
+      <LeadTable onPageChange={onPageChange} leads={leads} setLeads={setLeads} count={count}/>
     </div>
 
-    {(query.get("id") === "new") ? <CreateLead lead={lead} setLead={setLead}/> : (query.get("id") !== null && query.get("id") !== "") && <LeadDetails lead={lead} setLead={setLead}/>}
+    {(query.get("id") === "new") ? <CreateLead onCreateSuccess={onCreateSuccess} /> : (query.get("id") !== null && query.get("id") !== "") && <LeadDetails onUpdateSuccess={onUpdateSuccess} />}
 
   </>
 

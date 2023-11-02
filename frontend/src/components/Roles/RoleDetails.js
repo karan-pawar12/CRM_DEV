@@ -11,7 +11,7 @@ import Backbutton from "../Backbutton";
 const size = "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1"
 
 
-function RoleDetails() {
+function RoleDetails({onUpdateSuccess}) {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
@@ -72,6 +72,7 @@ function RoleDetails() {
                 if (error) {
                     alert("Lead updation failed");
                 } else {
+                    onUpdateSuccess(res.data)
                     alert("Lead updated successfully");
                 }
             });
@@ -100,6 +101,7 @@ function RoleDetails() {
                 // If the API request fails, roll back the state to the previous value
                 setRoleDetailsData(roleDetailsData);
             } else {
+                onUpdateSuccess(res.data)
                 alert("API request successful");
             }
         });

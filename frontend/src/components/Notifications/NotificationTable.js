@@ -1,19 +1,19 @@
-import { useCallback, useContext,useState } from "react";
+import { useCallback, useContext,useState,useEffect } from "react";
 import AuthContext from "../../AuthContext";
 import { Button, Input } from '@nextui-org/react';
 import { useNavigate } from 'react-router-dom';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Pagination } from "@nextui-org/react";
 
-const itemsPerPage = 10;
+const limit = 10;
 
-function NotificationTable({notification,setNotification}) {
+function NotificationTable({notifications,setNotifications,count,onPageChange}) {
     const authContext = useContext(AuthContext);
+    const [totalPage,setTotalPage] = useState(1);
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
+    useEffect(()=>{
+        calculateTotalPage();
+    },[count])
 
     const handleCreateNotification = () => {
         navigate(`?id=new`);
@@ -27,6 +27,17 @@ function NotificationTable({notification,setNotification}) {
                 return <span>{notification.content}</span>
         }
     })
+
+    function calculateTotalPage(){
+        let temp = (count/limit);
+        if(temp>parseInt(temp)){
+            temp = parseInt(temp) + 1;
+        }else{
+            temp = parseInt(temp);
+            
+        }
+        setTotalPage(temp);
+    }
 
     const columns = [
         {name:"Title",key:"title"},
@@ -61,7 +72,7 @@ function NotificationTable({notification,setNotification}) {
                         </TableColumn>
                     )}
                 </TableHeader>
-                <TableBody items={notification.slice(startIndex, endIndex)}>
+                <TableBody items={notifications}>
                     {(notification) => (
 
                         <TableRow key={notification._id}>
@@ -73,10 +84,9 @@ function NotificationTable({notification,setNotification}) {
             </Table>
             <Pagination
                 className="flex justify-center"
-                total={notification.length}
-                pageSize={itemsPerPage}
+                total={totalPage}
                 page={currentPage}
-                onChange={(newPage) => setCurrentPage(newPage)}
+                onChange={onPageChange}
             />
         </>
     )
