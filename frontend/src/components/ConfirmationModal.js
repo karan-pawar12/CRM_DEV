@@ -9,6 +9,7 @@ export default function ConfirmationModal(props) {
             <Modal
                 isOpen={open}
                 placement="top-center"
+                onOpenChange={(isOpen) => {if(!isOpen) closeConfirmationModal()}}
             >
                 <ModalContent>
                     {(onClose) => (
