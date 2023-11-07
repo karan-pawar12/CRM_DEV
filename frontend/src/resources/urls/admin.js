@@ -42,4 +42,8 @@ export const GET_ALLNOTIFICATION = BASE+ "getAllNotification";
 
 export const GET_ALLUSERWITHOUTSKIP = BASE+ "getAllUserWithoutskip";
 
-export const GET_ALLROLEWITHOUTSKIP = BASE+ "getAllRoleWithoutskip"
+export const GET_ALLROLEWITHOUTSKIP = BASE+ "getAllRoleWithoutskip";
+
+export const VERIFY_OTP = BASE+"verifyOtp";
+
+export const RESEND_OTP = BASE+"resendOtp";

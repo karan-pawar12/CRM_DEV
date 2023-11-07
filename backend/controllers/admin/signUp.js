@@ -1,4 +1,5 @@
 const User = require('../../schema/user');
+const generateOtp = require('../../helpers/generateOtp')
 const adminPermissions = require('../../config/adminConfig');
 
 module.exports = async function (req, res, next) {
@@ -28,6 +29,8 @@ module.exports = async function (req, res, next) {
             return res.status(400).json({ error: 'Phone number is already in use' });
         }
 
+        const otp = generateOtp();
+
         // Create a new user instance
         const newUser = new User({
             firstName,
@@ -35,7 +38,8 @@ module.exports = async function (req, res, next) {
             email,
             phone,
             password,
-            permissions
+            permissions,
+            otp
         });
 
         // Save the user data to the database

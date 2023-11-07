@@ -3,10 +3,12 @@ import { Input, Button } from '@nextui-org/react';
 import { Link } from 'react-router-dom';
 import signup_api from '../api_strings/admin/signup_api';
 import { useNavigate } from 'react-router-dom';
+import OtpInput from './OtpInput';
 
 
 function Signup() {
   const navigate = useNavigate();
+  const [otpModalOpen, setOtpModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -43,6 +45,10 @@ function Signup() {
       setPhoneError('');
     }
 
+    const toggleOtpModal = () => {
+      setOtpModalOpen(!otpModalOpen);
+    };
+
 
     signup_api(firstName, lastName, email, phone, password, (error, res) => {
       if (error) {
@@ -50,7 +56,8 @@ function Signup() {
       }
       else {
         alert("Signup Successfully");
-        navigate('/cpanel/login');
+        toggleOtpModal();
+        // navigate('/cpanel/login');
 
       }
     })
@@ -76,6 +83,9 @@ function Signup() {
   function isNumeric(input) {
     return /^\d+$/.test(input);
   }
+
+  
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -152,6 +162,8 @@ function Signup() {
           </Link>
         </p>
       </div>
+
+      <OtpInput email={formData.email} open={otpModalOpen}  setOtpModalOpen={setOtpModalOpen}/>
     </div>
   );
 }

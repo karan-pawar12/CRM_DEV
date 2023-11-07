@@ -91,4 +91,8 @@ router.get('/getAllUserWithoutskip',verifyAccessToken,require('../controllers/ad
 
 router.get('/getAllRoleWithoutskip',verifyAccessToken,require('../controllers/admin/getAllRoleWithoutskip'));
 
+router.post('/verifyOtp',require('../controllers/admin/verifyOtp'));
+
+router.post('/resendOtp',require('../controllers/admin/resendOtp'));
+
 module.exports = router;
