@@ -84,19 +84,21 @@ function Signup() {
     return /^\d+$/.test(input);
   }
 
-  
+
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-semibold mb-6">Sign Up</h2>
+    <div className='w-full'>
+     
+
         <form onSubmit={handleSignup}>
           <div className="mb-4">
+
+
             <Input
+              size='sm'
               type="text"
               label="First Name"
-              placeholder="Enter your first Name"
               name="firstName"
               value={formData.firstName}
               onChange={handleInputChange}
@@ -104,9 +106,10 @@ function Signup() {
           </div>
           <div className="mb-4">
             <Input
+              size='sm'
+
               type="text"
               label="Last Name"
-              placeholder="Enter your last Name"
               name="lastName"
               value={formData.lastName}
               onChange={handleInputChange}
@@ -114,9 +117,10 @@ function Signup() {
           </div>
           <div className="mb-4">
             <Input
+              size='sm'
+
               type="text"
               label="Email"
-              placeholder="Enter your email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
@@ -126,9 +130,10 @@ function Signup() {
           </div>
           <div className="mb-4">
             <Input
+              size='sm'
+
               type="phone"
               label="Phone"
-              placeholder="Enter your phone no"
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
@@ -138,9 +143,10 @@ function Signup() {
           </div>
           <div className="mb-4">
             <Input
+              size='sm'
+
               type="password"
               label="Password"
-              placeholder="Enter your password"
               name="password"
               value={formData.password}
               onChange={handleInputChange}
@@ -155,15 +161,10 @@ function Signup() {
             Sign Up
           </Button>
         </form>
-        <p className="mt-4 text-gray-600 text-sm text-center">
-          Already have an account?{' '}
-          <Link to="/cpanel/login" className="text-blue-500 hover:underline">
-            Login
-          </Link>
-        </p>
-      </div>
 
-      <OtpInput email={formData.email} open={otpModalOpen}  setOtpModalOpen={setOtpModalOpen}/>
+     
+
+      <OtpInput email={formData.email} open={otpModalOpen} setOtpModalOpen={setOtpModalOpen} />
     </div>
   );
 }

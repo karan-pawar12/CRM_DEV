@@ -10,6 +10,7 @@ import { AuthContextProvider } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import permissions_api from './api_strings/admin/permissions_api';
 import AuthContext from './AuthContext';
+import Entry from './components/Entry';
 
 function App() {
 
@@ -52,6 +53,7 @@ function Main() {
     <>
       <Routes>
         <Route path="/cpanel/:module" element={<AdminContextProvider><Layout /></AdminContextProvider>}></Route>
+        <Route path="/cpanel/entry" element={<Entry/>}/>
         <Route exact path={"/cpanel/login"} element={<Login />} />
         <Route exact path={"/cpanel/signup"} element={<Signup />} />
       </Routes>

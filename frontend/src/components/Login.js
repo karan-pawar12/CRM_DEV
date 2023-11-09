@@ -19,9 +19,9 @@ function Login() {
         alert("Login Failed");
       }
       else {
-        const { role,permissions } = res.data;
+        const { role, permissions } = res.data;
         authContext.setAuth({
-          user: role, 
+          user: role,
           permissions: permissions,
         });
 
@@ -32,28 +32,34 @@ function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-semibold mb-6">Login</h2>
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <Input type="email" label="Email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
-          <div className="mb-4">
-            <Input type="password" label="Password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          <Button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
-          >
-            Login
-          </Button>
-        </form>
-        <p className="mt-4 text-gray-600 text-sm text-center">
-          Don't have an account? <Link to="/cpanel/signup" className="text-blue-500 hover:underline">Sign up</Link>
-        </p>
-      </div>
-    </div>
+
+    
+
+      <form className='w-full' onSubmit={handleLogin}>
+        <div className="mb-4">
+          <Input size='sm'
+            type="email" label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+        <div className="mb-4">
+          <Input size='sm'
+            type="password" label="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </div>
+       <div>
+        <Link to="/forgotPassword" className="text-small text-blue-500 hover:underline">
+          Forgot Password?
+        </Link>
+       </div>
+       <br/>
+        <Button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+        >
+          Login
+        </Button>
+      </form>
+
+    
+
   );
 }
 
