@@ -3,8 +3,7 @@ const User = require('../../schema/user');
 const Role = require('../../schema/role');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const adminPermissions = require('../../config/adminConfig');
-const defaultPermissions = require('../../config/defaultConfig');
+const adminPermissions = require('../../config/adminPermissions');
 const { signAccessToken } = require('../../helpers/adminAuthetication')
 
 module.exports = async function (req, res, next) {
@@ -17,6 +16,16 @@ module.exports = async function (req, res, next) {
         // Check if the user exists
         if (!user) {
             return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        if (!user.isEmailVerified) {
+            const newOtp = generateOtp();
+            user.otp = {
+                value: newOtp.value,
+                generatedAt: newOtp.generatedAt,
+            };
+            await user.save();
+            return res.status(401).json({ error: 'Email is not verified' });
         }
 
         // Compare the provided password with the hashed password in the database
@@ -40,7 +49,7 @@ module.exports = async function (req, res, next) {
             res.json({ token: token, role: role[0], permissions });
         }
         else{
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(403).json({ error: 'Invalid credentials' });
         }
 
     } catch (e) {

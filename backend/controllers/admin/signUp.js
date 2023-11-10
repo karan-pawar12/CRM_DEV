@@ -1,6 +1,6 @@
 const User = require('../../schema/user');
 const generateOtp = require('../../helpers/generateOtp')
-const adminPermissions = require('../../config/adminConfig');
+const adminPermissions = require('../../config/adminPermissions');
 
 module.exports = async function (req, res, next) {
     try {

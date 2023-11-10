@@ -1,5 +1,5 @@
 const Role = require('../../schema/role');
-const defaultPermissions = require('../../config/defaultConfig');
+const defaultPermissions = require('../../config/defaultPermissions');
 module.exports = async function(req,res,next){
     try{
         const {_id} = req.payload;

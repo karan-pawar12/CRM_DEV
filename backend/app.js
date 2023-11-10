@@ -2,6 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const path = require('path');
+const filePath = path.join(__dirname, './config/appConfig.json');
+
 const app = express();
 
 const mongooseOptions = {
@@ -58,6 +62,7 @@ mongoose
     console.log(err.message);
   });
 
+global.appConfig = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 
 app.listen(5000,()=> {
     console.log("Port Connected");

@@ -1,6 +1,6 @@
 const User = require('../../schema/user');
 const Role = require('../../schema/role'); 
-const adminPermissions = require('../../config/adminConfig')
+const adminPermissions = require('../../config/adminPermissions')
 
 module.exports = async function (req, res, next) {
     try {
