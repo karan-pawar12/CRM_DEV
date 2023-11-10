@@ -1,19 +1,23 @@
-import React, { useCallback, useContext, useState, useEffect } from "react";
+import React, { useCallback, useContext, useState, useEffect,useRef } from "react";
 import { EditIcon, DeleteIcon, EyeIcon } from "../../resources/icons/icons";
 import { Button, Input } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Pagination } from "@nextui-org/react";
 import deleteLead_api from "../../api_strings/admin/deleteLead_api";
+import getAllLead_api from "../../api_strings/admin/getAllLead_api";
 import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
 
 const limit = 10;
 
-export default function LeadTable({ leads, setLeads, onPageChange,count }) {
+export default function LeadTable({ leads, setLeads, onPageChange,count,settotalCount }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage,setTotalPage] = useState(1);
+    const [searchKey, setSearchKey] = useState("");
     const authContext = useContext(AuthContext);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
+    const skip = useRef(0);
+    const limit = useRef(10);
     const navigate = useNavigate();
 
     useEffect(()=>{
@@ -26,6 +30,21 @@ export default function LeadTable({ leads, setLeads, onPageChange,count }) {
         // Use the navigate function to navigate to the new URL
         navigate(`?id=new`);
     };
+
+    const handleSearchQuery = (e) => {
+        const currValue = e.target.value;
+        setSearchKey(currValue);
+        getAllLead_api({skip:skip.current,limit:limit.current,searchQuery:currValue},(error, res) => {
+            if (error) {
+              console.log("Error:", error);
+            } else {
+      
+              setLeads(res.data.leads);
+              settotalCount(res.data.totalCount);
+      
+            }
+          });
+    }
 
     function handleDeleteLeadClick(leadId) {
         openConfirmationModal('Are you sure you want to delete this lead?', () => {
@@ -103,7 +122,10 @@ export default function LeadTable({ leads, setLeads, onPageChange,count }) {
                     authContext.auth.permissions["leads"].create &&
                     <div className='flex justify-between'>
                         <div>
-                            <Input placeholder='Search users' className='w-auto' />
+                            <Input placeholder='Search Leads' className='w-auto' 
+                            value={searchKey}
+                            onChange={handleSearchQuery}
+                            />
                         </div>
                         <div>
 

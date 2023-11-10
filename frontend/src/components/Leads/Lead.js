@@ -58,7 +58,7 @@ function Lead() {
 
   return <>
     <div hidden={query.get("id") === "" || !query.get("id") ? false : true}>
-      <LeadTable onPageChange={onPageChange} leads={leads} setLeads={setLeads} count={count}/>
+      <LeadTable onPageChange={onPageChange} leads={leads} setLeads={setLeads} count={count} settotalCount={settotalCount}/>
     </div>
 
     {(query.get("id") === "new") ? <CreateLead onCreateSuccess={onCreateSuccess} /> : (query.get("id") !== null && query.get("id") !== "") && <LeadDetails onUpdateSuccess={onUpdateSuccess} />}
