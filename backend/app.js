@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const logger = require('morgan')
 const fs = require('fs');
 const path = require('path');
 const filePath = path.join(__dirname, './config/appConfig.json');
@@ -14,6 +15,9 @@ const mongooseOptions = {
     autoIndex: false,
 };
 const mongooseConnectionString = "mongodb://localhost:27017/crm";
+
+// Use morgan logger
+app.use(logger('dev'));
 
 // Parse JSON requests
 app.use(bodyParser.json());
