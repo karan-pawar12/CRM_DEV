@@ -19,6 +19,8 @@ const userSchema = new Schema({
         value: { type: String },
         generatedAt: { type: Date }
     },
+    isEmailVerified:{type:Boolean,default:false},
+    isPhoneVerified:{type:Boolean,default:false},
     softDelete: { type: Boolean, default: false }
 }, {
     timestamps: true,

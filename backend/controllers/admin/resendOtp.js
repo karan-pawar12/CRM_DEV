@@ -1,6 +1,7 @@
 const User = require('../../schema/user');
 const generateOtp = require('../../helpers/generateOtp');
 
+
 module.exports = async function (req, res, next) {
     try {
         const { email } = req.body;
@@ -9,6 +10,13 @@ module.exports = async function (req, res, next) {
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
+        }
+
+        const currentTime = Date.now(); // Get the current timestamp in milliseconds
+        const otpGeneratedAt = user.otp.generatedAt;
+
+        if (currentTime - otpGeneratedAt > global.appConfig.otpExpiryTime * 60 * 1000) {
+            return res.status(401).json({ error: 'Please wait till 5 minutes to generate new otp' });
         }
 
         const newOtp = generateOtp();
