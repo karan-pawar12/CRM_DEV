@@ -52,8 +52,8 @@ function Main() {
     <>
       <Routes>
         <Route path="/cpanel/:module" element={<AdminContextProvider><Layout /></AdminContextProvider>}></Route>
-        <Route exact path={"/cpanel/login"} element={<Login />} />
-        <Route exact path={"/cpanel/signup"} element={<Signup />} />
+        <Route exact path={"/cpanel/login"} element={<AdminContextProvider><Login /></AdminContextProvider>} />
+        <Route exact path={"/cpanel/signup"} element={<AdminContextProvider><Signup /></AdminContextProvider>} />
       </Routes>
     </>
   )
