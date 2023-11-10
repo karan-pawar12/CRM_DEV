@@ -155,12 +155,6 @@ function Signup() {
             Sign Up
           </Button>
         </form>
-        <p className="mt-4 text-gray-600 text-sm text-center">
-          Already have an account?{' '}
-          <Link to="/cpanel/login" className="text-blue-500 hover:underline">
-            Login
-          </Link>
-        </p>
       </div>
 
       <OtpInput email={formData.email} open={otpModalOpen}  setOtpModalOpen={setOtpModalOpen}/>

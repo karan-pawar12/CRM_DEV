@@ -10,6 +10,11 @@ export function AdminContextProvider(props) {
         msg: '',
         listener: null,
     });
+    const [toast,setToast] = useState({
+        msg:null,
+        toastType:null,
+        onClose:null
+    });
 
     function openConfirmationModal(msg, listener) {
         setConfirmModalData({ msg, listener });
@@ -20,9 +25,18 @@ export function AdminContextProvider(props) {
         setConfirmModalOpen(false);
     }
 
+    function hideToast() {
+        setToast({
+            msg:null,
+            toastType:null,
+            onClose:null
+        })
+    }
+
     const context = {
         confirmModalOpen,openConfirmationModal,
-        confirmModalData,closeConfirmationModal
+        confirmModalData,closeConfirmationModal,
+        toast,setToast,hideToast
     }
 
     return <AdminContext.Provider value={context}>
