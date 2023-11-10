@@ -47,9 +47,7 @@ function Login() {
     {
 				admincontext.toast.msg && 	<Toast {...admincontext.toast} />
 		}
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-semibold mb-6">Login</h2>
+
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <Input type="email" label="Email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -65,8 +63,6 @@ function Login() {
             Login
           </Button>
         </form>
-      </div>
-    </div>
     </>
   );
 }

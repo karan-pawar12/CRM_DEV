@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import Login from './components/Login';
 import Signup from './components/Signup';
-import Sidebar from './components/Sidebar';
+import Entry from './components/Entry';
 import Layout from './components/Layout';
 import { AdminContextProvider } from './AdminContext';
 import { AuthContextProvider } from './AuthContext';
@@ -44,7 +44,7 @@ function Main() {
         }
       })
     } else {
-      navigate('/cpanel/login');
+      navigate('/cpanel/entry');
     }
   }, [])
 
@@ -52,8 +52,7 @@ function Main() {
     <>
       <Routes>
         <Route path="/cpanel/:module" element={<AdminContextProvider><Layout /></AdminContextProvider>}></Route>
-        <Route exact path={"/cpanel/login"} element={<AdminContextProvider><Login /></AdminContextProvider>} />
-        <Route exact path={"/cpanel/signup"} element={<AdminContextProvider><Signup /></AdminContextProvider>} />
+        <Route path="/cpanel/entry" element={<AdminContextProvider><Entry/></AdminContextProvider>}/>
       </Routes>
     </>
   )
