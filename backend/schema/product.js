@@ -27,6 +27,4 @@ const productSchema = new Schema({
 });
 
 
-const Meeting = mongoose.model('product', productSchema)
-
-module.exports = Meeting;
+module.exports = productSchema;

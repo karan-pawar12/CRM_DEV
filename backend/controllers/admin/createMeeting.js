@@ -1,8 +1,8 @@
-const Meeting = require('../../schema/meeting');
-
+const {getMeetingModel} = require('../../db/tenantDb');
 module.exports = async function (req, res, next) {
     try {
-        const { _id } = req.payload;
+        const { _id,tenantId } = req.payload;
+        const Meeting = await getMeetingModel(tenantId);
         const { meetingTitle, from, to, host= _id, participants, participantsReminder,description,createdBy=_id,updatedBy=_id } = req.body;
         let meeting = null;
         try {

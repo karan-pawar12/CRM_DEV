@@ -1,7 +1,9 @@
-const Role = require('../../schema/role');
+const {getRoleModel} = require('../../db/tenantDb')
 
 module.exports = async function (req, res, next) {
     try {
+        const {tenantId} = req.payload;
+        const Role = await getRoleModel(tenantId);
         const roles = await Role.aggregate([
             {
                 $project: {

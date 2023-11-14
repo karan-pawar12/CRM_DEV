@@ -1,12 +1,13 @@
-const User = require('../../schema/user');
+const {getUserModel} = require('../../db/tenantDb');
 const mongoose = require('mongoose')
 // const LeadLogs = require('../../methods/leadLogs');
 
 module.exports = async function (req, res, next) {
 
     try {
-        const { _id: payloadId } = req.payload; // Rename _id to payloadId
+        const { _id: payloadId,tenantId } = req.payload; // Rename _id to payloadId
         let { _id, fieldName, fieldValue } = req.body;
+        const User = await getUserModel(tenantId);
 
         if (fieldName === "role") {
             fieldValue = new mongoose.Types.ObjectId(fieldValue);

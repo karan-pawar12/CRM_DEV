@@ -1,11 +1,12 @@
-const User = require('../../schema/user'); // Import the User schema
-const Role = require('../../schema/role'); 
+const {getUserModel,getRoleModel} = require('../../db/tenantDb');
 const mongoose = require('mongoose');
 
 module.exports = async function (req, res, next) {
     try {
+        const {tenantId} = req.payload;
         const { userId } = req.query; // Assuming you're passing the ID as a URL parameter
-
+        const User = await getUserModel(tenantId);
+        const Role = await getRoleModel(tenantId);
         // Use Mongoose's aggregate method to retrieve a user by its ID
         const roles = await Role.aggregate([
             {

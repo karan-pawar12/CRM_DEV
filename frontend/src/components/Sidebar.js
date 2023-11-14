@@ -5,7 +5,7 @@ import { HiOutlineLogout } from 'react-icons/hi'
 import { DASHBOARD_SIDEBAR_BOTTOM_LINKS, DASHBOARD_SIDEBAR_LINKS } from "../resources/icons/icons";
 import AuthContext from "../AuthContext";
 import { Badge } from '@nextui-org/react';
-import getAllNotification_api from "../api_strings/admin/getAllNotification";
+import getNotificationCount_api from "../api_strings/admin/getNotificationCount";
 
 
 function Sidebar() {
@@ -19,11 +19,11 @@ function Sidebar() {
     },[]);
 
     function getAllNotification() {
-        getAllNotification_api({},(error,res) => {
+        getNotificationCount_api((error,res) => {
             if(error){
                 console.log("Error",error);
             }else{
-                setnotificationcount(res.data.notifications.length);
+                setnotificationcount(res.data.totalCount);
             }
         })
     }   
@@ -35,7 +35,7 @@ function Sidebar() {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        navigate('/cpanel/login');
+        navigate('/cpanel/entry');
     };
 
 

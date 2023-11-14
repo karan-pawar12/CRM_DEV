@@ -1,10 +1,10 @@
 import { RESEND_OTP } from "../../resources/urls/admin";
 import axios from "../../Interceptor";
 
-async function resendOtp_api(email,callback){
+async function resendOtp_api(email,tenantId,callback){
     try {
         const res = await axios.post(RESEND_OTP,{
-            email
+            email,tenantId
         });
 
         if(res){

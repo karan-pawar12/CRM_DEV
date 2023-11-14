@@ -1,10 +1,11 @@
-const Projecttask = require('../../schema/projectTask');
+const {getProjectModel} = require('../../db/tenantDb')
 
 module.exports = async function (req, res, next) {
     try {
 
-        const { _id } = req.payload;
+        const { _id,tenantId } = req.payload;
         const { projectName, participants, createdBy = _id, updatedBy = _id, description } = req.body;
+        const Projecttask = await getProjectModel(tenantId);
         let projectTask = null;
         try {
             projectTask = await new Projecttask({ projectName, participants, createdBy, updatedBy , description }).save();

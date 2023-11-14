@@ -10,11 +10,10 @@ function Signup() {
   const navigate = useNavigate();
   const [otpModalOpen, setOtpModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
     email: '',
     phone: '',
     password: '',
+    tenantId: ''
   });
   const [passwordError, setPasswordError] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -22,7 +21,7 @@ function Signup() {
 
   function handleSignup(e) {
     e.preventDefault();
-    const { firstName, lastName, email, phone, password } = formData;
+    const { email, phone, password, tenantId } = formData;
 
     if (password.length < 8) {
       setPasswordError("Password must be at least 8 characters long");
@@ -50,7 +49,7 @@ function Signup() {
     };
 
 
-    signup_api(firstName, lastName, email, phone, password, (error, res) => {
+    signup_api( {email, phone, password,tenantId}, (error, res) => {
       if (error) {
         alert("Signup Failed");
       }
@@ -89,7 +88,7 @@ function Signup() {
   return (
     <>
         <form onSubmit={handleSignup}>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <Input
               type="text"
               label="First Name"
@@ -108,7 +107,7 @@ function Signup() {
               value={formData.lastName}
               onChange={handleInputChange}
             />
-          </div>
+          </div> */}
           <div className="mb-4">
             <Input
               type="text"
@@ -145,6 +144,16 @@ function Signup() {
               errorMessage={passwordError}
             />
           </div>
+          <div className="mb-4">
+            <Input
+              type="text"
+              label="Username"
+              placeholder="Enter your company's username"
+              name="tenantId"
+              value={formData.tenantId}
+              onChange={handleInputChange}
+            />
+          </div>
           <Button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
@@ -153,7 +162,7 @@ function Signup() {
           </Button>
         </form>
 
-      <OtpInput email={formData.email} open={otpModalOpen}  setOtpModalOpen={setOtpModalOpen}/>
+      <OtpInput email={formData.email} tenantId={formData.tenantId} open={otpModalOpen}  setOtpModalOpen={setOtpModalOpen}/>
       </>
   );
 }

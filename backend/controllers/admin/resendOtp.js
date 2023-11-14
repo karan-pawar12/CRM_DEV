@@ -1,10 +1,11 @@
-const User = require('../../schema/user');
+const { getUserModel } = require('../../db/tenantDb');
 const generateOtp = require('../../helpers/generateOtp');
 
 
 module.exports = async function (req, res, next) {
     try {
-        const { email } = req.body;
+        const { email,tenantId } = req.body;
+        const User = await getUserModel(tenantId);
 
         const user = await User.findOne({ email });
 

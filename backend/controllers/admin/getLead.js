@@ -1,11 +1,12 @@
-const User = require('../../schema/user'); // Import the User schema
-const Lead = require('../../schema/lead');
+const { getLeadModel } = require('../../db/tenantDb');
 const mongoose = require('mongoose')
 
 module.exports = async function (req, res, next) {
     try {
         const { leadId } = req.query; // Assuming you're passing the ID as a URL parameter
+        const { tenantId } = req.payload;
 
+        const Lead = await getLeadModel(tenantId);
         // Use Mongoose's aggregate method to retrieve a lead by its ID
         const lead = await Lead.aggregate([
             {

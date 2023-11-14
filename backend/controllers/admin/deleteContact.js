@@ -1,9 +1,10 @@
-const Contact = require('../../schema/contact');
+const {getContactModel} = require('../../db/tenantDb')
 
 module.exports = async function (req, res, next) {
-    try {
+    try { 
+        const {tenantId} = req.payload;
         const { _id, deleted } = req.body;
-
+        const Contact = await getContactModel(tenantId);
         // Update the 'deleted' field based on the value provided
         const update = { deleted };
 

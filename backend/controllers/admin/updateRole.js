@@ -1,10 +1,9 @@
-const Role = require('../../schema/role');
-
+const {getRoleModel} = require('../../db/tenantDb');
 module.exports = async function (req, res, next) {
     try {
-        const { _id: payloadId } = req.payload;
+        const { _id: payloadId,tenantId } = req.payload;
         const { _id, fieldName, fieldValue, permissionType, value } = req.body;
-        
+        const Role = getRoleModel(tenantId);
         let role;
 
         if (fieldName && fieldValue) {

@@ -4,7 +4,7 @@ import verifyOtp_api from '../api_strings/admin/verifyOtp_api';
 import resendOtp_api from '../api_strings/admin/resendOtp_api';
 import { useNavigate } from 'react-router-dom';
 
-export default function OtpInput({email,open,setOtpModalOpen}) {
+export default function OtpInput({email,tenantId,open,setOtpModalOpen}) {
   const navigate = useNavigate();
   const [otp, setOtp] = useState('');
 
@@ -19,19 +19,19 @@ export default function OtpInput({email,open,setOtpModalOpen}) {
 
   const handleSubmit = () => {
     // You can perform actions here, such as verifying the OTP
-    verifyOtp_api(email,otp,(error,res) => {
+    verifyOtp_api(email,tenantId,otp,(error,res) => {
         if(error){
           alert('Wrong email or otp');
         }
         else{
           alert('Otp verified successfully');
-          navigate('/cpanel/login');
+          // navigate('/cpanel/login');
         } 
     })
   };
 
   const handleResend = () => {
-    resendOtp_api(email,(error,res) => {
+    resendOtp_api(email,tenantId,(error,res) => {
       if(error){
         alert('Wrong email');
       }

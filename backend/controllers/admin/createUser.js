@@ -1,12 +1,13 @@
-const User = require('../../schema/user');
-const Role = require('../../schema/role');
+const {getUserModel,getRoleModel} = require('../../db/tenantDb');
 const validation = require('../../validations/validators')
 const mongoose = require('mongoose')
 
 module.exports = async function (req, res, next) {
     try {
-        const { _id } = req.payload;
+        const { _id,tenantId } = req.payload;
         const { firstName, lastName, password, email, phone, role, managers, createdBy = _id, updatedBy = _id } = req.body;
+        const User = await getUserModel(tenantId);
+        const Role = await getRoleModel(tenantId);
         let user = null;
 
         if (!role || role.trim() === '') {
@@ -21,12 +22,12 @@ module.exports = async function (req, res, next) {
             return res.status(400).json({ error: 'Password must be at least 8 characters long' });
         }
 
-        if (await validation.isEmailInUse(email)) {
+        if (await validation.isEmailInUse(email,tenantId)) {
             return res.status(400).json({ error: 'Email address is already in use' });
         }
         
 
-        if (await validation.isPhoneInUse(phone)) {
+        if (await validation.isPhoneInUse(phone,tenantId)) {
             return res.status(400).json({ error: 'Phone number is already in use' });
         }
 

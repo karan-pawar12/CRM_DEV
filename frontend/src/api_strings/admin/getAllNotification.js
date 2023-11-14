@@ -3,7 +3,7 @@ import axios from '../../Interceptor'
 
 async function getAllNotification_api({skip,limit},callback) {
     try {
-
+        console.log(skip,limit);
         const res = await axios.get(`${GET_ALLNOTIFICATION}?skip=${skip}&limit=${limit}`);
 
         if(res){

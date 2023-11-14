@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
-const Lead = require('../../schema/lead');
+const {getLeadModel} = require('../../db/tenantDb');
 
 module.exports = async function (req, res, next) {
     let lead = null;
     try {
+        const {tenantId} = req.payload;
         const { _id, softDelete } = req.body;
-
+        const Lead = await getLeadModel(tenantId);
         const update = { softDelete };
 
         // Find and update the user by ID

@@ -14,6 +14,4 @@ const leadLogSchema = new Schema({
 });
 
 
-const LeadLogs = mongoose.model('leadlogs', leadLogSchema)
-
-module.exports = LeadLogs;
+module.exports = leadLogSchema;

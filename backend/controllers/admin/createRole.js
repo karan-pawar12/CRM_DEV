@@ -1,8 +1,9 @@
-const Role = require('../../schema/role');
+const {getRoleModel} = require('../../db/tenantDb');
 const defaultPermissions = require('../../config/defaultPermissions');
 module.exports = async function(req,res,next){
     try{
-        const {_id} = req.payload;
+        const {_id,tenantId} = req.payload;
+        const Role = await getRoleModel(tenantId);
         const {name,description,createdBy=_id,updatedBy=_id} = req.body;
         let role = null;
         try{

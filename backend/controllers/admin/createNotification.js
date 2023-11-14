@@ -1,8 +1,9 @@
-const Notification = require('../../schema/notification');
+const {getNotificationModel} = require('../../db/tenantDb');
 const mongoose = require("mongoose")
 module.exports = async function (req, res, next) {
     try {
-        const { _id: payloadId } = req.payload;
+        const { _id: payloadId,tenantId } = req.payload;
+        const Notification = await getNotificationModel(tenantId);
         const { title, content, data, recipients, room, priority } = req.body;
         let notification = null;
        

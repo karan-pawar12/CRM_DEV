@@ -1,11 +1,11 @@
-const User = require('../../schema/user');
-const Role = require('../../schema/role'); 
+const {getUserModel,getRoleModel} = require('../../db/tenantDb')
 const adminPermissions = require('../../config/adminPermissions')
 
 module.exports = async function (req, res, next) {
     try {
-        const { _id: payloadId } = req.payload;
-
+        const { _id: payloadId, tenantId } = req.payload;
+        const User = await getUserModel(tenantId);
+        const Role = await getRoleModel(tenantId);
      
         const user = await User.findById(payloadId);
 
@@ -16,7 +16,7 @@ module.exports = async function (req, res, next) {
        
         const userRole = user.role[0]; 
 
-        if (userRole === 'admin') {
+        if (userRole === 'Superadmin') {
             return res.status(200).json({ roleName:userRole, permissions:adminPermissions });   
         }
         else {

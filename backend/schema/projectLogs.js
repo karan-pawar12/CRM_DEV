@@ -14,6 +14,4 @@ const projectLogSchema = new Schema({
 });
 
 
-const ProjectLogs = mongoose.model('projectlogs', projectLogSchema)
-
-module.exports = ProjectLogs;
+module.exports = projectLogSchema;

@@ -1,10 +1,11 @@
-const User = require('../../schema/user');
+const {getUserModel} = require('../../db/tenantDb');
 
 module.exports = async function (req, res, next) {
     let user = null;
     try {
+        const { tenantId } = req.payload;
         const { _id, softDelete } = req.body;
-
+        const User = await getUserModel(tenantId);
         const update = { softDelete };
 
         // Find and update the user by ID

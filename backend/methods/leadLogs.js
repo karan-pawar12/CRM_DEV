@@ -1,6 +1,7 @@
-const leadLogs = require('../schema/leadLogs');
-module.exports = async function LeadLogs(updatedBy, oldValue, newValue, fieldName) {
-   
+const {getLeadLogModel} = require('../db/tenantDb')
+module.exports = async function LeadLogs(updatedBy, oldValue, newValue, fieldName,tenantId) {
+    
+    const leadLogs = await getLeadLogModel(tenantId);
 
     const leadLog = new leadLogs({
         updatedBy,

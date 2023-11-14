@@ -1,15 +1,16 @@
-const Notification = require('../../schema/notification');
 const mongoose = require('mongoose');
+const {getNotificationModel} = require('../../db/tenantDb');
 module.exports = async function (req, res, next) {
     try {
-        const { _id, role } = req.payload;
+        const { _id, role,tenantId } = req.payload;
         const {skip=0,limit=10} = req.query
-        let skipValue = parseInt(skip)
-        let limitValue = parseInt(limit)
+        const skipValue = parseInt(skip);
+        const limitValue = parseInt(limit);
+        const Notification = await getNotificationModel(tenantId)
         let notifications = null
 
 
-        if (role[0] === 'admin') {
+        if (role[0] === 'Superadmin') {
             notifications = await Notification.find({})
             .skip(skipValue)
             .limit(limitValue);

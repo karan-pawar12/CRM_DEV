@@ -57,14 +57,14 @@ app.use((err, req, res, next) => {
 
 
 //mongodb connection instance
-mongoose
-  .connect(mongooseConnectionString, mongooseOptions)
-  .then(() => {
-    console.log("Mongoose connection established with pid : " + process.pid);
-})
-  .catch((err) => {
-    console.log(err.message);
-  });
+// mongoose
+//   .connect(mongooseConnectionString, mongooseOptions)
+//   .then(() => {
+//     console.log("Mongoose connection established with pid : " + process.pid);
+// })
+//   .catch((err) => {
+//     console.log(err.message);
+//   });
 
 global.appConfig = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 

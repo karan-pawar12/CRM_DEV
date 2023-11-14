@@ -1,9 +1,10 @@
-const Role = require('../../schema/role');
+const {getRoleModel} = require('../../db/tenantDb');
 
 module.exports = async function (req, res, next) {
     try {
+        const {tenantId} = req.payload;
         const { _id, softDelete } = req.body;
-
+        const Role = await getRoleModel(tenantId);
         // Update the 'deleted' field based on the value provided
         const update = { softDelete };
 

@@ -49,10 +49,4 @@ userSchema.pre("save", function (next) {
     });
 });
 
-
-const User = mongoose.model('user', userSchema)
-
-module.exports = User;
-
-
-//indexing createIndexor startIndex
+module.exports = userSchema;

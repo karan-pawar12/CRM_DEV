@@ -1,10 +1,10 @@
 import { VERIFY_OTP } from "../../resources/urls/admin";
 import axios from "../../Interceptor";
 
-async function verifyOtp_api(email,otp,callback){
+async function verifyOtp_api(email,tenantId,otp,callback){
     try {
         const res = await axios.post(VERIFY_OTP,{
-            email,otp
+            email,tenantId,otp
         })
 
         if(res){

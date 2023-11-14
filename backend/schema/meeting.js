@@ -18,7 +18,4 @@ const meetingSchema = new Schema({
     timestamps: true,
 });
 
-
-const Meeting = mongoose.model('meeting', meetingSchema)
-
-module.exports = Meeting;
+module.exports = meetingSchema;

@@ -26,6 +26,4 @@ const callSchema = new Schema({
 });
 
 
-const Call = mongoose.model('call', callSchema)
-
-module.exports = Call;
+module.exports = callSchema;

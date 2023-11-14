@@ -15,6 +15,4 @@ const emailSchema = new Schema({
     timestamps: true,
 })
 
-const Emailer = mongoose.model('emailer', emailSchema)
-
-module.exports = Emailer
+module.exports = emailSchema;

@@ -1,11 +1,12 @@
-const Project = require('../../schema/project');
-const ProjectLogs = require('../../methods/projectLogs');
+const {getProjectModel,getprojectLogModel} = require('../../db/tenantDb')
 
 module.exports = async function (req, res, next) {
 
     try {
-        const { _id: payloadId } = req.payload; // Rename _id to payloadId
+        const { _id: payloadId,tenantId } = req.payload; // Rename _id to payloadId
         const { _id, fieldName, fieldValue } = req.body;
+        const Project = await getProjectModel(tenantId);
+        const ProjectLogs = await getprojectLogModel(tenantId);
 
         const project = await Project.findByIdAndUpdate(_id, { $set: { [fieldName]: fieldValue } });
 

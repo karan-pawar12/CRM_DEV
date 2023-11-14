@@ -87,6 +87,8 @@ router.post('/createNotification',verifyAccessToken,require('../controllers/admi
 
 router.get('/getAllNotification',verifyAccessToken,require('../controllers/admin/getAllNotification'));
 
+router.get('/getNotificationCount',verifyAccessToken,require('../controllers/admin/getNotificationCount'));
+
 router.get('/getAllUserWithoutskip',verifyAccessToken,require('../controllers/admin/getAllUserWithouskip'));
 
 router.get('/getAllRoleWithoutskip',verifyAccessToken,require('../controllers/admin/getAllRoleWithoutskip'));
@@ -94,5 +96,7 @@ router.get('/getAllRoleWithoutskip',verifyAccessToken,require('../controllers/ad
 router.post('/verifyOtp',require('../controllers/admin/verifyOtp'));
 
 router.post('/resendOtp',require('../controllers/admin/resendOtp'));
+
+router.post('/tenantSignup',require('../controllers/admin/tenantSignup'));
 
 module.exports = router;

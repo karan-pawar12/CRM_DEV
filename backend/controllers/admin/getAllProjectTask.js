@@ -1,7 +1,9 @@
-const projectTask = require('../../schema/projectTask');
+const {getprojectTaskModel} = require('../../db/tenantDb')
 
 module.exports = async function (req, res, next) {
     try {
+        const {tenantId} = req.payload;
+        const projectTask = await getprojectTaskModel(tenantId)
         const projectTasks = await projectTask.aggregate([
             {
                 $lookup: {

@@ -22,6 +22,4 @@ const dealSchema = new Schema({
 });
 
 
-const Deal = mongoose.model('deal', dealSchema)
-
-module.exports = Deal;
+module.exports = dealSchema;

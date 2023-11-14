@@ -1,8 +1,10 @@
-const Lead = require('../../schema/lead');
+const {getLeadModel} = require('../../db/tenantDb'); 
 
 module.exports = async function(req,res,next){
     try{
-        const {_id} = req.payload;
+        const {_id,tenantId} = req.payload;
+        const Lead = await getLeadModel(tenantId);
+
         const {firstName,lastName,email,phone,leadSource,leadStatus,companyName,rating,annualRevenue,createdBy=_id,updatedBy=_id,address,description} = req.body;
         let lead = null;
         try{

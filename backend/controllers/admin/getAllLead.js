@@ -1,15 +1,16 @@
-const Lead = require('../../schema/lead');
-
+const { getLeadModel } = require('../../db/tenantDb');
 module.exports = async function (req, res, next) {
     try {
-    
+        const { tenantId } = req.payload;
         const skip = parseInt(req.query.skip, 10) || 0;
         const limit = parseInt(req.query.limit, 10) || 10;
         let searchQuery = req.query.searchQuery || '';
-
+        
         if(searchQuery === "undefined" || searchQuery === undefined){
             searchQuery = ''
         }
+
+        const Lead = await getLeadModel(tenantId);
         
         const leads = await Lead.aggregate([
             {

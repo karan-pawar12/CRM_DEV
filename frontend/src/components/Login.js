@@ -14,12 +14,13 @@ function Login() {
   const admincontext = useContext(AdminContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [tenantId,setTenantId] = useState('');
   const [loading,setLoading] = useState(false);
 
   function handleLogin(e) {
     e.preventDefault();
     setLoading(true);
-    login_api(email, password, (error, res) => {
+    login_api(email, password,tenantId, (error, res) => {
       setLoading(false);
       if (error) {
         // alert("Login Failed");
@@ -54,6 +55,9 @@ function Login() {
           </div>
           <div className="mb-4">
             <Input type="password" label="Password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </div>
+          <div className="mb-4">
+            <Input type="text" label="Username" placeholder="Enter your company's username" value={tenantId} onChange={(e) => setTenantId(e.target.value)} />
           </div>
           <Button
             type="submit"

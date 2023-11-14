@@ -28,9 +28,7 @@ const clientSchema = new Schema({
 });
 
 
-const Client = mongoose.model('client', clientSchema)
-
-module.exports = Client;
+module.exports = clientSchema;
 
 
 //company no and client no softdeleted = permanant delete should not allowed

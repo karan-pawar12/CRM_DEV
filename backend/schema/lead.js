@@ -29,7 +29,4 @@ const leadSchema = new Schema({
     timestamps: true,
 });
 
-
-const Lead = mongoose.model('lead', leadSchema)
-
-module.exports = Lead;
+module.exports = leadSchema;

@@ -5,9 +5,9 @@ const SECRET = "cb4da6f3-8f45-4b99-95f7-0235cf541f6e";
 module.exports = {
     signAccessToken: (obj) => {
         return new Promise((resolve, reject) => {
-            const { _id, firstName, lastName, email, phone, role, managers, createdBy, updatedBy,permissions } = obj;
+            const { _id,email,role,permissions,tenantId } = obj;
 
-            const payload = { _id, firstName, lastName, email, phone, role, managers, createdBy, updatedBy,permissions };
+            const payload = { _id,email,role,permissions,tenantId };
             const secret = SECRET;
 
             JWT.sign(payload, secret, (err, token) => {

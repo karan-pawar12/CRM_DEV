@@ -1,7 +1,9 @@
-const Client = require('../../schema/client');
+const {getClientModel} = require('../../db/tenantDb')
 
 module.exports = async function (req, res, next) {
     try {
+        const {tenantId} = req.payload;
+        const Client = getClientModel(tenantId);
         const client = await Client.find({});
             
             

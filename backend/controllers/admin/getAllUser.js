@@ -1,9 +1,11 @@
-const User = require('../../schema/user');
+const {getUserModel} = require('../../db/tenantDb');
 const mongoose = require('mongoose');
 
 module.exports = async function (req, res, next) {
     try {
+        const {tenantId} = req.payload;
         let {skip=0,limit=10} = req.query;
+        const User = await getUserModel(tenantId);
 
         const users = await User.aggregate([
             {
