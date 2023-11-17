@@ -2,13 +2,17 @@ const {getRoleModel} = require('../../db/tenantDb');
 module.exports = async function (req, res, next) {
     try {
         const { _id: payloadId,tenantId } = req.payload;
-        const { _id, fieldName, fieldValue } = req.body;
+        const { _id, fieldName, fieldValue, permissionType } = req.body;
         const Role = await getRoleModel(tenantId);
         let role;
-
-        if (fieldName && fieldValue) {
-            const update = { $set: { [fieldName]: fieldValue } };
-            role = await Role.findByIdAndUpdate(_id, update,{ new: true });
+        
+        if (permissionType) {
+            const update = {
+                $set: {
+                    [`permissions.${fieldName}.${permissionType}`]: fieldValue,
+                },
+            };
+            role = await Role.findOneAndUpdate({ _id }, update, { new: true });
         } else {
             return res.status(400).json({ error: 'Invalid request.' });
         }

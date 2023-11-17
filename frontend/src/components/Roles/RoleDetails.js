@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import roleDetails_api from "../../api_strings/admin/RoleDetails_api";
 import updateRole_api from "../../api_strings/admin/updateRole_api";
+import updatePermission_api from "../../api_strings/admin/updatePermission_api";
 import { Accordion, AccordionItem, Switch } from "@nextui-org/react";
 import UpdatableElement from "../UpdateForm/UpdatableElement";
 import Backbutton from "../Backbutton";
@@ -43,7 +44,7 @@ function RoleDetails({onUpdateSuccess}) {
         const updatedPermissions = { ...roleDetailsData.permissions };
         updatedPermissions[moduleName][permissionType] = !updatedPermissions[moduleName][permissionType];
         const updatedValue = updatedPermissions[moduleName][permissionType];
-        await updateRole_api(id, { fieldName: moduleName, permissionType, value: updatedValue }, (error, res) => {
+        await updatePermission_api(id, { fieldName: moduleName, permissionType, fieldValue: updatedValue }, (error, res) => {
             if (error) {
                 alert("API request failed");
                 // If the API request fails, roll back the state to the previous value
