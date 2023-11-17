@@ -1,8 +1,21 @@
-import { InfoIcon,CloseIcon } from "../../resources/icons/icons"
+import { useState,useEffect } from "react";
+import { InfoIcon,CloseIcon } from "../../resources/icons/icons";
+import { Button } from "@nextui-org/react";
 function InfoToast({msg,onClose,timer=3000}) {
+    const [isVisible, setIsVisible] = useState(true);
+
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+          setIsVisible(false);
+          onClose();
+        }, timer);
+    
+        return () => clearTimeout(timerId);
+      }, [onClose, timer]);
+
     return (
         <>
-            <div class="fixed bottom-[24px] right-[24px] box-border flex space-x-3 max-w-[600px] min-w-[400px] rounded-lg">
+            {isVisible && <div class="fixed bottom-[24px] right-[24px] box-border flex space-x-3 max-w-[600px] min-w-[400px] rounded-lg">
 
                 <div class="absolute mx-2 my-7 pr-28 pl-6 text-blue-400">
                     <InfoIcon />
@@ -12,11 +25,13 @@ function InfoToast({msg,onClose,timer=3000}) {
                     <h1 class="text-blue-700 font-semibold flex-grow">{msg}</h1>
                     <div class="text-blue-400 flex items-center">
 
-                        <CloseIcon onClick={onClose}/>
+                        
+                    <Button isIconOnly className="text-blue-700 bg-blue-50 flex items-center" onClick={() => { onClose() }} ><CloseIcon /></Button>
                     </div>
                 </div>
 
             </div>
+        }   
         </>
     )
 }
