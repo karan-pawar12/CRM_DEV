@@ -25,7 +25,7 @@ function WarningToast({msg,onClose,timer=3000}) {
                     <h1 class="text-yellow-700 font-semibold flex-grow">{msg}</h1>
                     <div class="text-yellow-400 flex items-center">
 
-                    <Button isIconOnly className="text-green-600 bg-green-50 flex items-center" onClick={() => { onClose() }} ><CloseIcon /></Button>
+                    <Button isIconOnly className="text-yellow-600 bg-yellow-50 flex items-center" onClick={() => { onClose() }} ><CloseIcon /></Button>
                     </div>
                 </div>
 
