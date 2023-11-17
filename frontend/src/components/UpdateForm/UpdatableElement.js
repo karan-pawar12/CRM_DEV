@@ -71,7 +71,8 @@ export default function UpdatableElement({ fieldType, id, onUpdateSuccess, field
             if (error) {
                 alert("User updation failed");
             } else {
-                onUpdateSuccess(res.data)
+                onUpdateSuccess(res.data);
+                setValue(selectedKeys);
                 alert("User updated successfully");
             }
         });
