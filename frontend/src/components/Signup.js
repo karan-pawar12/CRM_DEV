@@ -4,11 +4,18 @@ import { Link } from 'react-router-dom';
 import signup_api from '../api_strings/admin/signup_api';
 import { useNavigate } from 'react-router-dom';
 import OtpInput from './OtpInput';
+import Forms from './Inputform/Forms';
+
+
+
+
+
 
 
 function Signup() {
   const navigate = useNavigate();
   const [otpModalOpen, setOtpModalOpen] = useState(false);
+  const [formSubmitted,setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -20,43 +27,23 @@ function Signup() {
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('');
 
-  function handleSignup(e) {
-    e.preventDefault();
-    const { firstName, lastName, email, phone, password } = formData;
 
-    if (password.length < 8) {
-      setPasswordError("Password must be at least 8 characters long");
-      return;
-    } else {
-      setPasswordError('');
-    }
+  function onSubmitForm(){
+    setFormSubmitted(true);
+  }
 
-    if (!isEmailValid(email)) {
-      setEmailError('Please enter a valid email address');
-      return;
-    } else {
-      setEmailError('');
-    }
-
-    if (!isNumeric(phone)) {
-      setPhoneError('Phone number must contain only numbers');
-      return;
-    } else {
-      setPhoneError('');
-    }
-
-    const toggleOtpModal = () => {
-      setOtpModalOpen(!otpModalOpen);
-    };
-
+  function handleSignup({firstName, lastName, email, phone, password}) {
+  
+   
 
     signup_api(firstName, lastName, email, phone, password, (error, res) => {
       if (error) {
         alert("Signup Failed");
+        setFormSubmitted(false);
       }
       else {
         alert("Signup Successfully");
-        toggleOtpModal();
+        //toggleOtpModal();
         // navigate('/cpanel/login');
 
       }
@@ -65,24 +52,6 @@ function Signup() {
 
   }
 
-  function handleInputChange(e) {
-    const { name, value } = e.target;
-
-    // Update the formData object with the new input value
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  }
-
-  function isEmailValid(email) {
-    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    return emailPattern.test(email);
-  }
-
-  function isNumeric(input) {
-    return /^\d+$/.test(input);
-  }
 
 
 
@@ -91,76 +60,61 @@ function Signup() {
     <div className='w-full'>
      
 
-        <form onSubmit={handleSignup}>
-          <div className="mb-4">
 
-
-            <Input
-              size='sm'
-              type="text"
-              label="First Name"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
+        <Forms
+        formSubmitted={formSubmitted}
+        setFormSubmitted={setFormSubmitted}
+             fields={[
+              {
+                name: "firstName",
+                label: "First Name",
+                type: "Input",
+                rules:{required:true,isName:true},
+                errorMsg:"Please enter valid first Name"
+              },
+              {
+                name: "lastName",
+                label: "Last Name",
+                type: "Input",
+                rules:{required:true,isName:true},
+                errorMsg:"Please enter valid last Name"
+              },
+              {
+                name: "email",
+                label: "Email",
+                type: "Input",
+               
+                rules:{required:true, isEmail:true},
+                errorMsg:"Please enter valid email"
+              },
+              {
+                name: "phone",
+                label: "Phone",
+                type: "Input",
+                
+                rules:{required:true,isPhone:true},
+                errorMsg:"Please enter valid phone"
+              },
+              {
+                name: "password",
+                label: "Password",
+                type: "Input",
+                rules:{required:true},
+                errorMsg:"Please enter valid password"
+              }
+             ]}
+             onSubmit={handleSignup}
+             sizeProps={'grid-cols-1'}
             />
-          </div>
-          <div className="mb-4">
-            <Input
-              size='sm'
+           
 
-              type="text"
-              label="Last Name"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="mb-4">
-            <Input
-              size='sm'
-
-              type="text"
-              label="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              isInvalid={emailError !== ''}
-              errorMessage={emailError}
-            />
-          </div>
-          <div className="mb-4">
-            <Input
-              size='sm'
-
-              type="phone"
-              label="Phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              isInvalid={phoneError !== ''}
-              errorMessage={phoneError}
-            />
-          </div>
-          <div className="mb-4">
-            <Input
-              size='sm'
-
-              type="password"
-              label="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              isInvalid={passwordError !== ""}
-              errorMessage={passwordError}
-            />
-          </div>
+         
           <Button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+          onClick={onSubmitForm}
+            className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
           >
             Sign Up
           </Button>
-        </form>
 
      
 

@@ -45,7 +45,7 @@ function Main() {
         }
       })
     } else {
-      navigate('/cpanel/login');
+      navigate('/cpanel/entry');
     }
   }, [])
 

@@ -1,12 +1,19 @@
 import { Input, Select, SelectItem, Button } from "@nextui-org/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Forms(props) {
-    const { fields, onSubmit, sizeProps } = props;
+    const { fields, onSubmit, formSubmitted,setFormSubmitted, sizeProps } = props;
     const formData = useRef(getRefValues());
     const [formEmpty, setFormEmpty] = useState(true);
     const size = sizeProps ?? "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1";
     const [errors,setErrors] = useState(getNullErrors());
+
+
+    useEffect(()=>{
+        if(formSubmitted){
+            handleSaveClick();
+        }
+    },[formSubmitted])
 
     function getNullErrors(){
         let temp = {};
@@ -46,7 +53,6 @@ export default function Forms(props) {
             }
             let {required=false,min=null,max=null,isEmail=false,isPhone=false,isName=false} = fields[i].rules;
             let value = formData.current[fields[i].name];
-            console.log(required);
 
             let error = false;
             if(required && value.length==0){
@@ -59,12 +65,11 @@ export default function Forms(props) {
                 error = true;
             }
             else if(min!=null){
-               console.log(min);
                 if(value.length<min){
                     error = true
                 }   
             }
-            else if(isName && isValidName){
+            else if(isName && !isValidName){
                 error = true;
             }
 
@@ -79,6 +84,7 @@ export default function Forms(props) {
 
         if(hasError){
             setErrors(tempErrors);
+            setFormSubmitted(false);
             return;
         }
 
@@ -122,13 +128,9 @@ export default function Forms(props) {
 
     return (
         <>
-            <div className="flex justify-end mt-5">
-                <Button color="primary" onClick={handleSaveClick}>
-                    Save
-                </Button>
-            </div>
+            
 
-            <div className={`grid w-full ${size} gap-10 mt-6`}>
+            <div className={`grid w-full ${size} gap-4 mt-6`}>
                 {fields.map((f, index) => {
                     const key = `${f.name}-${index}`; //  unique key
                     if (f.type === "Input") {
@@ -136,9 +138,10 @@ export default function Forms(props) {
                             <div key={key}>
                                 <Input
                                     type="text"
+                                    size="sm"
                                     label={f.label}
-                                    placeholder={`Enter ${f.label.toLowerCase()}`}
-                                    labelPlacement="outside"
+                                    placeholder={f.placeholder??""}
+                                   // labelPlacement="outside"
                                     name={f.name}
                                     onChange={onChange}
                                     defaultValue={formData.current[f.name]}
@@ -154,8 +157,9 @@ export default function Forms(props) {
                             <div key={key}>
                                 <Select
                                     label={f.label}
+                                    size="sm"
                                     placeholder={`Choose ${f.label.toLowerCase()}`}
-                                    labelPlacement="outside"
+                                    //labelPlacement="outside"
                                     name={f.name}
                                     defaultSelectedKeys={formData.current[f.name]}
                                     onSelectionChange={(keys) => handleSelectChange({ target: { name: f.name, value: Array.from(keys) } })}

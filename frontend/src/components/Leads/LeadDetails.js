@@ -93,6 +93,10 @@ function LeadDetails({onUpdateSuccess}) {
         // Check if the field is valid
         if (currentField === field) {
             const updatedValue = leadDetailsData[field];
+
+
+
+
             updateLead_api(id, field, updatedValue, (error, res) => {
                 if (error) {
                     alert("Lead updation failed");
@@ -127,7 +131,19 @@ function LeadDetails({onUpdateSuccess}) {
         });
     };
 
+
+
+
+
+
+
+
+
     const createInputField = (field, label) => {
+
+
+
+
         return (
             <Input
                 id={field}
