@@ -44,7 +44,7 @@ module.exports = async function (req, res, next) {
                     permissions: 1,
                     description: 1,
                     roleOwner: {
-                        $concat: ['$createdByUser.firstName', ' ', '$createdByUser.lastName']
+                        $concat: ['$createdByUser.firstName']
                     },
                     updatedBy: {
                         $concat: ['$updatedByUser.firstName', ' ', '$updatedByUser.lastName']
@@ -58,8 +58,8 @@ module.exports = async function (req, res, next) {
         }
 
         res.json(role[0]); // Assuming there's only one role with the given ID
-    } catch (e) {
-        console.error(e.message);
+    } catch (error) {
+        console.log(error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

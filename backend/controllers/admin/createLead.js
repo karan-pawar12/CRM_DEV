@@ -9,14 +9,14 @@ module.exports = async function(req,res,next){
         let lead = null;
         try{
             lead = await new Lead({firstName,lastName,email,phone,leadSource,leadStatus,companyName,rating,annualRevenue,createdBy,updatedBy,address,description}).save();
-            res.json(lead);
-        }catch(e){
-            console.log(e.message);
-            return res.status(500).end();
+            res.status(201).json(lead);
+        }catch(error){
+            console.log(error.message);
+            return res.status(500).json({ error: 'Internal server error' });
         }
 
-    }catch(e){
-        console.log(e.message);
-        return res.status(500).end();
+    }catch(error){
+        console.log(error.message);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 }

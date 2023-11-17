@@ -20,7 +20,7 @@ module.exports = async function (req, res, next) {
 
         res.json(project);
     } catch (e) {
-        console.error('Error:', e);
-        return res.status(500).json({ error: 'An error occurred while updating the project.' });
+        console.log('Error:', e);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 };

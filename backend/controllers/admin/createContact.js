@@ -7,14 +7,14 @@ module.exports = async function (req, res, next) {
         let contact = null;
         try {
             contact = await new Contact({ firstName,lastName,email,phone,vendorName,createdBy,updatedBy,address,description }).save();
-            res.json(contact);
-        } catch (e) {
-            console.log(e.message);
-            return res.status(500).end();
+            res.status(201).json(contact);
+        } catch (error) {
+            console.log(error.message);
+            return res.status(500).json({ error: 'Internal server error' });
         }
 
-    } catch (e) {
-        console.log(e.message);
-        return res.status(500).end();
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 }

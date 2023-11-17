@@ -8,14 +8,14 @@ module.exports = async function (req,res,next) {
         let task = null;
         try {
             task = await new Task({ taskSubject, dueDate, status, priority, reminder, createdBy, updatedBy, description }).save();
-            res.json(task);
-        } catch (e) {
-            console.log(e.message);
+            res.status(201).json(task);
+        } catch (error) {
+            console.log(error.message);
             return res.status(500).end();
         }
 
-    } catch (e) {
-        console.log(e.message);
-        return res.status(500).end();
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 }

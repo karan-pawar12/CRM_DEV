@@ -20,8 +20,8 @@ module.exports = async function (req, res, next) {
 
         res.json(client);
 
-    } catch (e) {
-        console.log(e.message);
-        return res.status(500).end();
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 }

@@ -18,7 +18,7 @@ module.exports = async function (req, res, next) {
 
         res.json(client);
     } catch (e) {
-        console.error('Error:', e);
-        return res.status(500).json({ error: 'An error occurred while updating the user.' });
+        console.log('Error:', e);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 };

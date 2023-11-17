@@ -13,8 +13,8 @@ module.exports = async function (req, res, next) {
 
         res.json({totalCount});
 
-    } catch (e) {
-        console.error(e.message);
+    } catch (error) {
+        console.log(error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

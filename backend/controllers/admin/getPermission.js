@@ -35,6 +35,7 @@ module.exports = async function (req, res, next) {
 
         
     } catch (error) {
-        return res.status(500).json({ message: 'Error retrieving user role and permissions' });
+        console.log(error.message);
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 };

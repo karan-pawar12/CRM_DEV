@@ -35,17 +35,17 @@ module.exports = async function(req,res,next){
                 if(tenant){
                     res.json(tenant);
                 }
-            }catch(e){
-                return res.status(500).end(e.message);
+            }catch(error){
+                return res.status(500).end(error.message);
 
             }
 
 
         }
 
-    }catch(e){
+    }catch(error){
         
-        return res.status(500).end(e.message);
+        return res.status(500).end(error.message);
     }
 
        

@@ -11,13 +11,13 @@ module.exports = async function (req, res, next) {
         const User = await getUserModel(tenantId);
         const Role = await getRoleModel(tenantId);
 
-        console.log(Role)
+
         // Find the user by their email
         const user = await User.findOne({ email });
 
         // Check if the user exists
         if (!user) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(404).json({ error: 'Invalid credentials' });
         }
 
         if (!user.isEmailVerified) {
@@ -27,14 +27,14 @@ module.exports = async function (req, res, next) {
                 generatedAt: newOtp.generatedAt,
             };
             await user.save();
-            return res.status(401).json({ error: 'Email is not verified' });
+            return res.status(403).json({ error: 'Email is not verified' });
         }
 
         // Compare the provided password with the hashed password in the database
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (passwordMatch) {
-            const { _id, firstName, lastName, email, phone, role, createdBy, updatedBy } = user;
+            const { _id, email, role } = user;
             let permissions;
             if(role[0] === 'Superadmin'){
                 permissions = adminPermissions;
@@ -53,8 +53,8 @@ module.exports = async function (req, res, next) {
             return res.status(403).json({ error: 'Invalid credentials' });
         }
 
-    } catch (e) {
-        console.error(e.message);
+    } catch (error) {
+        console.log(error.message);
         return res.status(500).json({ error: 'Internal server error' });
     }
 };

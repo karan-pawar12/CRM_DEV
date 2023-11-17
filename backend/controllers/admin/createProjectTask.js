@@ -9,14 +9,14 @@ module.exports = async function (req, res, next) {
         let projectTask = null;
         try {
             projectTask = await new Projecttask({ projectName, participants, createdBy, updatedBy , description }).save();
-            res.json(projectTask);
-        } catch (e) {
-            console.log(e.message);
+            res.status(201).json(projectTask);
+        } catch (error) {
+            console.log(error.message);
             return res.statusb(500).end();
         }
 
-    } catch (e) {
-        console.log(e.message);
-        return res.status(500).end();
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 }

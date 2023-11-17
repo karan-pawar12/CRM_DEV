@@ -8,14 +8,14 @@ module.exports = async function (req, res, next) {
         let client = null;
         try {
             client = await new Client({ companyName, companySite, email, companyPhoneNo, clientPhoneNo, address, industry, annualRevenue, createdBy, updatedBy, description, softDelete }).save();
-            res.json(client);
-        } catch (e) {
-            console.log(e.message);
-            return res.status(500).end();
+            res.status(201).json(client);
+        } catch (error) {
+            console.log(error.message);
+            return res.status(500).end({ error: 'Internal Server Error' });
         }
 
-    } catch (e) {
-        console.log(e.message);
-        return res.status(500).end();
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).end({ error: 'Internal Server Error' });
     }
 }

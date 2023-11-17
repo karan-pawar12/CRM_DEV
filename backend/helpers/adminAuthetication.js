@@ -44,8 +44,8 @@ module.exports = {
 
 
 
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.log(error);
             res.status(401).end('Unauthorized');
         }
     }

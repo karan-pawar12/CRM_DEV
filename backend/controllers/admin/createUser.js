@@ -23,12 +23,12 @@ module.exports = async function (req, res, next) {
         }
 
         if (await validation.isEmailInUse(email,tenantId)) {
-            return res.status(400).json({ error: 'Email address is already in use' });
+            return res.status(409).json({ error: 'Email address is already in use' });
         }
         
 
         if (await validation.isPhoneInUse(phone,tenantId)) {
-            return res.status(400).json({ error: 'Phone number is already in use' });
+            return res.status(409).json({ error: 'Phone number is already in use' });
         }
 
 
@@ -41,14 +41,14 @@ module.exports = async function (req, res, next) {
                 user.role = roleInfo.name; 
             }
 
-            res.json(user);
-        } catch (e) {
-            console.log(e.message);
+            res.status(201).json(user);
+        } catch (error) {
+            console.log(error.message);
             return res.status(500).end();
         }
 
-    } catch (e) {
-        console.log(e.message);
-        return res.status(500).end();
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 }

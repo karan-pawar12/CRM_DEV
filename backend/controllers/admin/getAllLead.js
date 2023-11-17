@@ -41,8 +41,8 @@ module.exports = async function (req, res, next) {
         const totalCount = await Lead.countDocuments({ softDelete: false });
         res.json({leads,totalCount});
 
-    } catch (e) {
-        console.error(e.message);
+    } catch (error) {
+        console.log(error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

@@ -8,14 +8,14 @@ module.exports = async function (req, res, next) {
         let call = null;
         try{
             call = await new Call({contactType, contactId, callOwnerId, callType, status, from, callstartTime, subject, reminder, purpose, description,createdBy,updatedBy}).save();
-            res.json(call);
-        }catch(e){
-            console.log(e.message);
-            return res.status(500).end();
+            res.status(201).json(call);
+        }catch(error){
+            console.log(error.message);
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
 
-    } catch (e) {
-        console.log(e.message);
-        return res.status(500).end();
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 }

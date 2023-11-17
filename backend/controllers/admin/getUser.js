@@ -64,13 +64,15 @@ module.exports = async function (req, res, next) {
             }
         ]);
 
+        console.log(roles);
+
         if (!user || user.length === 0) {
             return res.status(404).json({ error: 'User not found.' });
         }
 
         res.json({userDetails:user[0],roles}); // Assuming there's only one user with the given ID
-    } catch (e) {
-        console.error(e.message);
+    } catch (error) {
+        console.log(error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

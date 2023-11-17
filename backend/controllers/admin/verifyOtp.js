@@ -28,7 +28,7 @@ module.exports = async function (req, res, next) {
 
         res.json({ message: 'OTP verified successfully' });
     } catch (error) {
-        console.error(error.message);
+        console.log(error.message);
         return res.status(500).json({ error: 'Internal server error' });
     }
 }

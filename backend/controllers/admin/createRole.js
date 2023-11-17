@@ -8,14 +8,14 @@ module.exports = async function(req,res,next){
         let role = null;
         try{
             role = await new Role({name,description,permissions:defaultPermissions,createdBy,updatedBy}).save();
-            res.json(role);
-        }catch(e){
-            console.log(e.message);
+            res.status(201).json(role);
+        }catch(error){
+            console.log(error.message);
             return res.status(500).end();
         }
 
-    }catch(e){
-        console.log(e.message);
-        return res.status(500).end();
+    }catch(error){
+        console.log(error.message);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 }

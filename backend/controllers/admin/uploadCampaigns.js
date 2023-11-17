@@ -74,15 +74,15 @@ module.exports = async function (req, res, next) {
                 ]);
 
                 res.json(data);
-            } catch (e) {
-                console.log(e.message);
+            } catch (error) {
+                console.log(error.message);
                 return res.status(500).end();
             }
         });
 
 
-    } catch (e) {
-        console.log(e.message);
-        res.status(500).end();
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: 'Internal server error' });
     }
 }

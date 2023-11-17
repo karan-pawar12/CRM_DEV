@@ -51,7 +51,7 @@ module.exports = async function (req, res, next) {
                     createdAt: 1,
                     updatedAt: 1,
                     leadOwner: {
-                        $concat: ['$createdByUser.firstName', ' ', '$createdByUser.lastName']
+                        $concat: ['$createdByUser.firstName']
                     },
                     updatedBy: {
                         $concat: ['$updatedByUser.firstName', ' ', '$updatedByUser.lastName']
@@ -65,8 +65,8 @@ module.exports = async function (req, res, next) {
         }
 
         res.json(lead[0]); // Assuming there's only one lead with the given ID
-    } catch (e) {
-        console.error(e.message);
+    } catch (error) {
+        console.log(error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

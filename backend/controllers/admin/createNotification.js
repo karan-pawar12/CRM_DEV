@@ -11,14 +11,14 @@ module.exports = async function (req, res, next) {
         
         try {
             notification = await new Notification({ title, content, data, recipients: recipientIds, room, priority }).save();
-            res.json(notification);
+            res.status(201).json(notification);
         } catch (error) {
             console.log(error.message);
-            return res.status(500).end();
+            return res.status(500).json({ error: 'Internal server error' });
         }
 
     } catch (error) {
         console.log(error.message);
-        return res.status(500).end();
+        return res.status(500).json({ error: 'Internal server error' });
     }
 }
