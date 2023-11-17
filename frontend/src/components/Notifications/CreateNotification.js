@@ -1,4 +1,5 @@
 import { useEffect,useState } from "react";
+import { Button } from "@nextui-org/react";
 import Forms from "../Inputform/Forms";
 import getAllUserWithoutskip from "../../api_strings/admin/getallUserWithoutskip";
 import Createnotification_api from "../../api_strings/admin/createNotification_api";
@@ -6,13 +7,19 @@ import Backbutton from "../Backbutton";
 
 function CreateNotification({onCreateSuccess}){
     const[userArr,setuserArr] = useState([]);
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
+    function onSubmitForm() {
+        setFormSubmitted(true);
+    }
 
     const onSubmit = (formData) => {
         const {title,content,data,recipients} = formData;
         const recipientsArray = Object.values(recipients);
         Createnotification_api(title,content,data,recipientsArray,(error,res) => {
             if(error){
-                alert("Unable to push notification")
+                alert("Unable to push notification");
+                setFormSubmitted(false);
             }
             else{
                 onCreateSuccess(res.data);
@@ -37,7 +44,14 @@ function CreateNotification({onCreateSuccess}){
         <>
         <Backbutton />
         <div className="w-full">
+                <div className="flex justify-end mt-5">
+                    <Button color="primary" onClick={onSubmitForm}>
+                        Save
+                    </Button>
+                </div>
             <Forms
+                formSubmitted={formSubmitted}
+                setFormSubmitted={setFormSubmitted}
                 fields={
                     [
                         {

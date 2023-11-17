@@ -1,5 +1,6 @@
 import React, { useRef, useContext, useState, useEffect } from "react";
 import Forms from "../Inputform/Forms";
+import { Button } from "@nextui-org/react";
 import createUser_api from "../../api_strings/admin/createUser_api";
 import AuthContext from "../../AuthContext";
 import NotAuthorized from "../NotAuthorized";
@@ -9,6 +10,12 @@ import Backbutton from '../Backbutton';
 export default function CreateUser({ onCreateSuccess }) {
     const authContext = useContext(AuthContext);
     const [roleOptions, setRoleOptions] = useState([]);
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
+    function onSubmitForm() {
+        setFormSubmitted(true);
+    }
+
 
     useEffect(() => {
         getAllRoleWithoutskip((error, res) => {
@@ -34,6 +41,7 @@ export default function CreateUser({ onCreateSuccess }) {
             if (error) {
 
                 alert("User Creation Failed");
+                setFormSubmitted(false);
             }
             else {
                 onCreateSuccess(res.data);
@@ -53,8 +61,14 @@ export default function CreateUser({ onCreateSuccess }) {
             <>
                 <Backbutton />
                 <div className="w-full">
+                <div className="flex justify-end mt-5">
+                    <Button color="primary" onClick={onSubmitForm}>
+                        Save
+                    </Button>
+                </div>
                 <Forms
-
+                    formSubmitted={formSubmitted}
+                    setFormSubmitted={setFormSubmitted}
                     fields={
                         [
                             {

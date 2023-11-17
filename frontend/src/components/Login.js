@@ -5,6 +5,7 @@ import login_api from '../api_strings/admin/login_api';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../AuthContext';
 import AdminContext from '../AdminContext';
+import Forms from './Inputform/Forms';
 import Toast from './ToastsContainers/Toast';
 
 
@@ -12,28 +13,31 @@ function Login() {
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   const admincontext = useContext(AdminContext);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [tenantId,setTenantId] = useState('');
-  const [loading,setLoading] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  function handleLogin(e) {
-    e.preventDefault();
+  function onSubmitForm(){
+    setFormSubmitted(true);
+  }
+
+  function handleLogin(formData) {
     setLoading(true);
-    login_api(email, password,tenantId, (error, res) => {
+    const { email, password, tenantId, } = formData
+    login_api(email, password, tenantId, (error, res) => {
       setLoading(false);
       if (error) {
         // alert("Login Failed");
         admincontext.setToast({
-          msg:"Login Failed",
-          toastType:"error",
-          onClose:null
+          msg: "Login Failed",
+          toastType: "error",
+          onClose: null
         })
+        setFormSubmitted(false);
       }
       else {
-        const { role,permissions } = res.data;
+        const { role, permissions } = res.data;
         authContext.setAuth({
-          user: role, 
+          user: role,
           permissions: permissions,
         });
 
@@ -44,29 +48,51 @@ function Login() {
   }
 
   return (
-   <>
-    {
-				admincontext.toast.msg && 	<Toast {...admincontext.toast} />
-		}
+    <>
+      {
+        admincontext.toast.msg && <Toast {...admincontext.toast} />
+      }
 
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <Input type="email" label="Email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
-          <div className="mb-4">
-            <Input type="password" label="Password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          <div className="mb-4">
-            <Input type="text" label="Username" placeholder="Enter your company's username" value={tenantId} onChange={(e) => setTenantId(e.target.value)} />
-          </div>
-          <Button
-            type="submit"
-            isLoading={loading}
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
-          >
-            Login
-          </Button>
-        </form>
+      <div className='w-full'>
+        <Forms
+          formSubmitted={formSubmitted}
+          setFormSubmitted={setFormSubmitted}
+          fields={[
+            {
+              name: "email",
+              label: "Email",
+              type: "Input",
+              rules: { required: true, isEmail: true },
+              errorMsg: "Please enter valid email"
+            },
+            {
+              name: "password",
+              label: "Password",
+              type: "Input",
+              rules: { min: 8 },
+              errorMsg: "Password must be at least 8 characters long"
+            },
+            {
+              name: "tenantId",
+              label: "Username",
+              type: "Input",
+              rules: { required: true },
+              errorMsg: "Please enter username"
+            }
+          ]}
+          onSubmit={handleLogin}
+          sizeProps={'grid-cols-1'}
+        />
+
+        <Button
+          type="submit"
+          onClick={onSubmitForm}
+          isLoading={loading}
+          className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+        >
+          Login
+        </Button>
+      </div>
     </>
   );
 }
