@@ -1,10 +1,10 @@
 import { GETALL_USER } from "../../resources/urls/admin";
 import axios from '../../Interceptor'
 
-async function getAllUser_api({skip,limit},callback) {
+async function getAllUser_api({skip,limit,searchQuery},callback) {
     try {
 
-        const res = await axios.get(`${GETALL_USER}?skip=${skip}&limit=${limit}`);
+        const res = await axios.get(`${GETALL_USER}?skip=${skip}&limit=${limit}&searchQuery=${searchQuery}`);
 
         if(res){
             callback(null,res);

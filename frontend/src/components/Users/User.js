@@ -57,7 +57,7 @@ function User() {
 
   return <>
     <div hidden={query.get("id") === "" || !query.get("id") ? false : true}>
-      <UserTable users={users} setUsers={setUsers} onPageChange={onPageChange} count={count}/>
+      <UserTable users={users} setUsers={setUsers} onPageChange={onPageChange} count={count} settotalCount={settotalCount}/>
     </div>
 
     {(query.get("id") === "new") ? <CreateUser onCreateSuccess={onCreateSuccess}/> : (query.get("id") !== null && query.get("id") !== "") && <UserDetails onUpdateSuccess={onUpdateSuccess}/>}

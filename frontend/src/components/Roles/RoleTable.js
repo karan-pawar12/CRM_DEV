@@ -1,21 +1,27 @@
-import React, { useCallback, useContext, useState, useEffect } from "react";
+import React, { useCallback, useContext, useState, useEffect,useRef } from "react";
 import { Button, Input } from '@nextui-org/react';
 import { EditIcon, DeleteIcon, EyeIcon } from "../../resources/icons/icons";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Pagination } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import deleteRole_api from "../../api_strings/admin/deleteRole_api";
+import getAllRole_api from "../../api_strings/admin/getAllRole_api";
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
 const limit = 10;
 
 
 
-function RoleTable({ roles, setRoles,onPageChange,count }) {
+function RoleTable({ roles, setRoles,onPageChange,count,settotalCount }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage,setTotalPage] = useState(1);
+    const [searchKey, setSearchKey] = useState("");
     const authContext = useContext(AuthContext);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
+    const skip = useRef(0);
+    const limit = useRef(10);
     const navigate = useNavigate();
+
+
     useEffect(()=>{
         calculateTotalPage();
     },[count])
@@ -23,6 +29,21 @@ function RoleTable({ roles, setRoles,onPageChange,count }) {
 
     function handleDetailsRoleClick(roleId){
         navigate(`?id=${roleId}`);
+    }
+
+    const handleSearchQuery = (e) => {
+        const currValue = e.target.value;
+        setSearchKey(currValue);
+        getAllRole_api({skip:skip.current,limit:limit.current,searchQuery:currValue},(error, res) => {
+            if (error) {
+              console.log("Error:", error);
+            } else {
+      
+              setRoles(res.data.roles);
+              settotalCount(res.data.totalCount);
+      
+            }
+          });
     }
 
     function handleDeleteRoleClick(roleId) {
@@ -97,7 +118,10 @@ function RoleTable({ roles, setRoles,onPageChange,count }) {
             {authContext.auth.permissions["roles"]?.create &&
                 <div className='flex justify-between'>
                     <div>
-                        <Input placeholder='Search users' className='w-auto' />
+                        <Input placeholder='Search users' className='w-auto' 
+                         value={searchKey}
+                         onChange={handleSearchQuery}
+                        />
                     </div>
                     <div>
 

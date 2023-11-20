@@ -4,25 +4,49 @@ const mongoose = require('mongoose');
 module.exports = async function (req, res, next) {
     try {
         const {tenantId} = req.payload;
-        let {skip=0,limit=10} = req.query;
+        const skip = parseInt(req.query.skip, 10) || 0;
+        const limit = parseInt(req.query.limit, 10) || 10;
+        let searchQuery = req.query.searchQuery || '';
+
+        if(searchQuery === "undefined" || searchQuery === undefined){
+            searchQuery = ''
+        }
+
         const User = await getUserModel(tenantId);
 
         const users = await User.aggregate([
             {
                 $match: {
-                    softDelete: false, 
-                    $expr: {
-                        $ne: [
-                            '$_id', new mongoose.Types.ObjectId(req.payload._id)
-                        ]
-                    }
+                    $and:[
+                        {
+                            softDelete: false, 
+                        },
+                        {
+                            $expr: {
+                                $ne: [
+                                    '$_id', new mongoose.Types.ObjectId(req.payload._id)
+                                ]
+                            }
+                        },
+                        {
+                            $or: [
+                                { firstName: { $regex: searchQuery,$options: 'i' } }, 
+                                { lastName: { $regex: searchQuery, $options: 'i' } },  
+                                { phone: { $regex: searchQuery, $options: 'i' } },
+                                { email: { $regex:searchQuery, $options: 'i'}},    
+                            ]
+                        }
+
+                    ]
+                    
+                   
                 }
             },
             {
-                $skip: parseInt(skip)
+                $skip:skip
             },
             {
-                $limit: parseInt(limit)
+                $limit:limit
             },
             {
                 $lookup: {

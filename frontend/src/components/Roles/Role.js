@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import RoleTable from "./RoleTable";
 import CreateRole from "./CreateRole";
 import RoleDetails from "./RoleDetails";
-import getAllRole_api from "../../api_strings/admin/getAllRole";
+import getAllRole_api from "../../api_strings/admin/getAllRole_api";
 
 
 function Role() {
@@ -56,7 +56,7 @@ function Role() {
 
   return <>
     <div hidden={query.get("id") === "" || !query.get("id") ? false : true}>
-      <RoleTable roles={roles} setRoles={setRoles} onPageChange={onPageChange} count={count}/>
+      <RoleTable roles={roles} setRoles={setRoles} onPageChange={onPageChange} count={count} settotalCount={settotalCount}/>
     </div>
 
     {(query.get("id") === "new") ? <CreateRole  onCreateSuccess={onCreateSuccess}/> : (query.get("id") !== null && query.get("id") !== "") && <RoleDetails onUpdateSuccess={onUpdateSuccess}/>}
