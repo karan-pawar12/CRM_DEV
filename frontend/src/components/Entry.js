@@ -1,4 +1,5 @@
 import Login from "./Login";
+import OtpInput from "./OtpInput";
 import Signup from "./Signup";
 import { Tabs,Tab } from "@nextui-org/react";
 import {useState} from 'react';
@@ -17,6 +18,9 @@ export default function Entry(){
         </Tab>
         <Tab key="Register" title={<strong>Register</strong>}>
             <Signup/>
+        </Tab>
+        <Tab key="OTP" title={<strong>OTP</strong>} >
+            <OtpInput />
         </Tab>
         </Tabs>
        </div>
