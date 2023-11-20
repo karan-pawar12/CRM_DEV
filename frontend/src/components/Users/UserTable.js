@@ -2,56 +2,58 @@ import React, { useCallback, useContext, useState, useEffect } from "react";
 import { EditIcon, DeleteIcon, EyeIcon } from "../../resources/icons/icons";
 import { Button, Input } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Pagination } from "@nextui-org/react";
-import AdminContext from "../../AdminContext";
-import getAllUser_api from "../../api_strings/admin/getAllUser_api";
 import deleteUser_api from "../../api_strings/admin/deleteUser_api";
 import { useNavigate } from 'react-router-dom';
+import AuthContext from "../../AuthContext";
+import AdminContext from "../../AdminContext";
 
-const itemsPerPage = 10;
+const limit = 10;
 
-export default function UserTable() {
+export default function UserTable({ users, setUsers,onPageChange, count }) {
     const [currentPage, setCurrentPage] = useState(1);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const adminContext = useContext(AdminContext);
+    const [totalPage,setTotalPage] = useState(1);
+    const authContext = useContext(AuthContext);
+    const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
+    useEffect(()=>{
+        calculateTotalPage();
+    },[count])
 
 
-    useEffect(() => {
-        getAllUser();
-    }, []);
 
-    function getAllUser() {
 
-        getAllUser_api((error, res) => {
-            if (error) {
-                console.log("Error:", error);
-            } else {
 
-                adminContext.setUser(res.data);
-
-            }
-        });
-    }
-
-    const handleCreateLeadClick = () => {
+    const handleCreateUserClick = () => {
         // Use the navigate function to navigate to the new URL
         navigate(`?id=new`);
     };
 
     function handleDeleteUserClick(userId) {
-        deleteUser_api(userId, (error, res) => {
-            if (error) {
-                console.log("Error:", error);
-            } else {
+        openConfirmationModal('Are you sure you want to delete this user ?', () => {
+            deleteUser_api(userId, (error, res) => {
+                if (error) {
+                    console.log("Error:", error);
+                } else {
 
-                adminContext.setUser((users) => users.filter((user) => user._id !== userId))
-            }
+                    setUsers((users) => users.filter((user) => user._id !== userId))
+                }
+            })
         })
     }
 
-    function handleDetailsUserClick(userId){
+    function handleDetailsUserClick(userId) {
         navigate(`?id=${userId}`);
+    }
+
+    function calculateTotalPage(){
+        let temp = (count/limit);
+        if(temp>parseInt(temp)){
+            temp = parseInt(temp) + 1;
+        }else{
+            temp = parseInt(temp);
+            
+        }
+        setTotalPage(temp);
     }
 
     const renderCell = useCallback((user, columnKey) => {
@@ -63,20 +65,20 @@ export default function UserTable() {
             case "phone":
                 return <span>{user.phone[0]}</span>;
             case "role":
-                return <span>{user.role[0]}</span>;
+                return <span>{user.role}</span>;
             case "actions":
                 return (
                     <div className="relative flex items-center gap-3">
-                        <Tooltip content="Details">
+                        {authContext.auth.permissions["users"]?.delete && <Tooltip content="Details">
                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                <EyeIcon onClick={() => handleDetailsUserClick(user._id)}/>
+                                <EyeIcon onClick={() => handleDetailsUserClick(user._id)} />
                             </span>
-                </Tooltip>
-                        <Tooltip color="danger" content="Delete user">
+                        </Tooltip>}
+                        {authContext.auth.permissions["users"]?.update && <Tooltip color="danger" content="Delete user">
                             <span className="text-lg text-danger cursor-pointer active:opacity-50">
                                 <DeleteIcon onClick={() => handleDeleteUserClick(user._id)} />
                             </span>
-                        </Tooltip> 
+                        </Tooltip>}
                     </div>
                 );
             default:
@@ -97,13 +99,13 @@ export default function UserTable() {
     return (
         <>
             <div className="mt-4 mb-6">
-                <div className='flex justify-between'>
+                {authContext.auth.permissions["users"]?.create && <div className='flex justify-between'>
                     <div>
                         <Input placeholder='Search users' className='w-auto' />
                     </div>
                     <div>
 
-                        <Button color='primary' className='mr-4' onClick={handleCreateLeadClick}>
+                        <Button color='primary' className='mr-4' onClick={handleCreateUserClick}>
                             Create Users
                         </Button>
 
@@ -112,9 +114,9 @@ export default function UserTable() {
                             Export to CSV
                         </Button>
                     </div>
-                </div>
+                </div>}
             </div>
-            <Table selectionMode="multiple">
+            <Table aria-label="Example static collection table" selectionMode="multiple">
                 <TableHeader columns={columns}>
                     {(column) => (
                         <TableColumn key={column.key} align="start">
@@ -122,7 +124,7 @@ export default function UserTable() {
                         </TableColumn>
                     )}
                 </TableHeader>
-                <TableBody items={adminContext.user.slice(startIndex, endIndex)}>
+                <TableBody items={users}>
                     {(user) => (
 
                         <TableRow key={user._id}>
@@ -134,10 +136,9 @@ export default function UserTable() {
             </Table>
             <Pagination
                 className="flex justify-center"
-                total={adminContext.user.length}
-                pageSize={itemsPerPage}
+                total={totalPage}
                 current={currentPage}
-                onChange={(newPage) => setCurrentPage(newPage)}
+                onChange={onPageChange}
             />
         </>
     );

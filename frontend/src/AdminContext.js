@@ -1,34 +1,43 @@
-import { createContext, useState,useRef } from "react";
+import { createContext, useState, useRef } from "react";
 import axios from "axios";
 
 const AdminContext = createContext({
 });
 
-function checkedLogged(){
-    try{
-        if(localStorage.getItem("token"))
-        return true;
-        else
-        return false;
-    }catch(e){
-        return false;
+export function AdminContextProvider(props) {
+    const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+    const [confirmModalData, setConfirmModalData] = useState({
+        msg: '',
+        listener: null,
+    });
+    const [toast,setToast] = useState({
+        msg:null,
+        toastType:null,
+        onClose:null
+    });
+
+    function openConfirmationModal(msg, listener) {
+        setConfirmModalData({ msg, listener });
+        setConfirmModalOpen(true);
     }
-}
 
-export function AdminContextProvider(props){
-    const [lead,setLead] = useState([])
-    const [user,setUser] = useState([])
-    const [isLogged,setIsLogged] = useState(checkedLogged());
-    const httpRequest = useRef(axios);
+    function closeConfirmationModal() {
+        setConfirmModalOpen(false);
+    }
 
+    function hideToast() {
+        setToast({
+            msg:null,
+            toastType:null,
+            onClose:null
+        })
+    }
 
     const context = {
-        lead,setLead,
-        user,setUser,
-        isLogged,setIsLogged,
-        httpRequest
+        confirmModalOpen,openConfirmationModal,
+        confirmModalData,closeConfirmationModal,
+        toast,setToast,hideToast
     }
-
 
     return <AdminContext.Provider value={context}>
         {props.children}

@@ -1,10 +1,10 @@
 import { GETALL_LEAD } from "../../resources/urls/admin";
 import axios from '../../Interceptor'
 
-async function getAllLead_api(callback) {
+async function getAllLead_api({skip,limit,searchQuery},callback) {
     try {
 
-        const res = await axios.get(GETALL_LEAD);
+        const res = await axios.get(`${GETALL_LEAD}?skip=${skip}&limit=${limit}&searchQuery=${searchQuery}`);
 
         if(res){
             callback(null,res);

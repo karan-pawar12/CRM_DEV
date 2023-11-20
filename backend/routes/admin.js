@@ -23,7 +23,9 @@ router.post('/updateRole',verifyAccessToken,require('../controllers/admin/update
 
 router.get('/getAllRole',verifyAccessToken,require('../controllers/admin/getAllRole'));
 
-router.post('deleteRole',verifyAccessToken,require('../controllers/admin/deleteRole'));
+router.post('/deleteRole',verifyAccessToken,require('../controllers/admin/deleteRole'));
+
+router.get('/getRole',verifyAccessToken,require('../controllers/admin/getRole'));
 
 router.post('/createLead',verifyAccessToken,require('../controllers/admin/createLead'));
 
@@ -37,7 +39,7 @@ router.get('/getLead',verifyAccessToken,require('../controllers/admin/getLead'))
 
 router.post('/createClient',verifyAccessToken,require('../controllers/admin/createClient'));
 
-router.post('updateClient',verifyAccessToken,require('../controllers/admin/updateClient'));
+router.post('/updateClient',verifyAccessToken,require('../controllers/admin/updateClient'));
 
 router.post('/deleteClient',verifyAccessToken,require('../controllers/admin/deleteClient'));
 
@@ -78,5 +80,19 @@ router.post('/updateProjectTask',verifyAccessToken,require('../controllers/admin
 router.get('/getAllProjectTask',verifyAccessToken,require('../controllers/admin/getAllProjectTask'));
 
 router.post('/uploadCampagin',verifyAccessToken,require('../controllers/admin/uploadCampaigns'));
+
+router.get('/getPermission',verifyAccessToken,require('../controllers/admin/getPermission'));
+
+router.post('/createNotification',verifyAccessToken,require('../controllers/admin/createNotification'));
+
+router.get('/getAllNotification',verifyAccessToken,require('../controllers/admin/getAllNotification'));
+
+router.get('/getAllUserWithoutskip',verifyAccessToken,require('../controllers/admin/getAllUserWithouskip'));
+
+router.get('/getAllRoleWithoutskip',verifyAccessToken,require('../controllers/admin/getAllRoleWithoutskip'));
+
+router.post('/verifyOtp',require('../controllers/admin/verifyOtp'));
+
+router.post('/resendOtp',require('../controllers/admin/resendOtp'));
 
 module.exports = router;

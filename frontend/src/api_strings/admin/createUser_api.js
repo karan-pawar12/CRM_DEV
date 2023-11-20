@@ -11,10 +11,6 @@ async function CreateUser_api(firstName,lastName,password,email,phone,role,manag
         });
 
         if(res){
-            // Assuming that you have access to the AdminContext
-            
-            
-            // Update the lead state in the context
             callback(null,res);
         }
 

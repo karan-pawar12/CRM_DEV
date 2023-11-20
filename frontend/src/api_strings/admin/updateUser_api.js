@@ -19,7 +19,7 @@ async function updateUser_api(id,fieldName,fieldValue, callback) {
         }
 
     } catch (error) {
-        console.log("Unable to update lead", error);
+        console.log("Unable to update role", error);
         callback(error,null);
     }
 }

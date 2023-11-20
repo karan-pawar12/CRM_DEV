@@ -2,19 +2,25 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 let SALT_WORK_FACTOR = 10;
 const Schema = mongoose.Schema;
-const {nanoid} = require('nanoid')
+const { nanoid } = require('nanoid')
 
 const userSchema = new Schema({
     firstName: { type: String },
     lastName: { type: String },
     email: { type: String },
-    phone: { type: Array,default:[]},
+    phone: { type: Array, default: [] },
     password: { type: String },
-    role: { type: [String], default: ['admin'] }, //make it array by default it will be admin
-    managers:{type:Array,default:[]},
-    createdBy:{type:mongoose.Types.ObjectId,default: null},
-    updatedBy:{type:mongoose.Types.ObjectId,default: null},
-    username:{type:String,required:true,default:()=>nanoid()},
+    role: { type: Array, default: ['admin'] },
+    managers: { type: Array, default: [] },
+    createdBy: { type: mongoose.Types.ObjectId, default: null },
+    updatedBy: { type: mongoose.Types.ObjectId, default: null },
+    username: { type: String, required: true, default: () => nanoid() },
+    otp: {
+        value: { type: String },
+        generatedAt: { type: Date }
+    },
+    isEmailVerified:{type:Boolean,default:false},
+    isPhoneVerified:{type:Boolean,default:false},
     softDelete: { type: Boolean, default: false }
 }, {
     timestamps: true,

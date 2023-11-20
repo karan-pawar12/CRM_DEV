@@ -6,6 +6,7 @@ import { EditIcon } from "../../resources/icons/icons";
 import { FaCheckCircle } from 'react-icons/fa'
 import { BsFillFileExcelFill } from 'react-icons/bs'
 import updateLead_api from "../../api_strings/admin/updateLead_api";
+import Backbutton from "../Backbutton";
 const size = "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1"
 const leadsourceArr = ["Advertisement",
     "Cold Call",
@@ -36,9 +37,9 @@ const leadstatusArr = [
     "Not Qualified"
 ]
 
-const ratingArr = ["Acquired", "Active", "Market Failed", "Project Canceelled", "Shut Down"];
+const ratingArr = ["Acquired", "Active", "Market Failed", "Project Cancelled", "Shut Down"];
 
-function LeadDetails() {
+function LeadDetails({onUpdateSuccess}) {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
@@ -96,6 +97,7 @@ function LeadDetails() {
                 if (error) {
                     alert("Lead updation failed");
                 } else {
+                     onUpdateSuccess(res.data)
                     alert("Lead updated successfully");
                 }
             });
@@ -119,6 +121,7 @@ function LeadDetails() {
             if (error) {
                 alert("Lead updation failed");
             } else {
+                onUpdateSuccess(res.data)
                 alert("Lead updated successfully");
             }
         });
@@ -166,15 +169,17 @@ function LeadDetails() {
                 className="mt-6"
                 onChange={(selectedKeys) => handleSelectChange(field, selectedKeys)}
             >
-                {options.map((animal) => (
-                    <SelectItem key={animal} value={animal}>
-                        {animal}
+                {options.map((option) => (
+                    <SelectItem key={option} value={option}>
+                        {option}
                     </SelectItem>
                 ))}
             </Select>
         );
     }
     return (
+        <>
+        <Backbutton />
         <div className={`grid w-full ${size} gap-10 mt-6`}>
             {createInputField("leadOwner", "Lead Owner")}
             {createInputField("firstName", "Lead First Name")}
@@ -187,6 +192,7 @@ function LeadDetails() {
             {selectField("leadStatus", "Lead Status", leadstatusArr)}
             {selectField("rating","Lead Rating",ratingArr)}
         </div>
+        </>
     );
 }
 

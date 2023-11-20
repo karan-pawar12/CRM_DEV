@@ -1,4 +1,5 @@
 const User = require('../../schema/user'); // Import the User schema
+const Role = require('../../schema/role'); 
 const mongoose = require('mongoose');
 
 module.exports = async function (req, res, next) {
@@ -6,6 +7,14 @@ module.exports = async function (req, res, next) {
         const { userId } = req.query; // Assuming you're passing the ID as a URL parameter
 
         // Use Mongoose's aggregate method to retrieve a user by its ID
+        const roles = await Role.aggregate([
+            {
+                '$project': {
+                    name: '$name',
+                    id: "$_id"
+                }
+            }
+        ])
         const user = await User.aggregate([
             {
                 $match: {
@@ -28,6 +37,7 @@ module.exports = async function (req, res, next) {
                     as: 'updatedByUser'
                 }
             },
+
             {
                 $unwind: '$createdByUser' // Unwind the createdByUser array
             },
@@ -57,7 +67,7 @@ module.exports = async function (req, res, next) {
             return res.status(404).json({ error: 'User not found.' });
         }
 
-        res.json(user[0]); // Assuming there's only one user with the given ID
+        res.json({userDetails:user[0],roles}); // Assuming there's only one user with the given ID
     } catch (e) {
         console.error(e.message);
         res.status(500).json({ error: 'Internal Server Error' });

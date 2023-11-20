@@ -1,57 +1,77 @@
-import React, { useCallback, useContext, useState, useEffect } from "react";
+import React, { useCallback, useContext, useState, useEffect,useRef } from "react";
 import { EditIcon, DeleteIcon, EyeIcon } from "../../resources/icons/icons";
 import { Button, Input } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Pagination } from "@nextui-org/react";
-import AdminContext from "../../AdminContext";
-import getAllLead_api from "../../api_strings/admin/getAllLead_api";
 import deleteLead_api from "../../api_strings/admin/deleteLead_api";
+import getAllLead_api from "../../api_strings/admin/getAllLead_api";
 import { useNavigate } from 'react-router-dom';
+import AuthContext from "../../AuthContext";
+import AdminContext from "../../AdminContext";
 
-const itemsPerPage = 10;
+const limit = 10;
 
-export default function LeadTable() {
+export default function LeadTable({ leads, setLeads, onPageChange,count,settotalCount }) {
     const [currentPage, setCurrentPage] = useState(1);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const adminContext = useContext(AdminContext);
+    const [totalPage,setTotalPage] = useState(1);
+    const [searchKey, setSearchKey] = useState("");
+    const authContext = useContext(AuthContext);
+    const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
+    const skip = useRef(0);
+    const limit = useRef(10);
     const navigate = useNavigate();
 
+    useEffect(()=>{
+        calculateTotalPage();
+    },[count])
 
-    useEffect(() => {
-        getAllLead();
-    }, []);
 
-    function getAllLead() {
-
-        getAllLead_api((error, res) => {
-            if (error) {
-                console.log("Error:", error);
-            } else {
-
-                adminContext.setLead(res.data);
-                console.log(adminContext.lead, "line no 30");
-
-            }
-        });
-    }
 
     const handleCreateLeadClick = () => {
         // Use the navigate function to navigate to the new URL
         navigate(`?id=new`);
     };
 
-    function handleDeleteLeadClick(leadId) {
-        deleteLead_api(leadId, (error, res) => {
+    const handleSearchQuery = (e) => {
+        const currValue = e.target.value;
+        setSearchKey(currValue);
+        getAllLead_api({skip:skip.current,limit:limit.current,searchQuery:currValue},(error, res) => {
             if (error) {
-                console.log("Error:", error);
+              console.log("Error:", error);
             } else {
-
-                adminContext.setLead((leads) => leads.filter((lead) => lead._id !== leadId))
+      
+              setLeads(res.data.leads);
+              settotalCount(res.data.totalCount);
+      
             }
-        })
+          });
     }
 
-    function handleDetailsLeadClick(leadId){
+    function handleDeleteLeadClick(leadId) {
+        openConfirmationModal('Are you sure you want to delete this lead?', () => {
+            deleteLead_api(leadId, (error, res) => {
+                if (error) {
+                    console.log("Error:", error);
+                } else {
+                    setLeads((leads) => leads.filter((lead) => lead._id !== leadId));
+                }
+            })
+          });
+
+      
+    }
+
+    function calculateTotalPage(){
+        let temp = (count/limit);
+        if(temp>parseInt(temp)){
+            temp = parseInt(temp) + 1;
+        }else{
+            temp = parseInt(temp);
+            
+        }
+        setTotalPage(temp);
+    }
+
+    function handleDetailsLeadClick(leadId) {
         navigate(`?id=${leadId}`);
     }
 
@@ -68,16 +88,16 @@ export default function LeadTable() {
             case "actions":
                 return (
                     <div className="relative flex items-center gap-3">
-                        <Tooltip content="Details">
+                        {authContext.auth.permissions["leads"]?.update && <Tooltip content="Details">
                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                <EyeIcon onClick={() => handleDetailsLeadClick(lead._id)}/>
+                                <EyeIcon onClick={() => handleDetailsLeadClick(lead._id)} />
                             </span>
-                        </Tooltip>
-                        <Tooltip color="danger" content="Delete user">
+                        </Tooltip>}
+                        {authContext.auth.permissions["leads"]?.delete && <Tooltip color="danger" content="Delete user">
                             <span className="text-lg text-danger cursor-pointer active:opacity-50">
                                 <DeleteIcon onClick={() => handleDeleteLeadClick(lead._id)} />
                             </span>
-                        </Tooltip>
+                        </Tooltip>}
                     </div>
                 );
             default:
@@ -98,24 +118,31 @@ export default function LeadTable() {
     return (
         <>
             <div className="mt-4 mb-6">
-                <div className='flex justify-between'>
-                    <div>
-                        <Input placeholder='Search users' className='w-auto' />
+                {
+                    authContext.auth.permissions["leads"].create &&
+                    <div className='flex justify-between'>
+                        <div>
+                            <Input placeholder='Search Leads' className='w-auto' 
+                            value={searchKey}
+                            onChange={handleSearchQuery}
+                            />
+                        </div>
+                        <div>
+
+                            <Button color='primary' className='mr-4' onClick={handleCreateLeadClick}>
+                                Create Leads
+                            </Button>
+
+
+                            <Button color='primary'>
+                                Export to CSV
+                            </Button>
+                        </div>
                     </div>
-                    <div>
 
-                        <Button color='primary' className='mr-4' onClick={handleCreateLeadClick}>
-                            Create Leads
-                        </Button>
-
-
-                        <Button color='primary'>
-                            Export to CSV
-                        </Button>
-                    </div>
-                </div>
+                }
             </div>
-            <Table selectionMode="multiple">
+            <Table aria-label="Example static collection table" selectionMode="multiple">
                 <TableHeader columns={columns}>
                     {(column) => (
                         <TableColumn key={column.key} align="start">
@@ -123,7 +150,7 @@ export default function LeadTable() {
                         </TableColumn>
                     )}
                 </TableHeader>
-                <TableBody items={adminContext.lead.filter(lead => !lead.softDelete).slice(startIndex, endIndex)}>
+                <TableBody items={leads}>
                     {(lead) => (
 
                         <TableRow key={lead._id}>
@@ -135,10 +162,9 @@ export default function LeadTable() {
             </Table>
             <Pagination
                 className="flex justify-center"
-                total={adminContext.lead.length}
-                pageSize={itemsPerPage}
-                current={currentPage}
-                onChange={(newPage) => setCurrentPage(newPage)}
+                total={totalPage}
+                page={currentPage}
+                onChange={onPageChange}
             />
         </>
     );

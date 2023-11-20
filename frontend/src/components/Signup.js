@@ -3,10 +3,12 @@ import { Input, Button } from '@nextui-org/react';
 import { Link } from 'react-router-dom';
 import signup_api from '../api_strings/admin/signup_api';
 import { useNavigate } from 'react-router-dom';
+import OtpInput from './OtpInput';
 
 
 function Signup() {
   const navigate = useNavigate();
+  const [otpModalOpen, setOtpModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -14,18 +16,48 @@ function Signup() {
     phone: '',
     password: '',
   });
+  const [passwordError, setPasswordError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
 
   function handleSignup(e) {
     e.preventDefault();
-
     const { firstName, lastName, email, phone, password } = formData;
+
+    if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long");
+      return;
+    } else {
+      setPasswordError('');
+    }
+
+    if (!isEmailValid(email)) {
+      setEmailError('Please enter a valid email address');
+      return;
+    } else {
+      setEmailError('');
+    }
+
+    if (!isNumeric(phone)) {
+      setPhoneError('Phone number must contain only numbers');
+      return;
+    } else {
+      setPhoneError('');
+    }
+
+    const toggleOtpModal = () => {
+      setOtpModalOpen(!otpModalOpen);
+    };
+
+
     signup_api(firstName, lastName, email, phone, password, (error, res) => {
       if (error) {
         alert("Signup Failed");
       }
       else {
         alert("Signup Successfully");
-        navigate('/login');
+        toggleOtpModal();
+        // navigate('/cpanel/login');
 
       }
     })
@@ -42,6 +74,18 @@ function Signup() {
       [name]: value,
     }));
   }
+
+  function isEmailValid(email) {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(email);
+  }
+
+  function isNumeric(input) {
+    return /^\d+$/.test(input);
+  }
+
+  
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -76,6 +120,8 @@ function Signup() {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
+              isInvalid={emailError !== ''}
+              errorMessage={emailError}
             />
           </div>
           <div className="mb-4">
@@ -86,6 +132,8 @@ function Signup() {
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
+              isInvalid={phoneError !== ''}
+              errorMessage={phoneError}
             />
           </div>
           <div className="mb-4">
@@ -96,6 +144,8 @@ function Signup() {
               name="password"
               value={formData.password}
               onChange={handleInputChange}
+              isInvalid={passwordError !== ""}
+              errorMessage={passwordError}
             />
           </div>
           <Button
@@ -105,13 +155,9 @@ function Signup() {
             Sign Up
           </Button>
         </form>
-        <p className="mt-4 text-gray-600 text-sm text-center">
-          Already have an account?{' '}
-          <Link to="/login" className="text-blue-500 hover:underline">
-            Login
-          </Link>
-        </p>
       </div>
+
+      <OtpInput email={formData.email} open={otpModalOpen}  setOtpModalOpen={setOtpModalOpen}/>
     </div>
   );
 }

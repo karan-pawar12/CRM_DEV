@@ -5,9 +5,9 @@ const SECRET = "cb4da6f3-8f45-4b99-95f7-0235cf541f6e";
 module.exports = {
     signAccessToken: (obj) => {
         return new Promise((resolve, reject) => {
-            const { _id, firstName, lastName, email, phone, role, managers, createdBy, updatedBy } = obj;
+            const { _id, firstName, lastName, email, phone, role, managers, createdBy, updatedBy,permissions } = obj;
 
-            const payload = { _id, firstName, lastName, email, phone, role, managers, createdBy, updatedBy };
+            const payload = { _id, firstName, lastName, email, phone, role, managers, createdBy, updatedBy,permissions };
             const secret = SECRET;
 
             JWT.sign(payload, secret, (err, token) => {
@@ -36,12 +36,9 @@ module.exports = {
                 }
 
                 req.payload = payload;
-                if (req.payload.role[0] === "admin") {
+                // if (req.payload.role[0] === "admin") {
                     next();
-                }
-                else {
-                    return res.status(401).end('Unauthorized');
-                }
+                // }
 
             });
 

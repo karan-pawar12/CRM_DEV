@@ -23,3 +23,27 @@ export const DELETE_USER = BASE+ "deleteUser";
 export const GET_USER = BASE+ "getUser";
 
 export const UPDATE_USER = BASE+ "updateUser";
+
+export const CREATE_ROLE = BASE+ "createRole";
+
+export const GETALL_ROLE = BASE+ "getAllRole";
+
+export const GET_ROLE = BASE+ "getRole";
+
+export const UPDATE_ROLE = BASE+ "updateRole";
+
+export const DELETE_ROLE = BASE+ "deleteRole";
+
+export const GET_PERMISSIONS = BASE+ "getPermission";
+
+export const CREATE_NOTIFICATION = BASE+ "createNotification";
+
+export const GET_ALLNOTIFICATION = BASE+ "getAllNotification";
+
+export const GET_ALLUSERWITHOUTSKIP = BASE+ "getAllUserWithoutskip";
+
+export const GET_ALLROLEWITHOUTSKIP = BASE+ "getAllRoleWithoutskip";
+
+export const VERIFY_OTP = BASE+"verifyOtp";
+
+export const RESEND_OTP = BASE+"resendOtp";

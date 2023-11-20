@@ -1,19 +1,17 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-// const nanoid = require('nanoid').nanoid
 
 const roleSchema = new Schema({
-    name:{type:String},
-    permissions:{type:Array,default:[]}, //read-write,read
-    hirerachy:{type:String,default:null},
-    createdBy:{type:mongoose.Types.ObjectId,defaul:null},
-    updatedBy:{type:mongoose.Types.ObjectId,defaul:null},
-
+    name: { type: String },
+    description: {type:String, default:null},
+    permissions: {type:{}},
+    createdBy: { type: mongoose.Schema.Types.ObjectId, default: null },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, default: null },
+    softDelete: { type: Boolean, default: false }
 }, {
     timestamps: true,
 });
 
-
-const Role = mongoose.model('role', roleSchema)
+const Role = mongoose.model('role', roleSchema);
 
 module.exports = Role;
