@@ -9,14 +9,14 @@ import Forms from './Inputform/Forms';
 import Toast from './ToastsContainers/Toast';
 
 
-function Login() {
+function Login({ handlePage }) {
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   const admincontext = useContext(AdminContext);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  function onSubmitForm(){
+  function onSubmitForm() {
     setFormSubmitted(true);
   }
 
@@ -27,22 +27,39 @@ function Login() {
       setLoading(false);
       if (error) {
         // alert("Login Failed");
-        admincontext.setToast({
-          msg: "Login Failed",
-          toastType: "error",
-          onClose: null
-        })
-        setFormSubmitted(false);
+        if (error.response.status === 401) {
+          admincontext.setToast({
+            msg: "Invalid credentials. Please check your email and password.",
+            toastType: "error",
+            onClose: null
+          })
+          setFormSubmitted(false);
+        } else if (error.response.status === 403) {
+          admincontext.setToast({
+            msg: "Email is not verified",
+            toastType: "Warning",
+            onClose: null
+          });
+          handlePage(email,tenantId);
+          setFormSubmitted(false);
+        } else if (error.response.status === 404) {
+          // Handle other status codes as needed
+          admincontext.setToast({
+            msg: `Login Failed - Unexpected Error`,
+            toastType: "error",
+            onClose: null
+          });
+          setFormSubmitted(false);
+        }
       }
       else {
         const { role, permissions } = res.data;
-        authContext.setAuth({
-          user: role,
-          permissions: permissions,
-        });
+          authContext.setAuth({
+            user: role,
+            permissions: permissions,
+          });
+          navigate('/cpanel/dashboard');
 
-        navigate('/cpanel/dashboard');
-        alert("Login Successfully");
       }
     })
   }

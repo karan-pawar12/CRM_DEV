@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const generateOtp = require('../../helpers/generateOtp');
 const adminPermissions = require('../../config/adminPermissions');
 const { signAccessToken } = require('../../helpers/adminAuthetication')
 const {getUserModel,getRoleModel} = require('../../db/tenantDb')
@@ -50,7 +51,7 @@ module.exports = async function (req, res, next) {
             res.json({ token: token, role: role[0], permissions });
         }
         else{
-            return res.status(403).json({ error: 'Invalid credentials' });
+            return res.status(401).json({ error: 'Invalid credentials' });
         }
 
     } catch (error) {

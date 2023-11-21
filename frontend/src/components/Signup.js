@@ -5,7 +5,7 @@ import Forms from './Inputform/Forms';
 
 
 
-function Signup() {
+function Signup({onSignupSuccess}) {
   const [formSubmitted,setFormSubmitted] = useState(false);
 
   function onSubmitForm(){
@@ -20,6 +20,7 @@ function Signup() {
         setFormSubmitted(false);
       }
       else {
+        onSignupSuccess(email,tenantId);
         alert("Signup Successfully");
 
       }
