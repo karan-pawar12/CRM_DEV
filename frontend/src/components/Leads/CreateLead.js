@@ -70,27 +70,31 @@ export default function CreateLead({ onCreateSuccess }) {
                   label: "First Name",
                   type: "Input",
                   rules: { required: true },
-                  errorMsg: "Please enter valid first Name"
+                  errorMsg: "Please enter valid first Name",
+                  inputType: "text"
                 },
                 {
                   name: "lastName",
                   label: "Last Name",
                   type: "Input",
                   rules: { required: true },
-                  errorMsg: "Please enter valid last Name"
+                  errorMsg: "Please enter valid last Name",
+                  inputType: "text"
                 },
                 {
                   name: "email",
                   label: "Email",
                   type: "Input",
-                  rules: { required: true, isEmail: true }
+                  rules: { required: true, isEmail: true },
+                  inputType: "text"
                 },
                 {
                   name: "phone",
                   label: "Phone No",
                   type: "Input",
                   rules: { required: true, isPhone: true },
-                  errorMsg: "Enter numbers only"
+                  errorMsg: "Enter numbers only",
+                  inputType: "tel"
                 },
                 {
                   name: "company",
@@ -153,32 +157,38 @@ export default function CreateLead({ onCreateSuccess }) {
                 {
                   name: "street",
                   label: "Street Name",
-                  type: "Input"
+                  type: "Input",
+                  inputType: "text"
                 },
                 {
                   name: "state",
                   label: "State Name",
-                  type: "Input"
+                  type: "Input",
+                  inputType: "text"
                 },
                 {
                   name: "city",
                   label: "City Name",
-                  type: "Input"
+                  type: "Input",
+                  inputType: "text"
                 },
                 {
                   name: "country",
                   label: "Country Name",
-                  type: "Input"
+                  type: "Input",
+                  inputType: "text"
                 },
                 {
                   name: "zipcode",
                   label: "Zip Code",
-                  type: "Input"
+                  type: "Input",
+                  inputType: "text"
                 },
                 {
                   name: "description",
                   label: "Description",
-                  type: "Input"
+                  type: "Input",
+                  inputType: "text"
                 }
 
 

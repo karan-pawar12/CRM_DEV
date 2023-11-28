@@ -80,6 +80,7 @@ function Login({ handlePage }) {
               label: "Email",
               type: "Input",
               rules: { required: true, isEmail: true },
+              inputType: "email",
               errorMsg: "Please enter valid email"
             },
             {
@@ -87,12 +88,14 @@ function Login({ handlePage }) {
               label: "Password",
               type: "Input",
               rules: { min: 8 },
+              inputType: "password",
               errorMsg: "Password must be at least 8 characters long"
             },
             {
               name: "tenantId",
               label: "Username",
               type: "Input",
+              inputType: "text",
               rules: { required: true },
               errorMsg: "Please enter username"
             }

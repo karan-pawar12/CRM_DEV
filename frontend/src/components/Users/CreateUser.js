@@ -76,34 +76,39 @@ export default function CreateUser({ onCreateSuccess }) {
                                 label: "First Name",
                                 type: "Input",
                                 rules:{required:true},
-                                errorMsg:"Please enter valid first Name"
+                                errorMsg:"Please enter valid first Name",
+                                inputType: "text"
                             },
                             {
                                 name: "lastName",
                                 label: "Last Name",
                                 type: "Input",
                                 rules:{required:true},
-                                errorMsg:"Please enter valid last Name"
+                                errorMsg:"Please enter valid last Name",
+                                inputType: "text"
                             },
                             {
                                 name: "email",
                                 label: "Email",
                                 type: "Input",
-                                rules:{required:true,isEmail:true}
+                                rules:{required:true,isEmail:true},
+                                inputType: "text"
                             },
                             {
                                 name: "phone",
                                 label: "Phone No",
                                 type: "Input",
                                 rules:{required:true,isPhone:true},
-                                errorMsg:"Enter numbers only"
+                                errorMsg:"Enter numbers only",
+                                inputType: "text"
                             },
                             {
                                 name: "password",
                                 label: "Password",
                                 type: "Input",
                                 rules:{min:8},
-                                errorMsg:"Password length should be greater than 8 Character"
+                                errorMsg:"Password length should be greater than 8 Character",
+                                inputType: "text"
                             },
                             {
                                 name: "role",
@@ -116,7 +121,8 @@ export default function CreateUser({ onCreateSuccess }) {
                             {
                                 name: "managers",
                                 label: "Manager",
-                                type: "Input"
+                                type: "Input",
+                                inputType: "text"
                             }
 
 

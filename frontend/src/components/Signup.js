@@ -44,13 +44,14 @@ function Signup({onSignupSuccess}) {
                 label: "Email",
                 type: "Input",
                 rules:{required:true, isEmail:true},
+                inputType: "email",
                 errorMsg:"Please enter valid email"
               },
               {
                 name: "phone",
                 label: "Phone",
                 type: "Input",
-                
+                inputType: "tel",
                 rules:{required:true,isPhone:true},
                 errorMsg:"Please enter valid phone"
               },
@@ -59,6 +60,7 @@ function Signup({onSignupSuccess}) {
                 label: "Password",
                 type: "Input",
                 rules:{min:8},
+                inputType: "password",
                 errorMsg:"Password must be at least 8 characters long"
               },
               {
@@ -66,6 +68,7 @@ function Signup({onSignupSuccess}) {
                 label: "Username",
                 type: "Input",
                 rules: {required:true},
+                inputType: "text",
                 errorMsg: "Please enter username"
               }
              ]}

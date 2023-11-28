@@ -42,12 +42,14 @@ function CreateRole({ onCreateSuccess }) {
                             {
                                 name: "name",
                                 label: "Role Name",
-                                type: "Input"
+                                type: "Input",
+                                inputType: "text"
                             },
                             {
                                 name: "description",
                                 label: "Description",
-                                type: "Input"
+                                type: "Input",
+                                inputType: "text"
                             }
 
                         ]

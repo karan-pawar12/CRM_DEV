@@ -57,12 +57,14 @@ function CreateNotification({onCreateSuccess}){
                         {
                             name:"title",
                             label:"Title",
-                            type:"Input"
+                            type:"Input",
+                            inputType: "text"
                         },
                         {
                             name:"content",
                             label:"Content",
-                            type:"Input"
+                            type:"Input",
+                            inputType: "text"
                         },
                         {
                             name:"data",

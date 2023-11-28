@@ -135,7 +135,7 @@ export default function Forms(props) {
                         return (
                             <div key={key}>
                                 <Input
-                                    type={f.name === 'password' ? 'password' : 'text'}
+                                    type={f.inputType}
                                     label={f.label}
                                     placeholder={`Enter ${f.label.toLowerCase()}`}
                                     name={f.name}
