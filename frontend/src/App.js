@@ -51,8 +51,18 @@ function Main() {
   return (
     <>
       <Routes>
-        <Route path="/cpanel/:module" element={<AdminContextProvider><Layout /></AdminContextProvider>}></Route>
-        <Route path="/cpanel/entry" element={<AdminContextProvider><Entry/></AdminContextProvider>}/>
+        {/* <Route path="/cpanel/:module" element={<AdminContextProvider><Layout /></AdminContextProvider>}>
+          <Route path={':id'} element={<AdminContextProvider><Layout /></AdminContextProvider>} >
+            <Route path={':submodule'} />
+          </Route>
+        </Route> */}
+        <Route path="/cpanel/:module" element={<AdminContextProvider><Layout /></AdminContextProvider>}>
+          <Route path={':id'} element={<AdminContextProvider><Layout /></AdminContextProvider>}>
+            <Route path={':subModule'} element={<AdminContextProvider><Layout /></AdminContextProvider>} />
+          </Route>
+
+        </Route>
+        <Route path="/cpanel/entry" element={<AdminContextProvider><Entry /></AdminContextProvider>} />
       </Routes>
     </>
   )

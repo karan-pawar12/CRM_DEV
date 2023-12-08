@@ -8,6 +8,7 @@ const taskSchema = new Schema({
     status: { type: String },
     priority: { type: String },
     reminder: { type: String },
+    participant:{type:mongoose.Types.ObjectId,default:null},
     createdBy: { type: mongoose.Types.ObjectId, default: null },
     updatedBy: { type: mongoose.Types.ObjectId, default: null },
     description: { type: String }

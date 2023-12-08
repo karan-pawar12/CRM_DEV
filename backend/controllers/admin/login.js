@@ -40,7 +40,7 @@ module.exports = async function (req, res, next) {
             if(role[0] === 'Superadmin'){
                 permissions = adminPermissions;
             }else{
-                let roleData = await Role.findOne({_id:role});
+                let roleData = await Role.findOne({_id:role[0]});
                 permissions = roleData.permissions;
             }
 

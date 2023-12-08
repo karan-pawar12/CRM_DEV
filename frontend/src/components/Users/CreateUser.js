@@ -108,7 +108,7 @@ export default function CreateUser({ onCreateSuccess }) {
                                 type: "Input",
                                 rules:{min:8},
                                 errorMsg:"Password length should be greater than 8 Character",
-                                inputType: "text"
+                                inputType: "password"
                             },
                             {
                                 name: "role",

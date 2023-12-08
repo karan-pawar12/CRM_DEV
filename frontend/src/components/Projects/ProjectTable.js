@@ -3,14 +3,14 @@ import { EditIcon, DeleteIcon, EyeIcon } from "../../resources/icons/icons";
 import { Button, Input } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Pagination } from "@nextui-org/react";
 import deleteUser_api from "../../api_strings/admin/deleteUser_api";
-import getAllUser_api from '../../api_strings/admin/getAllUser_api'
+import getAllProject_api from '../../api_strings/admin/getAllProject_api'
 import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
 
 const limit = 10;
 
-export default function UserTable({ users, setUsers,onPageChange, count, settotalCount }) {
+export default function ProjectTable({ projects, setProjects,onPageChange, count, settotalCount }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchKey, setSearchKey] = useState("");
     const [totalPage,setTotalPage] = useState(1);
@@ -29,41 +29,41 @@ export default function UserTable({ users, setUsers,onPageChange, count, settota
 
 
 
-    const handleCreateUserClick = () => {
+    const handleCreateProjectClick = () => {
         // Use the navigate function to navigate to the new URL
-        navigate(`?id=new`);
+        navigate(`new`);
     };
 
     const handleSearchQuery = (e) => {
         const currValue = e.target.value;
         setSearchKey(currValue);
-        getAllUser_api({skip:skip.current,limit:limit.current,searchQuery:currValue},(error, res) => {
+        getAllProject_api({skip:skip.current,limit:limit.current,searchQuery:currValue},(error, res) => {
             if (error) {
               console.log("Error:", error);
             } else {
       
-              setUsers(res.data.users);
+              setProjects(res.data.projects);
               settotalCount(res.data.totalCount);
       
             }
           });
     }
 
-    function handleDeleteUserClick(userId) {
-        openConfirmationModal('Are you sure you want to delete this user ?', () => {
-            deleteUser_api(userId, (error, res) => {
+    function handleDeleteProjectClick(projectId) {
+        openConfirmationModal('Are you sure you want to delete this project ?', () => {
+            deleteUser_api(projectId, (error, res) => {
                 if (error) {
                     console.log("Error:", error);
                 } else {
 
-                    setUsers((users) => users.filter((user) => user._id !== userId))
+                    setProjects((projects) => projects.filter((project) => project._id !== projectId))
                 }
             })
         })
     }
 
-    function handleDetailsUserClick(userId) {
-        navigate(`?id=${userId}`);
+    function handleDetailsProjectClick(projectId) {
+        navigate(`${projectId}`);
     }
 
     function calculateTotalPage(){
@@ -77,27 +77,31 @@ export default function UserTable({ users, setUsers,onPageChange, count, settota
         setTotalPage(temp);
     }
 
-    const renderCell = useCallback((user, columnKey) => {
+    const renderCell = useCallback((project, columnKey) => {
         switch (columnKey) {
-            case "fullName": // Concatenate first name and last name
-                return <span>{`${user.firstName} ${user.lastName}`}</span>;
-            case "email":
-                return <span>{user.email}</span>;
-            case "phone":
-                return <span>{user.phone[0]}</span>;
-            case "role":
-                return <span>{user.role}</span>;
+            case "projectName": // Concatenate first name and last name
+                return <span>{`${project.projectName}`}</span>;
+            case "createdBy":
+                return <span>{`${project.createdBy.firstName}`}</span>;
+            case "startDate":
+                let startDate = new Date(project[columnKey]);
+                return <span>{startDate.toLocaleDateString()}</span>
+            case "endDate":
+                let endDate = new Date(project[columnKey]);
+                return <span>{endDate.toLocaleDateString()}</span>
+            case "priority":
+                return <span>{project.priority}</span>
             case "actions":
                 return (
                     <div className="relative flex items-center gap-3">
-                        {authContext.auth.permissions["users"]?.update && <Tooltip content="Details">
+                        {authContext.auth.permissions["projects"]?.update && <Tooltip content="Details">
                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                <EyeIcon onClick={() => handleDetailsUserClick(user._id)} />
+                                <EyeIcon onClick={() => handleDetailsProjectClick(project._id)} />
                             </span>
                         </Tooltip>}
-                        {authContext.auth.permissions["users"]?.delete && <Tooltip color="danger" content="Delete user">
+                        {authContext.auth.permissions["projects"]?.delete && <Tooltip color="danger" content="Delete project">
                             <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                <DeleteIcon onClick={() => handleDeleteUserClick(user._id)} />
+                                <DeleteIcon onClick={() => handleDeleteProjectClick(project._id)} />
                             </span>
                         </Tooltip>}
                     </div>
@@ -108,10 +112,11 @@ export default function UserTable({ users, setUsers,onPageChange, count, settota
     }, []);
 
     const columns = [
-        { name: "Name", key: "fullName" }, // Use "fullName" column for full name
-        { name: "Email", key: "email" },
-        { name: "Phone", key: "phone" },
-        { name: "Role", key: "role" },
+        { name: "Project Name", key: "projectName" }, // Use "fullName" column for full name
+        { name: "Owner", key: "createdBy" },
+        { name: "Start Date", key: "startDate" },
+        { name: "End Date", key: "endDate" },
+        { name: "Priority", key: "priority"},
         { name: "ACTIONS", key: "actions" },
     ];
 
@@ -120,17 +125,17 @@ export default function UserTable({ users, setUsers,onPageChange, count, settota
     return (
         <>
             <div className="mt-4 mb-6">
-                {authContext.auth.permissions["users"]?.create && <div className='flex justify-between'>
+                {authContext.auth.permissions["projects"]?.create && <div className='flex justify-between'>
                     <div>
-                        <Input placeholder='Search users' className='w-auto' 
+                        <Input placeholder='Search Project' className='w-auto' 
                         value={searchKey}
                         onChange={handleSearchQuery}
                         />
                     </div>
                     <div>
 
-                        <Button color='primary' className='mr-4' onClick={handleCreateUserClick}>
-                            Create Users
+                        <Button color='primary' className='mr-4' onClick={handleCreateProjectClick}>
+                            Create Project
                         </Button>
 
 
@@ -148,12 +153,12 @@ export default function UserTable({ users, setUsers,onPageChange, count, settota
                         </TableColumn>
                     )}
                 </TableHeader>
-                <TableBody items={users}>
-                    {(user) => (
+                <TableBody items={projects}>
+                    {(project) => (
 
-                        <TableRow key={user._id}>
+                        <TableRow key={project._id}>
 
-                            {(columnKey) => <TableCell>{renderCell(user, columnKey)}</TableCell>}
+                            {(columnKey) => <TableCell>{renderCell(project, columnKey)}</TableCell>}
                         </TableRow>
                     )}
                 </TableBody>

@@ -6,6 +6,8 @@ import Lead from './Leads/Lead'
 import User from './Users/User'
 import Notification from './Notifications/Notification'
 import Role from './Roles/Role'
+import Task from './Tasks/Task'
+import Project from './Projects/Project'
 import AuthContext from '../AuthContext'
 import AdminContext from '../AdminContext'
 import ConfirmationModal from './ConfirmationModal'
@@ -15,7 +17,10 @@ const moduleMap = {
 	leads: <Lead />,
 	users: <User />,
 	roles: <Role />,
-	notification: <Notification />
+	notification: <Notification />,
+	tasks: <Task />,
+	projects: <Project /> 
+
 }
 
 

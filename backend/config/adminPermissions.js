@@ -40,6 +40,12 @@ const adminPermissions = {
         "create": true,
         "delete": true,
         "update": true
+    },
+    "tasks":{
+        "view": true,
+        "create": true,
+        "delete": true,
+        "update": true
     }
 };
 

@@ -3,12 +3,12 @@ const {getProjectModel} = require('../../db/tenantDb')
 module.exports = async function (req, res, next) {
     try {
         const {tenantId} = req.payload
-        const { _id, deleted } = req.body;
+        const { _id, softDelete } = req.body;
 
         const Project = await getProjectModel(tenantId);
 
         // Update the 'deleted' field based on the value provided
-        const update = { deleted };
+        const update = { softDelete };
 
         // Find and update the user by ID
         const options = { new: true };

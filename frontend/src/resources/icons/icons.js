@@ -7,7 +7,9 @@ import {
 	HiOutlineAnnotation,
 	HiOutlineQuestionMarkCircle,
 	HiOutlineCog,
-	HiBell
+	HiBell,
+	HiClipboardList ,
+	HiChartSquareBar 
 } from 'react-icons/hi'
 
 
@@ -48,6 +50,18 @@ export const DASHBOARD_SIDEBAR_LINKS = [
 		path: '/notification',
 		icon: <HiBell />
 
+	},
+	{
+		key: 'tasks',
+		label: 'Tasks',
+		path: '/tasks',
+		icon: <HiClipboardList />
+	},
+	{
+		key: 'projects',
+		label: 'Projects',
+		path: '/projects',
+		icon: <HiChartSquareBar />
 	}
 ]
 

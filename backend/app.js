@@ -1,20 +1,34 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan')
 const fs = require('fs');
 const path = require('path');
 const filePath = path.join(__dirname, './config/appConfig.json');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc  = require('swagger-jsdoc');
 
 const app = express();
 
-const mongooseOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    autoIndex: false,
-};
-const mongooseConnectionString = "mongodb://localhost:27017/crm";
+//Swagger api config
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info:{
+            title:"Crm Web Application",
+            description:"Developed by vkvtech"
+        },
+        servers:[
+            {
+                url:"http://localhost:5000"
+            }
+        ]
+    },
+    apis:['routes/admin.js']
+}
+
+const spec = swaggerJsdoc(options);
+
 
 // Use morgan logger
 app.use(logger('dev'));
@@ -47,6 +61,7 @@ var adminRouter = require('./routes/admin');
 // app.use('/',indexRouter);
 // app.use('/users',usersRouter);
 app.use('/admin',adminRouter);
+app.use('/api-doc',swaggerUi.serve,swaggerUi.setup(spec));
 
 
 //error handler
@@ -56,15 +71,7 @@ app.use((err, req, res, next) => {
 });
 
 
-//mongodb connection instance
-// mongoose
-//   .connect(mongooseConnectionString, mongooseOptions)
-//   .then(() => {
-//     console.log("Mongoose connection established with pid : " + process.pid);
-// })
-//   .catch((err) => {
-//     console.log(err.message);
-//   });
+
 
 global.appConfig = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 

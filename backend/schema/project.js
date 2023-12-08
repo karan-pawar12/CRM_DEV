@@ -9,8 +9,9 @@ const projectSchema = new Schema({
     updatedBy: { type: mongoose.Types.ObjectId, default: null },
     startDate: { type: Date },
     endDate: { type: Date },
+    status:{type:String},
     description: { type: String },
-    isPrivate: { type: Boolean, default: false },
+    isPrivate: { type: String },
     priority: { type: String },
     softDelete: { type: Boolean, default: false }
 

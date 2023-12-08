@@ -40,6 +40,12 @@ const defaultPermissions = {
         "create": false,
         "delete": false,
         "update": false
+    },
+    "tasks":{
+        "view": false,
+        "create": false,
+        "delete": false,
+        "update": false
     }
 };
 

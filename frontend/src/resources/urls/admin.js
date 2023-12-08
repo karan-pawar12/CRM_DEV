@@ -51,3 +51,11 @@ export const VERIFY_OTP = BASE+"verifyOtp";
 export const RESEND_OTP = BASE+"resendOtp";
 
 export const Notification_Count = BASE+"getNotificationCount";
+
+export const CREATE_TASK = BASE+"createTask";
+
+export const GETALL_TASK = BASE+"getAllTask";
+
+export const CREATE_PROJECT = BASE+"createProject";
+
+export const GETALL_PROJECT = BASE+"getAllProject";
