@@ -12,7 +12,8 @@ const projectTaskSchema = new Schema({
     createdBy: { type: mongoose.Types.ObjectId, default: null },
     updatedBy: { type: mongoose.Types.ObjectId, default: null },
     participants: { type: Array, default: [] },
-    status: { type: String }
+    status: { type: String, default:"Open" },
+    softDelete: { type: Boolean, default: false }
 
 
 }, {

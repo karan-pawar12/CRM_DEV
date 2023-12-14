@@ -1,40 +1,39 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Button } from "@nextui-org/react";
-import { useLocation, useParams } from 'react-router-dom';
 import ProjectTaskTable from "./ProjectTaskTable";
 import CreateProjectTask from "./CreateProjectTask";
 import ProjectTaskDetails from "./ProjectTaskDetails";
+import getAllProjectTask_api from "../../../api_strings/admin/getAllProjectTask_api"
 
 
-export default function ProjectTask() {
+export default function ProjectTask({id}) {
+    const [activeTab,setActiveTab] = useState('')
     const [projectTasks, setProjectTasks] = useState([]);
+    const [open,setOpen] = useState(false);
+    const [projectTaskId,setprojectTaskId] = useState('');
     const [count,settotalCount] = useState(0);
-    const {id,subModule} = useParams();
     const skip = useRef(0);
     const limit = useRef(10);
 
-    console.log(subModule,"I am subModule")
-
     useEffect(() => {
-        getProjectTask();
-      }, [])
-    
-      function getProjectTask() {
-        // getProjectTask_api({skip:skip.current,limit:limit.current},(error, res) => {
-        //   if (error) {
-        //     console.log("Error:", error);
-        //   }
-        //   else {
-        //     setTasks(res.data.tasks);
-        //     settotalCount(res.data.totalCount);
-    
-        //   }
-        // })
-      }
+      getProjectTask();
+    }, [])
     
       function onPageChange(pageNumber){
         skip.current = (pageNumber-1) * limit.current;
         getProjectTask();
+      }
+
+      function getProjectTask() {
+        getAllProjectTask_api(id,{skip:skip.current,limit:limit.current},(error, res) => {
+          if (error) {
+            console.log("Error:", error);
+          }
+          else {
+            setProjectTasks(res.data.projectTasks);
+            settotalCount(res.data.totalCount);
+    
+          }
+        })
       }
     
       function onCreateSuccess(newlyCreatedData){
@@ -54,22 +53,25 @@ export default function ProjectTask() {
     
         });
       }
+
+    const onOpenModal = () => {
+      setOpen(true);
+    }
       
+     const onCloseModal = () => {
+        setOpen(false);
+        setActiveTab('');
+     }
+
 
     return (
         <>
-            <div hidden={subModule === "" || subModule !== undefined }>
-                <ProjectTaskTable  projectTasks={projectTasks} setProjectTasks={setProjectTasks} onPageChange={onPageChange} count={count} settotalCount={settotalCount}/>
+            <div hidden={activeTab === 'newTask'} >
+                <ProjectTaskTable  projectTasks={projectTasks} setProjectTasks={setProjectTasks} onPageChange={onPageChange} count={count} settotalCount={settotalCount} setActiveTab={setActiveTab} onOpenModal={onOpenModal} setprojectTaskId={setprojectTaskId}/>
             </div>
 
-            {(subModule=== "newTask") ? <CreateProjectTask onCreateSuccess={onCreateSuccess}/> : "" }
+            {(activeTab=== "newTask") ? <CreateProjectTask open={open} onCloseModal={onCloseModal} onCreateSuccess={onCreateSuccess}/> : (activeTab === 'taskDetails') && <ProjectTaskDetails onUpdateSuccess={onUpdateSuccess} projectTaskId={projectTaskId} open={open} onCloseModal={onCloseModal}/> }
 
         </>
     )
-}
-
-export function useQuery() {
-    const { search } = useLocation();
-
-    return React.useMemo(() => new URLSearchParams(search), [search]);
 }

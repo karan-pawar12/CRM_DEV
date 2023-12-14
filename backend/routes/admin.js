@@ -79,6 +79,10 @@ router.post('/updateProjectTask',verifyAccessToken,require('../controllers/admin
 
 router.get('/getAllProjectTask',verifyAccessToken,require('../controllers/admin/getAllProjectTask'));
 
+router.post('/deleteProjectTask',verifyAccessToken,require('../controllers/admin/deleteProjectTask'));
+
+router.get('/getProjectTask',verifyAccessToken,require('../controllers/admin/getProjectTask'));
+
 router.post('/uploadCampagin',verifyAccessToken,require('../controllers/admin/uploadCampaigns'));
 
 router.get('/getPermission',verifyAccessToken,require('../controllers/admin/getPermission'));
@@ -101,7 +105,8 @@ router.post('/resendOtp',require('../controllers/admin/resendOtp'));
 
 router.post('/tenantSignup',require('../controllers/admin/tenantSignup'));
 
-router.post('/createTask',require('../controllers/admin/createTask'));
+router.post('/createTask',verifyAccessToken,require('../controllers/admin/createTask'));
+
 
 module.exports = router;
 

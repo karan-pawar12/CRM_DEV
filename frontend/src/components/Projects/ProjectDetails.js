@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import ProjectTask from './ProjectTasks/ProjectTask';
+import { useParams } from 'react-router-dom';
 
 function ProjectDetails() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const {id} = useParams();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -35,7 +37,7 @@ function ProjectDetails() {
 
       <div className="content">
         {activeTab === 'dashboard' && <Dashboard />}
-        {activeTab === 'tasks' && <ProjectTask />}
+        {activeTab === 'tasks' && <ProjectTask id={id}/>}
         {activeTab === 'gantt' && <GanttReport />}
       </div>
     </>

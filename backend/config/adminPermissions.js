@@ -46,6 +46,12 @@ const adminPermissions = {
         "create": true,
         "delete": true,
         "update": true
+    },
+    "projecttask":{
+        "view": true,
+        "create": true,
+        "delete": true,
+        "update": true
     }
 };
 

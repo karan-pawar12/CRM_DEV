@@ -13,9 +13,6 @@ function Project() {
   const {id} = useParams();
   const skip = useRef(0);
   const limit = useRef(10);
-
-  console.log(id,"I am id")
-
   useEffect(() => {
     getAllProject();
   }, [])

@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState, useEffect,useRef } from "reac
 import { EditIcon, DeleteIcon, EyeIcon } from "../../resources/icons/icons";
 import { Button, Input } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Pagination } from "@nextui-org/react";
-import deleteUser_api from "../../api_strings/admin/deleteUser_api";
+import deleteProject_api from "../../api_strings/admin/deleteProject_api";
 import getAllProject_api from '../../api_strings/admin/getAllProject_api'
 import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
@@ -51,7 +51,7 @@ export default function ProjectTable({ projects, setProjects,onPageChange, count
 
     function handleDeleteProjectClick(projectId) {
         openConfirmationModal('Are you sure you want to delete this project ?', () => {
-            deleteUser_api(projectId, (error, res) => {
+            deleteProject_api(projectId, (error, res) => {
                 if (error) {
                     console.log("Error:", error);
                 } else {

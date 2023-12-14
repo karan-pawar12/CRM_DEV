@@ -57,9 +57,7 @@ function Main() {
           </Route>
         </Route> */}
         <Route path="/cpanel/:module" element={<AdminContextProvider><Layout /></AdminContextProvider>}>
-          <Route path={':id'} element={<AdminContextProvider><Layout /></AdminContextProvider>}>
-            <Route path={':subModule'} element={<AdminContextProvider><Layout /></AdminContextProvider>} />
-          </Route>
+          <Route path={':id'} element={<AdminContextProvider><Layout /></AdminContextProvider>}></Route>
 
         </Route>
         <Route path="/cpanel/entry" element={<AdminContextProvider><Entry /></AdminContextProvider>} />

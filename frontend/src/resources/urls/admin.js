@@ -59,3 +59,15 @@ export const GETALL_TASK = BASE+"getAllTask";
 export const CREATE_PROJECT = BASE+"createProject";
 
 export const GETALL_PROJECT = BASE+"getAllProject";
+
+export const DELETE_PROJECT = BASE+"deleteProject";
+
+export const CREATE_PROJECTTASK = BASE+ "createProjectTask";
+
+export const GETALL_PROJECTTASK = BASE+ "getAllProjectTask";
+
+export const DELETE_PROJECTTASK = BASE+ "deleteProjectTask";
+
+export const UPDATE_PROJECTTASK = BASE + "updateProjectTask";
+
+export const GET_PROJECTTASK = BASE+ "getProjectTask";
