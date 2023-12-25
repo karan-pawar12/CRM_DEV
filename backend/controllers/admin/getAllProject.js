@@ -51,7 +51,7 @@ module.exports = async function (req, res, next) {
             {
                 $unwind: {
                     path: '$Owner',
-                    preserveNullAndEmptyArrays: true
+                    
                 }
             },
             {

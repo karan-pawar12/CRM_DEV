@@ -41,6 +41,7 @@ function Main() {
             user: roleName,
             permissions: permissions,
           });
+          navigate('/cpanel/dashboard');
         }
       })
     } else {

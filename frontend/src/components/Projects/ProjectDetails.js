@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ProjectTask from './ProjectTasks/ProjectTask';
+import GanttReport from './GanttReports/GanttReport'
 import { useParams } from 'react-router-dom';
 
 function ProjectDetails() {
@@ -38,7 +39,7 @@ function ProjectDetails() {
       <div className="content">
         {activeTab === 'dashboard' && <Dashboard />}
         {activeTab === 'tasks' && <ProjectTask id={id}/>}
-        {activeTab === 'gantt' && <GanttReport />}
+        {activeTab === 'gantt' && <GanttReport id={id}/>}
       </div>
     </>
   );
@@ -52,7 +53,4 @@ function Dashboard() {
 }
 
 
-function GanttReport() {
-  return <div>GanttReport content goes here</div>;
-}
 

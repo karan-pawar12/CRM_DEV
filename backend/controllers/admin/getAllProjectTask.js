@@ -10,7 +10,6 @@ module.exports = async function (req, res, next) {
         const limit = parseInt(req.query.limit, 10) || 10;
         let searchQuery = req.query.searchQuery || '';
 
-        console.log(id);
 
         if(searchQuery === "undefined" || searchQuery === undefined){
             searchQuery = ''
@@ -65,7 +64,7 @@ module.exports = async function (req, res, next) {
             {
                 $unwind: {
                     path: '$Owner',
-                    preserveNullAndEmptyArrays: true
+                    
                 }
             },
             {
@@ -79,6 +78,7 @@ module.exports = async function (req, res, next) {
                     createdBy: {
                         firstName: '$Owner.firstName',
                     },
+                    dependencies: 1,
                     duration: {
                         $divide: [
                             { $subtract: ['$endDate', '$startDate'] },

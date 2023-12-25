@@ -71,3 +71,9 @@ export const DELETE_PROJECTTASK = BASE+ "deleteProjectTask";
 export const UPDATE_PROJECTTASK = BASE + "updateProjectTask";
 
 export const GET_PROJECTTASK = BASE+ "getProjectTask";
+
+export const GET_GANTTREPORTDATA = BASE+"getGanttReportData";
+
+export const DATE_UPDATE = BASE+"updateDate";
+
+export const GET_ALLPROJECTTASKWITHOUTSKIP = BASE+"getAllProjectTaskWithoutSkip";

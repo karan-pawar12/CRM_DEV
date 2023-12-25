@@ -30,6 +30,8 @@ function Project() {
     })
   }
 
+  console.log(projects)
+
   function onPageChange(pageNumber){
     skip.current = (pageNumber-1) * limit.current;
     getAllProject();

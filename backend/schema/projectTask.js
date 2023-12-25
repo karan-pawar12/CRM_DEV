@@ -13,8 +13,8 @@ const projectTaskSchema = new Schema({
     updatedBy: { type: mongoose.Types.ObjectId, default: null },
     participants: { type: Array, default: [] },
     status: { type: String, default:"Open" },
-    softDelete: { type: Boolean, default: false }
-
+    softDelete: { type: Boolean, default: false },
+    dependencies: {type:Array, default:[]}
 
 }, {
     timestamps: true,

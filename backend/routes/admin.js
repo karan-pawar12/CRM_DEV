@@ -107,6 +107,12 @@ router.post('/tenantSignup',require('../controllers/admin/tenantSignup'));
 
 router.post('/createTask',verifyAccessToken,require('../controllers/admin/createTask'));
 
+router.get('/getGanttReportData',verifyAccessToken,require('../controllers/admin/getGanttReportsData'));
+
+router.post('/updateDate',verifyAccessToken,require('../controllers/admin/updateDate'));
+
+router.get('/getAllProjectTaskWithoutSkip',verifyAccessToken,require('../controllers/admin/getAllProjectTaskWithoutSkip'));
+
 
 module.exports = router;
 
