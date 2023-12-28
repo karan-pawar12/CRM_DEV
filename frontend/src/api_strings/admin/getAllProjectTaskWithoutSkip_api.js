@@ -1,10 +1,10 @@
 import { GET_ALLPROJECTTASKWITHOUTSKIP } from "../../resources/urls/admin";
 import axios from '../../Interceptor';
 
-async function getAllProjectTaskWithoutskip(callback) {
+async function getAllProjectTaskWithoutskip(id,callback) {
     try {
 
-        const res = await axios.get(GET_ALLPROJECTTASKWITHOUTSKIP);
+        const res = await axios.get(`${GET_ALLPROJECTTASKWITHOUTSKIP}?id=${id}`);
 
         if(res){
             callback(null,res);

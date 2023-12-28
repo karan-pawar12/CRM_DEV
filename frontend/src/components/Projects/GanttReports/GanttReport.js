@@ -1,6 +1,5 @@
 import { Gantt, Task, ViewMode } from "gantt-task-react";
 import { useEffect, useState } from "react";
-import { initTasks, getStartEndDateForProject } from "./helpers";
 import getGanttReport_api from "../../../api_strings/admin/getGanttReportData_api";
 import ViewSwitcher from "./ViewSwitcher";
 import dateUpdate_api from "../../../api_strings/admin/dateUpdate_api";
@@ -51,12 +50,7 @@ export default function GanttReport({ id }) {
 
     const handleTaskChange = (task) => {
         let { start, end, id } = task
-
-
-
-        start = new Date(start).toISOString();
-        end = new Date(end).toISOString();
-
+        console.log(start,end);
         dateUpdate_api(id, start, end, (error, res) => {
             if (error) {
                 console.log("Error:", error);

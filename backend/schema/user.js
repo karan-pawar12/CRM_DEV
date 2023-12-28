@@ -19,6 +19,7 @@ const userSchema = new Schema({
         value: { type: String },
         generatedAt: { type: Date }
     },
+    projects:{type:Array,default:[]},
     isEmailVerified:{type:Boolean,default:false},
     isPhoneVerified:{type:Boolean,default:false},
     softDelete: { type: Boolean, default: false }

@@ -21,11 +21,11 @@ module.exports = async function (req, res, next) {
                     $and:[
                         {
                             softDelete: false, 
-                            projectName: new mongoose.Types.ObjectId(id)
+                            projectId: new mongoose.Types.ObjectId(id)
                         },
                         {
                             $or: [
-                                { projectName: { $regex: searchQuery,$options: 'i' } }, 
+                                { projectId: { $regex: searchQuery,$options: 'i' } }, 
                                 { priority: { $regex:searchQuery, $options: 'i'}},  
                                 { taskName: { $regex:searchQuery, $options: 'i'}}  
                             ]
@@ -45,7 +45,7 @@ module.exports = async function (req, res, next) {
             {
                 $lookup: {
                     from: 'projects', // Name of the 'project' collection
-                    localField: 'projectName',
+                    localField: 'projectId',
                     foreignField: '_id',
                     as: 'projectData'
                 }
@@ -72,7 +72,7 @@ module.exports = async function (req, res, next) {
                     _id: 1,
                     description: 1,
                     taskName:1,
-                    participants: 1,
+                    assignedTo: 1,
                     projectName: '$projectData.projectName',
                     priority:1,
                     createdBy: {
@@ -80,10 +80,12 @@ module.exports = async function (req, res, next) {
                     },
                     dependencies: 1,
                     duration: {
-                        $divide: [
-                            { $subtract: ['$endDate', '$startDate'] },
-                            24 * 60 * 60 * 1000, // Convert milliseconds to days
-                        ],
+                        $ceil: {
+                            $divide: [
+                                { $subtract: ['$endDate', '$startDate'] },
+                                24 * 60 * 60 * 1000, // Convert milliseconds to days
+                            ],
+                        },
                     },
                 }
             }

@@ -6,8 +6,8 @@ module.exports = async function (req, res, next) {
         const { tenantId } = req.payload;
         const { _id, start, end } = req.body;
 
-        const startDate = start;
-        const endDate = end;
+        const startDate = new Date(start)
+        const endDate = new Date(end)
 
         const projectTask = await getprojectTaskModel(tenantId);
 

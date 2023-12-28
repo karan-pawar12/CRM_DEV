@@ -41,18 +41,8 @@ const ViewSwitcher = ({
       </Button>
 
       <div>
-        {/* <label className="Switch_Toggle">
-          <input
-            type="checkbox"
-            defaultChecked={isChecked}
-            onClick={() => onViewListChange(!isChecked)}
-          />
-          <span className="Slider" />
-        </label> */}
 
         <Checkbox className="m-2" defaultSelected={isChecked}  onClick={() => onViewListChange(!isChecked)}>Show Task List</Checkbox>
-
-        {/* Show Task List */}
       </div>
     </div>
   );

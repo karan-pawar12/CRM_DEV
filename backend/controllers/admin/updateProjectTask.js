@@ -17,7 +17,7 @@ module.exports = async function (req, res, next) {
         // Call the LeadLogs function and pass the required parameters
         // await projectTaskLogs(payloadId, projectTask[fieldName], fieldValue, fieldName);
 
-        res.status(200).end();
+        res.status(200).json(projectTask);
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({ error: 'Internal server error' });

@@ -12,7 +12,7 @@ module.exports = async function (req, res, next) {
             {
                 $match: {
                     softDelete: false,
-                    projectName: new mongoose.Types.ObjectId(id)
+                    projectId: new mongoose.Types.ObjectId(id)
 
                 }
             },

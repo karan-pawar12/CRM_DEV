@@ -1,13 +1,13 @@
 import { CREATE_PROJECTTASK } from "../../resources/urls/admin";
 import axios from "../../Interceptor";
 
-async function CreateProjectTask_api(projectName,taskName,description,startDate,endDate,priority,dependencies,callback) {
+async function CreateProjectTask_api(projectId,taskName,description,startDate,endDate,priority,dependencies,assignedTo,callback) {
     
     try {
         
 
         const res = await axios.post(CREATE_PROJECTTASK, {
-            projectName,taskName,description,startDate,endDate,priority,dependencies
+            projectId,taskName,description,startDate,endDate,priority,dependencies,assignedTo
         });
 
         if(res){

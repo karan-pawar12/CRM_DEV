@@ -64,7 +64,6 @@ module.exports = async function (req, res, next) {
             }
         ]);
 
-        console.log(roles);
 
         if (!user || user.length === 0) {
             return res.status(404).json({ error: 'User not found.' });

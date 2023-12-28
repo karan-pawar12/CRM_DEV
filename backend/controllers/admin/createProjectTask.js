@@ -1,14 +1,18 @@
-const {getprojectTaskModel} = require('../../db/tenantDb')
+const {getprojectTaskModel} = require('../../db/tenantDb');
+const mongoose = require('mongoose');
 
 module.exports = async function (req, res, next) {
     try {
 
         const { _id,tenantId } = req.payload;
-        const { projectName,taskName,startDate,endDate,priority,participants, createdBy = _id, updatedBy = _id, description,status,dependencies } = req.body;
+        const { projectId,taskName,startDate,endDate,priority,assignedTo, createdBy = _id, updatedBy = _id, description,status,dependencies } = req.body;
         const Projecttask = await getprojectTaskModel(tenantId);
         let projectTask = null;
         try {
-            projectTask = await new Projecttask({projectName,taskName,startDate,endDate,priority, participants, createdBy , updatedBy, description,status,dependencies }).save();
+
+            const participantsObjectIds = assignedTo.map(participant => new mongoose.Types.ObjectId(participant));
+
+            projectTask = await new Projecttask({projectId,taskName,startDate,endDate,priority, assignedTo: participantsObjectIds, createdBy , updatedBy, description,status,dependencies }).save();
 
             const projectTaskData = await Projecttask.aggregate([
                 {
@@ -17,7 +21,7 @@ module.exports = async function (req, res, next) {
                 {
                     $lookup: {
                         from: 'projects', 
-                        localField: 'projectName',
+                        localField: 'projectId',
                         foreignField: '_id',
                         as: 'projectData'
                     }
@@ -44,7 +48,7 @@ module.exports = async function (req, res, next) {
                         _id: 1,
                         description: 1,
                         taskName:1,
-                        participants: 1,
+                        assignedTo: 1,
                         projectName: '$projectData.projectName',
                         priority:1,
                         createdBy: {

@@ -10,8 +10,8 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure
 export default function CreateProjectTask({ onCreateSuccess,open,onCloseModal }) {
     const [formSubmitted, setFormSubmitted] = useState(false);
     const { id } = useParams();
-    const [size,setSize] = useState('full');
     const [tasks,setTasks] = useState([]);
+    const [assignedTo,setassignedTo] = useState([]);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     function onSubmitForm() {
@@ -19,12 +19,13 @@ export default function CreateProjectTask({ onCreateSuccess,open,onCloseModal })
     }
 
     useEffect(() => {
-        getAllProjectTaskWithoutskip((error,res) => {
+        getAllProjectTaskWithoutskip(id,(error,res) => {
             if(error){
                 console.log(error);
             }
             else {
-                setTasks(res.data);
+                setTasks(res.data.projecttasks);
+                setassignedTo(res.data.participantName);
             }
         });
     },[])
@@ -32,8 +33,8 @@ export default function CreateProjectTask({ onCreateSuccess,open,onCloseModal })
 
 
     const onSubmit = (formData) => {
-        const { taskName, description, startDate, endDate, priority,dependencies } = formData;
-        CreateProjectTask_api(id, taskName, description, startDate, endDate, priority,dependencies,(error, res) => {
+        const { taskName, description, startDate, endDate, priority,dependencies,assignedTo } = formData;
+        CreateProjectTask_api(id, taskName, description, startDate, endDate, priority,dependencies,assignedTo,(error, res) => {
             if (error) {
                 alert("Project Creation Failed");
                 setFormSubmitted(false);
@@ -50,7 +51,7 @@ export default function CreateProjectTask({ onCreateSuccess,open,onCloseModal })
     return (
         <>
             <div className="w-full">
-                <Modal size={size} isOpen={open} onOpenChange= {(isOpen) => {if(!isOpen) onCloseModal()}}>
+                <Modal  isOpen={open} onOpenChange= {(isOpen) => {if(!isOpen) onCloseModal()}}>
                     <ModalContent>
                         {(onClose) => (
                             <>
@@ -101,6 +102,13 @@ export default function CreateProjectTask({ onCreateSuccess,open,onCloseModal })
                                                     options: tasks,
                                                     selectionMode: "multiple"
                                                 },
+                                                {
+                                                    name:"assignedTo",
+                                                    label:"Assigned To",
+                                                    type: "Select",
+                                                    options:assignedTo,
+                                                    selectionMode: "multiple"
+                                                }
 
                                             ]
                                         }

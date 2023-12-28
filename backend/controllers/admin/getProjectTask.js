@@ -16,7 +16,7 @@ module.exports = async function (req, res, next) {
             {
                 $lookup: {
                     from: 'projects',
-                    localField: 'projectName',
+                    localField: 'projectId',
                     foreignField: '_id',
                     as: 'projectName'
                 }
