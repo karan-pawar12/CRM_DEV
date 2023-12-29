@@ -10,6 +10,8 @@ const ViewSwitcher = ({
   onViewListChange,
   isChecked
 }) => {
+  //onClick button color should change to primary
+
   return (
     <div className="ViewContainer mt-10">
       <Button

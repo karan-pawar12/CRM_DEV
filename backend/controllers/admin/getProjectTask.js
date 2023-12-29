@@ -31,7 +31,8 @@ module.exports = async function (req, res, next) {
                     description: 1,
                     startDate: 1,
                     endDate: 1,
-                    priority: 1
+                    priority: 1,
+                    assignedTo: 1
                 }
             }
         ])

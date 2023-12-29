@@ -11,15 +11,15 @@ function ProjectDetails() {
   return (
     <>
 
-      <div className="flex w-full flex-col ">
-        <Tabs aria-label="Options" className='border-b-2'>
-          <Tab key="dashboard" title="DashBoard">
+      <div className="flex w-full flex-col">
+        <Tabs aria-label="Options" className='border-b-2 flex w-full flex-col'>
+          <Tab key="dashboard" title="Dashboard" className='flex-1'>
             <Dashboard />
           </Tab>
-          <Tab key="tasks" title="Tasks">
+          <Tab key="tasks" title="Tasks" className='flex-1'>
             <ProjectTask id={id} />
           </Tab>
-          <Tab key="gantt" title="Gantt">
+          <Tab key="gantt" title="Gantt" className='flex-1'>
             <GanttReport id={id} />
           </Tab>
         </Tabs>

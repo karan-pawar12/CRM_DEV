@@ -36,13 +36,11 @@ export default function Layout() {
 			{
 				admincontext.toast.msg && 	<Toast {...admincontext.toast} />
 			}
-			<div className="flex flex-col flex-1 border-red-300">
 
 				<div className="flex-1 p-4 min-h-0 overflow-auto">
 					{/* {(moduleMap[module] && perms[modules]) ? moduleMap[module] : "404 page"} */}
 				   	 { authContext.auth.permissions[module]?.view && moduleMap[module]}
 				</div>
-			</div>
 		</div>
 	)
 }

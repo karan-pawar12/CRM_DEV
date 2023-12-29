@@ -9,16 +9,17 @@ import ProjectTable from "./ProjectTable";
 
 function Project() {
   const [projects, setProjects] = useState([]);
-  const [count,settotalCount] = useState(0)
+  const [count,settotalCount] = useState(1)
   const {id} = useParams();
   const skip = useRef(0);
   const limit = useRef(10);
+
   useEffect(() => {
     getAllProject();
   }, [])
 
-  function getAllProject() {
-    getAllProject_api({skip:skip.current,limit:limit.current},(error, res) => {
+  async function getAllProject() {
+    await getAllProject_api({skip:skip.current,limit:limit.current},(error, res) => {
       if (error) {
         console.log("Error:", error);
       }
@@ -30,7 +31,6 @@ function Project() {
     })
   }
 
-  console.log(projects)
 
   function onPageChange(pageNumber){
     skip.current = (pageNumber-1) * limit.current;
@@ -55,14 +55,14 @@ function Project() {
     });
   }
 
-  return <>
+  return <div className="w-full overflow-hidden">
     <div hidden={id === "" || !id ? false : true }>
       <ProjectTable projects={projects} setProjects={setProjects} onPageChange={onPageChange} count={count} settotalCount={settotalCount}/>
     </div>
 
     {(id === "new") ? <CreateProject  onCreateSuccess={onCreateSuccess}/> : (id !== null && id !== undefined ) && <ProjectDetails onUpdateSuccess={onUpdateSuccess}/>}
 
-  </>
+  </div>
 
 }
 

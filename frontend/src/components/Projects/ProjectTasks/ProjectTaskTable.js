@@ -19,6 +19,11 @@ export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageCha
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        calculateTotalPage();
+    }, [count]);
+
+
 
     function handleDeleteProjectTaskClick(projectTaskId){
         openConfirmationModal('Are you sure you want to delete this task ?', () => {
@@ -33,15 +38,19 @@ export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageCha
         })
     }
 
-    function calculateTotalPage(){
-        let temp = (count/limit);
-        if(temp>parseInt(temp)){
+    function calculateTotalPage() {
+        let temp = (count / limit.current);
+        let isFraction = temp % 1 !== 0;
+
+        if (isFraction) {
             temp = parseInt(temp) + 1;
-        }else{
-            temp = parseInt(temp);
-            
+            setTotalPage(temp);
+
+        } else {
+            setTotalPage(temp);
         }
-        setTotalPage(temp);
+
+
     }
 
     const handleCreateProjectTask = () => {
