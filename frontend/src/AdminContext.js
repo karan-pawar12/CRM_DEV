@@ -5,6 +5,8 @@ const AdminContext = createContext({
 });
 
 export function AdminContextProvider(props) {
+    const [socket,setSocket] = useState(null);
+
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [confirmModalData, setConfirmModalData] = useState({
         msg: '',
@@ -36,7 +38,8 @@ export function AdminContextProvider(props) {
     const context = {
         confirmModalOpen,openConfirmationModal,
         confirmModalData,closeConfirmationModal,
-        toast,setToast,hideToast
+        toast,setToast,hideToast,
+        socket,setSocket
     }
 
     return <AdminContext.Provider value={context}>

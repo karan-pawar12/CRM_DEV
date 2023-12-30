@@ -1,15 +1,21 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const logger = require('morgan')
 const fs = require('fs');
-const path = require('path');
+var path = require('path');
+
 const filePath = path.join(__dirname, './config/appConfig.json');
+
+
+global.appConfig = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+
+var createError = require('http-errors');
+var express = require('express');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+const cors = require('cors');
+
+const Socket = require('socket.io').Server;
+
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc  = require('swagger-jsdoc');
-
-const app = express();
-
 //Swagger api config
 const options = {
     definition: {
@@ -26,55 +32,47 @@ const options = {
     },
     apis:['routes/admin.js']
 }
-
 const spec = swaggerJsdoc(options);
 
 
-// Use morgan logger
-app.use(logger('dev'));
-
-// Parse JSON requests
-app.use(bodyParser.json());
-
-// Parse URL-encoded requests
-app.use(bodyParser.urlencoded({ extended: true }));
-
-//middlewares
-app.use(express.json());
+const adminRouter = require('./routes/admin');
 
 
-//cors 
+const app = express();
+
+
+
+
+
+
 app.use(cors());
-
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
-var adminRouter = require('./routes/admin');
-
-
-
+app.use(logger('dev'));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 
-
-
-
-//Routes
-// app.use('/',indexRouter);
-// app.use('/users',usersRouter);
 app.use('/admin',adminRouter);
 app.use('/api-doc',swaggerUi.serve,swaggerUi.setup(spec));
 
 
-//error handler
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something went wrong!');
-});
 
 
-
-
-global.appConfig = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-
-app.listen(5000,()=> {
-    console.log("Port Connected");
-})
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    next(createError(404));
+  });
+  
+  // error handler
+  app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+  
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
+  });
+  
+  module.exports = app;  

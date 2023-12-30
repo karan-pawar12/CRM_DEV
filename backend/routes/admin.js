@@ -114,6 +114,9 @@ router.post('/updateDate',verifyAccessToken,require('../controllers/admin/update
 router.get('/getAllProjectTaskWithoutSkip',verifyAccessToken,require('../controllers/admin/getAllProjectTaskWithoutSkip'));
 
 
+router.post('/pushNotification',verifyAccessToken,require('../controllers/admin/pushNotification'));
+
+
 module.exports = router;
 
 

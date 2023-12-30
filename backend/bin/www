@@ -1,0 +1,175 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('backend:server');
+var http = require('http');
+const jwt = require('jsonwebtoken');
+
+const USER_ACCESS_TOKEN_SECRET  = "cb4da6f3-8f45-4b99-95f7-0235cf541f6e";
+
+
+
+
+/**
+ * Declaring GLobal config and perms variabe
+ * 
+ */
+global.config = {
+  
+};
+global.perms = {
+ 
+};
+
+
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort('5000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+
+
+/**
+ * Mounting socket.io on node server and adding event listeners
+ */
+
+
+io = require('socket.io')(server,{
+  cors: {
+    origin: '*',
+  }
+});
+
+io.use(function(socket, next){
+  console.log("SOCKET ROLE",socket.handshake.query.role);
+
+  if (socket.handshake.query && socket.handshake.query.token){
+
+    let SECRET = USER_ACCESS_TOKEN_SECRET;
+
+    jwt.verify(socket.handshake.query.token, SECRET, function(err, props) {
+      if (err) {
+        console.log("Authentication Error",err);
+        return next(new Error('Authentication error'));
+      }
+      socket.props = props;
+      next();
+    });
+  }
+  else {
+    console.log("Authentication Error for socket.io");
+    next(new Error('Authentication error'));
+  }    
+}).on('connection',socket=>{
+  if(socket.props.role==="user"){
+    socket.join(socket.props._id);//if its a client/user then join the room with its own _id
+    console.log(`Client connected : ${socket.id} and has joined the room ${socket.props._id}`);
+
+   
+
+  
+  }else{
+
+    socket.emit('test',{title:"My title",content:"My content",id:new Date()})
+
+    socket.join(socket.props._id);
+    console.log(`Client connected : ${socket.id} and has joined the room with userId ${socket.props._id}`);
+
+    socket.join(socket.props.role); // if its a backoffice user then join the room with its role/roles.
+    console.log(`Client connected : ${socket.id} and has joined the room with roleId ${socket.props.role}`);
+
+  }
+  socket.on('join',room=>{
+    socket.join(room);
+    console.log(socket.id," has joined room "+room);
+  });
+  
+  socket.on('disconnect',()=>{
+    //console.log('Client disconnected : '+socket.id);
+
+  });
+});
+
+
+
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
