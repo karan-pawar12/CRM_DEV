@@ -8,20 +8,16 @@ import AuthContext from "../../../AuthContext";
 import AdminContext from "../../../AdminContext";
 import getAllProjectTask_api from "../../../api_strings/admin/getAllProjectTask_api";
 import deleteProjectTask_api from "../../../api_strings/admin/deleteProjectTask_api";
+import DynamicTable from "../../DynamicTables/Table";
 
 export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageChange,count,settotalCount,setActiveTab,onOpenModal,setprojectTaskId}) {
-    const [currentPage, setCurrentPage] = useState(1);
     const [searchKey, setSearchKey] = useState("");
-    const [totalPage,setTotalPage] = useState(1);
     const authContext = useContext(AuthContext);
     const skip = useRef(0);
     const limit = useRef(10);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        calculateTotalPage();
-    }, [count]);
 
 
 
@@ -38,20 +34,6 @@ export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageCha
         })
     }
 
-    function calculateTotalPage() {
-        let temp = (count / limit.current);
-        let isFraction = temp % 1 !== 0;
-
-        if (isFraction) {
-            temp = parseInt(temp) + 1;
-            setTotalPage(temp);
-
-        } else {
-            setTotalPage(temp);
-        }
-
-
-    }
 
     const handleCreateProjectTask = () => {
         // Use the navigate function to navigate to the new URL
@@ -148,30 +130,7 @@ export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageCha
                     </div>
                 </div>
             </div>
-            <Table aria-label="Example static collection table" selectionMode="multiple">
-                <TableHeader columns={columns}>
-                    {(column) => (
-                        <TableColumn key={column.key} align="start">
-                            {column.name}
-                        </TableColumn>
-                    )}
-                </TableHeader>
-                <TableBody items={projectTasks}>
-                    {(projectTask) => (
-
-                        <TableRow key={projectTask._id}>
-
-                            {(columnKey) => <TableCell>{renderCell(projectTask, columnKey)}</TableCell>}
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-            <Pagination
-                className="flex justify-center"
-                total={totalPage}
-                current={currentPage}
-                onChange={onPageChange}
-            />
+            <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={projectTasks} columns={columns} count={count}/>
         </>
     );
 }

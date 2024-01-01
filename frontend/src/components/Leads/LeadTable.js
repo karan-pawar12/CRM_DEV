@@ -7,23 +7,16 @@ import getAllLead_api from "../../api_strings/admin/getAllLead_api";
 import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
+import DynamicTable from "../DynamicTables/Table";
 
-const limit = 10;
 
 export default function LeadTable({ leads, setLeads, onPageChange,count,settotalCount }) {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPage,setTotalPage] = useState(1);
     const [searchKey, setSearchKey] = useState("");
     const authContext = useContext(AuthContext);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const skip = useRef(0);
     const limit = useRef(10);
     const navigate = useNavigate();
-
-    useEffect(()=>{
-        calculateTotalPage();
-    },[count])
-
 
 
     const handleCreateLeadClick = () => {
@@ -60,20 +53,6 @@ export default function LeadTable({ leads, setLeads, onPageChange,count,settotal
       
     }
 
-    function calculateTotalPage() {
-        let temp = (count / limit.current);
-        let isFraction = temp % 1 !== 0;
-
-        if (isFraction) {
-            temp = parseInt(temp) + 1;
-            setTotalPage(temp);
-
-        } else {
-            setTotalPage(temp);
-        }
-
-
-    }
 
     function handleDetailsLeadClick(leadId) {
         navigate(`?id=${leadId}`);
@@ -146,30 +125,7 @@ export default function LeadTable({ leads, setLeads, onPageChange,count,settotal
 
                 }
             </div>
-            <Table aria-label="Example static collection table">
-                <TableHeader columns={columns}>
-                    {(column) => (
-                        <TableColumn key={column.key} align="start">
-                            {column.name}
-                        </TableColumn>
-                    )}
-                </TableHeader>
-                <TableBody items={leads}>
-                    {(lead) => (
-
-                        <TableRow key={lead._id}>
-
-                            {(columnKey) => <TableCell>{renderCell(lead, columnKey)}</TableCell>}
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-            <Pagination
-                className="flex justify-center"
-                total={totalPage}
-                page={currentPage}
-                onChange={onPageChange}
-            />
+            <DynamicTable  onPageChange={onPageChange} renderCell={renderCell} data={leads} columns={columns} count={count}/>
         </>
     );
 }

@@ -7,22 +7,17 @@ import getAllProject_api from '../../api_strings/admin/getAllProject_api'
 import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
+import DynamicTable from "../DynamicTables/Table";
 
 
 export default function ProjectTable({ projects, setProjects, onPageChange, count, settotalCount }) {
     const [searchKey, setSearchKey] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPage, setTotalPage] = useState(1);
     const authContext = useContext(AuthContext);
     const skip = useRef(0);
     const limit = useRef(10);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
 
-
-    useEffect(() => {
-        calculateTotalPage();
-    }, [count]);
 
 
 
@@ -66,20 +61,6 @@ export default function ProjectTable({ projects, setProjects, onPageChange, coun
         navigate(`${projectId}`);
     }
 
-    function calculateTotalPage() {
-        let temp = (count / limit.current);
-        let isFraction = temp % 1 !== 0;
-
-        if (isFraction) {
-            temp = parseInt(temp) + 1;
-            setTotalPage(temp);
-
-        } else {
-            setTotalPage(temp);
-        }
-
-
-    }
 
     const renderCell = useCallback((project, columnKey) => {
         switch (columnKey) {
@@ -149,32 +130,9 @@ export default function ProjectTable({ projects, setProjects, onPageChange, coun
                     </div>
                 </div>}
             </div>
-            <div>
-                <Table aria-label="Example static collection table">
-                    <TableHeader columns={columns}>
-                        {(column) => (
-                            <TableColumn key={column.key} align="start">
-                                {column.name}
-                            </TableColumn>
-                        )}
-                    </TableHeader>
-                    <TableBody items={projects}>
-                        {(project) => (
 
-                            <TableRow key={project._id}>
-
-                                {(columnKey) => <TableCell>{renderCell(project, columnKey)}</TableCell>}
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </div>
-            <Pagination
-                className="flex justify-center"
-                total={totalPage}
-                page={currentPage}
-                onChange={onPageChange}
-            />
+            <DynamicTable   onPageChange={onPageChange} renderCell={renderCell} data={projects} columns={columns} count={count}/>
+            
         </>
     );
 }

@@ -7,13 +7,11 @@ import deleteRole_api from "../../api_strings/admin/deleteRole_api";
 import getAllTask_api from '../../api_strings/admin/createTask_api';
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
-const limit = 10;
+import DynamicTable from "../DynamicTables/Table";
 
 
 
 function TaskTable({ tasks, setTasks, onPageChange, count, settotalCount }) {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPage, setTotalPage] = useState(1);
     const [searchKey, setSearchKey] = useState("");
     const authContext = useContext(AuthContext);
     const { openConfirmationModal } = useContext(AdminContext);
@@ -21,10 +19,6 @@ function TaskTable({ tasks, setTasks, onPageChange, count, settotalCount }) {
     const limit = useRef(10);
     const navigate = useNavigate();
 
-
-    useEffect(() => {
-        calculateTotalPage();
-    }, [count])
 
 
     function handleDetailsTaskClick(taskId) {
@@ -58,22 +52,6 @@ function TaskTable({ tasks, setTasks, onPageChange, count, settotalCount }) {
             })
         })
     }
-
-    function calculateTotalPage() {
-        let temp = (count / limit.current);
-        let isFraction = temp % 1 !== 0;
-
-        if (isFraction) {
-            temp = parseInt(temp) + 1;
-            setTotalPage(temp);
-
-        } else {
-            setTotalPage(temp);
-        }
-
-
-    }
-
 
     const columns = [
         { name: "Subject", key: "taskSubject" },
@@ -163,32 +141,7 @@ function TaskTable({ tasks, setTasks, onPageChange, count, settotalCount }) {
                 }
             </div>
 
-            <Table aria-label="Example static collection table">
-                <TableHeader columns={columns}>
-                    {
-                        (column) => (
-                            <TableColumn key={column.key} align="start">
-                                {column.name}
-                            </TableColumn>
-                        )
-                    }
-                </TableHeader>
-                <TableBody items={tasks}>
-                    {(task) => (
-
-                        <TableRow key={task._id}>
-
-                            {(columnKey) => <TableCell>{renderCell(task, columnKey)}</TableCell>}
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-            <Pagination
-                className="flex justify-center"
-                total={totalPage}
-                current={currentPage}
-                onChange={onPageChange}
-            />
+            <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={tasks} columns={columns} count={count}/>
         </>
 
     )

@@ -7,13 +7,12 @@ import deleteRole_api from "../../api_strings/admin/deleteRole_api";
 import getAllRole_api from "../../api_strings/admin/getAllRole_api";
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
+import DynamicTable from "../DynamicTables/Table";
 const limit = 10;
 
 
 
 function RoleTable({ roles, setRoles,onPageChange,count,settotalCount }) {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPage,setTotalPage] = useState(1);
     const [searchKey, setSearchKey] = useState("");
     const authContext = useContext(AuthContext);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
@@ -21,10 +20,6 @@ function RoleTable({ roles, setRoles,onPageChange,count,settotalCount }) {
     const limit = useRef(10);
     const navigate = useNavigate();
 
-
-    useEffect(()=>{
-        calculateTotalPage();
-    },[count])
 
 
     function handleDetailsRoleClick(roleId){
@@ -59,20 +54,6 @@ function RoleTable({ roles, setRoles,onPageChange,count,settotalCount }) {
         })
     }
 
-    function calculateTotalPage() {
-        let temp = (count / limit.current);
-        let isFraction = temp % 1 !== 0;
-
-        if (isFraction) {
-            temp = parseInt(temp) + 1;
-            setTotalPage(temp);
-
-        } else {
-            setTotalPage(temp);
-        }
-
-
-    }
 
 
     const columns = [
@@ -141,33 +122,7 @@ function RoleTable({ roles, setRoles,onPageChange,count,settotalCount }) {
                 </div>
         }
         </div>
-
-            <Table aria-label="Example static collection table">
-                <TableHeader columns={columns}>
-                    {
-                        (column) => (
-                            <TableColumn key={column.key} align="start">
-                                {column.name}
-                            </TableColumn>
-                        )
-                    }
-                </TableHeader>
-                <TableBody items={roles}>
-                    {(role) => (
-
-                        <TableRow key={role._id}>
-
-                            {(columnKey) => <TableCell>{renderCell(role, columnKey)}</TableCell>}
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-            <Pagination
-                className="flex justify-center"
-                total={totalPage}
-                current={currentPage}
-                onChange={onPageChange}
-            />
+        <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={roles} columns={columns} count={count}/>
         </>
 
     )

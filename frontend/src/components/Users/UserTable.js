@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, useEffect,useRef } from "react";
+import React, { useCallback, useContext, useState, useEffect, useRef } from "react";
 import { EditIcon, DeleteIcon, EyeIcon } from "../../resources/icons/icons";
 import { Button, Input } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Pagination } from "@nextui-org/react";
@@ -7,22 +7,17 @@ import getAllUser_api from '../../api_strings/admin/getAllUser_api'
 import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
+import DynamicTable from "../DynamicTables/Table";
 
 
-export default function UserTable({ users, setUsers,onPageChange, count, settotalCount }) {
-    const [currentPage, setCurrentPage] = useState(1);
+export default function UserTable({ users, setUsers, onPageChange, count, settotalCount }) {
     const [searchKey, setSearchKey] = useState("");
-    const [totalPage,setTotalPage] = useState(1);
     const authContext = useContext(AuthContext);
     const skip = useRef(0);
     const limit = useRef(10);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
 
-
-    useEffect(()=>{
-        calculateTotalPage();
-    },[count])
 
 
 
@@ -65,20 +60,6 @@ export default function UserTable({ users, setUsers,onPageChange, count, settota
         navigate(`?id=${userId}`);
     }
 
-    function calculateTotalPage() {
-        let temp = (count / limit.current);
-        let isFraction = temp % 1 !== 0;
-
-        if (isFraction) {
-            temp = parseInt(temp) + 1;
-            setTotalPage(temp);
-
-        } else {
-            setTotalPage(temp);
-        }
-
-
-    }
 
     const renderCell = useCallback((user, columnKey) => {
         switch (columnKey) {
@@ -143,30 +124,7 @@ export default function UserTable({ users, setUsers,onPageChange, count, settota
                     </div>
                 </div>}
             </div>
-            <Table aria-label="Example static collection table">
-                <TableHeader columns={columns}>
-                    {(column) => (
-                        <TableColumn key={column.key} align="start">
-                            {column.name}
-                        </TableColumn>
-                    )}
-                </TableHeader>
-                <TableBody items={users}>
-                    {(user) => (
-
-                        <TableRow key={user._id}>
-
-                            {(columnKey) => <TableCell>{renderCell(user, columnKey)}</TableCell>}
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-            <Pagination
-                className="flex justify-center"
-                total={totalPage}
-                current={currentPage}
-                onChange={onPageChange}
-            />
+            <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={users} columns={columns} count={count} />
         </>
     );
 }
