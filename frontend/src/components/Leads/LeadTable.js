@@ -60,15 +60,19 @@ export default function LeadTable({ leads, setLeads, onPageChange,count,settotal
       
     }
 
-    function calculateTotalPage(){
-        let temp = (count/limit);
-        if(temp>parseInt(temp)){
+    function calculateTotalPage() {
+        let temp = (count / limit.current);
+        let isFraction = temp % 1 !== 0;
+
+        if (isFraction) {
             temp = parseInt(temp) + 1;
-        }else{
-            temp = parseInt(temp);
-            
+            setTotalPage(temp);
+
+        } else {
+            setTotalPage(temp);
         }
-        setTotalPage(temp);
+
+
     }
 
     function handleDetailsLeadClick(leadId) {
@@ -142,7 +146,7 @@ export default function LeadTable({ leads, setLeads, onPageChange,count,settotal
 
                 }
             </div>
-            <Table aria-label="Example static collection table" selectionMode="multiple">
+            <Table aria-label="Example static collection table">
                 <TableHeader columns={columns}>
                     {(column) => (
                         <TableColumn key={column.key} align="start">

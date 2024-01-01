@@ -8,7 +8,7 @@ import getAllRole_api from "../../api_strings/admin/getAllRole_api";
 
 function Role() {
   const [roles, setRoles] = useState([]);
-  const [count,settotalCount] = useState(0)
+  const [count,settotalCount] = useState(1)
   const query = useQuery();
   const skip = useRef(0);
   const limit = useRef(10);

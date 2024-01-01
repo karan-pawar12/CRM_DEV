@@ -1,16 +1,16 @@
-import { useCallback, useContext,useState,useEffect } from "react";
+import { useCallback, useContext,useState,useEffect,useRef } from "react";
 import AuthContext from "../../AuthContext";
 import { Button, Input } from '@nextui-org/react';
 import { useNavigate } from 'react-router-dom';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Pagination } from "@nextui-org/react";
 
-const limit = 10;
 
 function NotificationTable({notifications,setNotifications,count,onPageChange}) {
     const authContext = useContext(AuthContext);
     const [totalPage,setTotalPage] = useState(1);
-    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
+    const limit = useRef(10);
+    const navigate = useNavigate();
     useEffect(()=>{
         calculateTotalPage();
     },[count])
@@ -28,15 +28,19 @@ function NotificationTable({notifications,setNotifications,count,onPageChange}) 
         }
     })
 
-    function calculateTotalPage(){
-        let temp = (count/limit);
-        if(temp>parseInt(temp)){
+    function calculateTotalPage() {
+        let temp = (count / limit.current);
+        let isFraction = temp % 1 !== 0;
+
+        if (isFraction) {
             temp = parseInt(temp) + 1;
-        }else{
-            temp = parseInt(temp);
-            
+            setTotalPage(temp);
+
+        } else {
+            setTotalPage(temp);
         }
-        setTotalPage(temp);
+
+
     }
 
     const columns = [
@@ -64,7 +68,7 @@ function NotificationTable({notifications,setNotifications,count,onPageChange}) 
 
                 }
             </div>
-            <Table aria-label="Example static collection table" selectionMode="multiple">
+            <Table aria-label="Example static collection table">
                 <TableHeader columns={columns}>
                     {(column) => (
                         <TableColumn key={column.key} align="start">

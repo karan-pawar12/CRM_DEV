@@ -19,8 +19,6 @@ export default function ProjectTable({ projects, setProjects, onPageChange, coun
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
 
-    console.log(count);
-
 
     useEffect(() => {
         calculateTotalPage();

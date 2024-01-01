@@ -60,14 +60,18 @@ function TaskTable({ tasks, setTasks, onPageChange, count, settotalCount }) {
     }
 
     function calculateTotalPage() {
-        let temp = (count / limit);
-        if (temp > parseInt(temp)) {
-            temp = parseInt(temp) + 1;
-        } else {
-            temp = parseInt(temp);
+        let temp = (count / limit.current);
+        let isFraction = temp % 1 !== 0;
 
+        if (isFraction) {
+            temp = parseInt(temp) + 1;
+            setTotalPage(temp);
+
+        } else {
+            setTotalPage(temp);
         }
-        setTotalPage(temp);
+
+
     }
 
 
@@ -159,7 +163,7 @@ function TaskTable({ tasks, setTasks, onPageChange, count, settotalCount }) {
                 }
             </div>
 
-            <Table aria-label="Example static collection table" selectionMode='multiple'>
+            <Table aria-label="Example static collection table">
                 <TableHeader columns={columns}>
                     {
                         (column) => (

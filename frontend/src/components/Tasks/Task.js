@@ -9,7 +9,7 @@ import getAllTask_api from "../../api_strings/admin/getAllTask_api";
 
 function Task() {
   const [tasks, setTasks] = useState([]);
-  const [count,settotalCount] = useState(0)
+  const [count,settotalCount] = useState(1)
   const query = useQuery();
   const skip = useRef(0);
   const limit = useRef(10);

@@ -59,15 +59,19 @@ function RoleTable({ roles, setRoles,onPageChange,count,settotalCount }) {
         })
     }
 
-    function calculateTotalPage(){
-        let temp = (count/limit);
-        if(temp>parseInt(temp)){
+    function calculateTotalPage() {
+        let temp = (count / limit.current);
+        let isFraction = temp % 1 !== 0;
+
+        if (isFraction) {
             temp = parseInt(temp) + 1;
-        }else{
-            temp = parseInt(temp);
-            
+            setTotalPage(temp);
+
+        } else {
+            setTotalPage(temp);
         }
-        setTotalPage(temp);
+
+
     }
 
 
@@ -138,7 +142,7 @@ function RoleTable({ roles, setRoles,onPageChange,count,settotalCount }) {
         }
         </div>
 
-            <Table aria-label="Example static collection table" selectionMode='multiple'>
+            <Table aria-label="Example static collection table">
                 <TableHeader columns={columns}>
                     {
                         (column) => (

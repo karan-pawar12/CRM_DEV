@@ -10,7 +10,7 @@ import getAllUser_api from "../../api_strings/admin/getAllUser_api";
 
 function User() {
   const [users, setUsers] = useState([]);
-  const [count,settotalCount] = useState();
+  const [count,settotalCount] = useState(1);
   const skip = useRef(0);
   const limit = useRef(10);
   const query = useQuery();

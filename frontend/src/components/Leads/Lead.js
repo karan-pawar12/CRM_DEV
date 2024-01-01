@@ -9,7 +9,7 @@ import getAllLead_api from "../../api_strings/admin/getAllLead_api";
 function Lead() {
   const query = useQuery();
   const [leads, setLeads] = useState([]);
-  const [count,settotalCount] = useState()
+  const [count,settotalCount] = useState(1)
   const skip = useRef(0);
   const limit = useRef(10);
 

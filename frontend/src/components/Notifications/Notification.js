@@ -7,7 +7,7 @@ import getAllNotification_api from '../../api_strings/admin/getAllNotification';
 function Notification() {
     const query = useQuery();
     const [notifications,setNotifications] = useState([]);
-    const [count,settotalCount] = useState(0)
+    const [count,settotalCount] = useState(1)
     const skip = useRef(0);
     const limit = useRef(10);
 

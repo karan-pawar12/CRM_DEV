@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
 
-const limit = 10;
 
 export default function UserTable({ users, setUsers,onPageChange, count, settotalCount }) {
     const [currentPage, setCurrentPage] = useState(1);
@@ -66,15 +65,19 @@ export default function UserTable({ users, setUsers,onPageChange, count, settota
         navigate(`?id=${userId}`);
     }
 
-    function calculateTotalPage(){
-        let temp = (count/limit);
-        if(temp>parseInt(temp)){
+    function calculateTotalPage() {
+        let temp = (count / limit.current);
+        let isFraction = temp % 1 !== 0;
+
+        if (isFraction) {
             temp = parseInt(temp) + 1;
-        }else{
-            temp = parseInt(temp);
-            
+            setTotalPage(temp);
+
+        } else {
+            setTotalPage(temp);
         }
-        setTotalPage(temp);
+
+
     }
 
     const renderCell = useCallback((user, columnKey) => {
@@ -140,7 +143,7 @@ export default function UserTable({ users, setUsers,onPageChange, count, settota
                     </div>
                 </div>}
             </div>
-            <Table aria-label="Example static collection table" selectionMode="multiple">
+            <Table aria-label="Example static collection table">
                 <TableHeader columns={columns}>
                     {(column) => (
                         <TableColumn key={column.key} align="start">
