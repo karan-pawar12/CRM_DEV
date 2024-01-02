@@ -5,9 +5,12 @@ import AuthContext from "../../AuthContext";
 import NotAuthorized from "../NotAuthorized";
 import Backbutton from "../Backbutton";
 import { Button } from "@nextui-org/react";
+import AdminContext from "../../AdminContext";
+import Toast from '../ToastsContainers/Toast'
 
 export default function CreateLead({ onCreateSuccess }) {
   const authContext = useContext(AuthContext);
+  const admincontext = useContext(AdminContext);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   function onSubmitForm() {
@@ -37,10 +40,19 @@ export default function CreateLead({ onCreateSuccess }) {
     createLead_api(firstName, lastName, email, phone, company, rating, leadSource, leadStatus, street, state, city, country, zipcode, description, (error, res) => {
 
       if (error) {
-        alert("Lead Creation Failed");
+        admincontext.setToast({
+          msg: "Unable to create lead",
+          toastType: "error",
+          onClose: null
+        })
         setFormSubmitted(false);
       }
       else {
+        admincontext.setToast({
+          msg: "Lead created successfully",
+          toastType: "success",
+          onClose: null
+        })
         onCreateSuccess(res.data);
       }
     })
@@ -52,6 +64,9 @@ export default function CreateLead({ onCreateSuccess }) {
 
     return (
       <>
+        {
+          admincontext.toast.msg && <Toast {...admincontext.toast} />
+        }
         <Backbutton />
         <div className="w-full">
           <div className="flex justify-end mt-5">

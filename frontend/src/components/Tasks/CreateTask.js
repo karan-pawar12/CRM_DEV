@@ -5,10 +5,13 @@ import AuthContext from "../../AuthContext";
 import NotAuthorized from "../NotAuthorized";
 import CreateTask_api from "../../api_strings/admin/createTask_api.js";
 import Backbutton from "../Backbutton";
+import AdminContext from "../../AdminContext.js";
+import Toast from '../ToastsContainers/Toast';
 
 function CreateTask({ onCreateSuccess }) {
     const authContext = useContext(AuthContext);
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const admincontext = useContext(AdminContext);
 
     function onSubmitForm() {
         setFormSubmitted(true);
@@ -18,10 +21,20 @@ function CreateTask({ onCreateSuccess }) {
         const { taskSubject,dueDate,status,priority,reminder,participant,description } = formData;
         CreateTask_api(taskSubject,dueDate,status,priority,reminder,participant,description, (error, res) => {
             if (error) {
-                alert("Task Creation Failed");
+                admincontext.setToast({
+                    msg: "Unable to create task",
+                    toastType: "error",
+                    onClose: null
+                })
                 setFormSubmitted(false);
+
             }
             else {
+                admincontext.setToast({
+                    msg: "Task created successfully",
+                    toastType: "success",
+                    onClose: null
+                })
                 onCreateSuccess(res.data);
             }
         })
@@ -31,6 +44,9 @@ function CreateTask({ onCreateSuccess }) {
     if (authContext.auth.permissions["tasks"].create)
         return (
             <>
+            {
+                admincontext.toast.msg && <Toast {...admincontext.toast} />
+            }
                 <Backbutton />
                 <div className="w-full">
                     <div className="flex justify-end mt-5">

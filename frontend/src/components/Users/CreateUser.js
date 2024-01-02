@@ -6,11 +6,14 @@ import AuthContext from "../../AuthContext";
 import NotAuthorized from "../NotAuthorized";
 import getAllRoleWithoutskip from "../../api_strings/admin/getAllRoleWithoutskip";
 import Backbutton from '../Backbutton';
+import AdminContext from "../../AdminContext";
+import Toast from '../ToastsContainers/Toast';
 
 export default function CreateUser({ onCreateSuccess }) {
     const authContext = useContext(AuthContext);
     const [roleOptions, setRoleOptions] = useState([]);
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const admincontext = useContext(AdminContext);
 
     function onSubmitForm() {
         setFormSubmitted(true);
@@ -40,12 +43,20 @@ export default function CreateUser({ onCreateSuccess }) {
 
             if (error) {
 
-                alert("User Creation Failed");
+                admincontext.setToast({
+                    msg: "Unable to create user",
+                    toastType: "error",
+                    onClose: null
+                })
                 setFormSubmitted(false);
             }
             else {
+                admincontext.setToast({
+                    msg: "User created successfully",
+                    toastType: "success",
+                    onClose: null
+                })
                 onCreateSuccess(res.data);
-                alert("User Created successfully");
             }
         })
 
@@ -59,6 +70,9 @@ export default function CreateUser({ onCreateSuccess }) {
     if (authContext.auth.permissions["users"].create)
         return (
             <>
+            {
+                admincontext.toast.msg && <Toast {...admincontext.toast} />
+            }
                 <Backbutton />
                 <div className="w-full">
                 <div className="flex justify-end mt-5">

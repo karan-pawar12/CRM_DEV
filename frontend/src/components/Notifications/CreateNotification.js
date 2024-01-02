@@ -1,13 +1,16 @@
-import { useEffect,useState } from "react";
+import { useEffect,useState,useContext } from "react";
 import { Button } from "@nextui-org/react";
 import Forms from "../Inputform/Forms";
 import getAllUserWithoutskip from "../../api_strings/admin/getallUserWithoutskip";
 import Createnotification_api from "../../api_strings/admin/createNotification_api";
 import Backbutton from "../Backbutton";
+import AdminContext from "../../AdminContext";
+import Toast from '../ToastsContainers/Toast'
 
 function CreateNotification({onCreateSuccess}){
     const[userArr,setuserArr] = useState([]);
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const admincontext = useContext(AdminContext);
 
     function onSubmitForm() {
         setFormSubmitted(true);
@@ -18,12 +21,20 @@ function CreateNotification({onCreateSuccess}){
         const recipientsArray = Object.values(recipients);
         Createnotification_api(title,content,data,recipientsArray,(error,res) => {
             if(error){
-                alert("Unable to push notification");
+                admincontext.setToast({
+                    msg: "Unable to create notification",
+                    toastType: "error",
+                    onClose: null
+                })
                 setFormSubmitted(false);
             }
             else{
+                admincontext.setToast({
+                    msg: "Notification created successfully",
+                    toastType: "success",
+                    onClose: null
+                })
                 onCreateSuccess(res.data);
-                alert("Successfully pushed notification")
             }
         })
 
@@ -42,6 +53,9 @@ function CreateNotification({onCreateSuccess}){
 
     return(
         <>
+        {
+          admincontext.toast.msg && <Toast {...admincontext.toast} />
+        }
         <Backbutton />
         <div className="w-full">
                 <div className="flex justify-end mt-5">
