@@ -14,6 +14,12 @@ export default function Forms(props) {
         }
     }, [formSubmitted])
 
+    const handleKeyPress = (event) => {
+    if (event.key === 'Enter' || event.keyCode === 13) {
+        handleSaveClick();
+    }
+  };
+
     function getNullErrors() {
         let temp = {};
         for (let i = 0; i < fields.length; i++) {
@@ -140,6 +146,7 @@ export default function Forms(props) {
                                     placeholder={`Enter ${f.label.toLowerCase()}`}
                                     name={f.name}
                                     onChange={onChange}
+                                    onKeyDown={handleKeyPress}
                                     defaultValue={formData.current[f.name]}
                                     isInvalid={errors[f.name]}
                                     errorMessage={errors[f.name]}
