@@ -131,7 +131,7 @@ export default function ProjectTable({ projects, setProjects, onPageChange, coun
                 </div>}
             </div>
 
-            <DynamicTable   onPageChange={onPageChange} renderCell={renderCell} data={projects} columns={columns} count={count}/>
+            <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={projects} columns={columns} count={count}/>
             
         </>
     );

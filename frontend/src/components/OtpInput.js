@@ -4,12 +4,15 @@ import verifyOtp_api from '../api_strings/admin/verifyOtp_api';
 import resendOtp_api from '../api_strings/admin/resendOtp_api';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../AuthContext';
+import Toast from './ToastsContainers/Toast';
+import AdminContext from '../AdminContext';
 
 
 export default function OtpInput({ email, tenantId, onOtpSuccess, password }) {
   const [otp, setOtp] = useState('');
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
+  const admincontext = useContext(AdminContext);
 
   const handleOtpChange = (e) => {
     const value = e.target.value;
@@ -24,7 +27,11 @@ export default function OtpInput({ email, tenantId, onOtpSuccess, password }) {
     // You can perform actions here, such as verifying the OTP
     verifyOtp_api(email, tenantId, password, otp, (error, res) => {
       if (error) {
-        alert('Wrong email or otp');
+        admincontext.setToast({
+          msg: `Wrong otp`,
+          toastType: "error",
+          onClose: null
+        });
       }
       else {
         const { role, permissions } = res.data;
@@ -50,7 +57,9 @@ export default function OtpInput({ email, tenantId, onOtpSuccess, password }) {
 
   return (
     <>
-
+      {
+        admincontext.toast.msg && <Toast {...admincontext.toast} />
+      }
       <div className="mb-4">
         <Input type="text" label="OTP" placeholder="Enter otp" value={otp} onChange={handleOtpChange} />
       </div>
