@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { Button, Input } from "@nextui-org/react";
 import verifyOtp_api from '../api_strings/admin/verifyOtp_api';
 import resendOtp_api from '../api_strings/admin/resendOtp_api';
+import { useNavigate } from 'react-router-dom';
+import AuthContext from '../AuthContext';
 
 
-export default function OtpInput({ email, tenantId,onOtpSuccess }) {
+export default function OtpInput({ email, tenantId, onOtpSuccess, password }) {
   const [otp, setOtp] = useState('');
+  const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   const handleOtpChange = (e) => {
     const value = e.target.value;
@@ -18,13 +22,17 @@ export default function OtpInput({ email, tenantId,onOtpSuccess }) {
 
   const handleSubmit = () => {
     // You can perform actions here, such as verifying the OTP
-    verifyOtp_api(email, tenantId, otp, (error, res) => {
+    verifyOtp_api(email, tenantId, password, otp, (error, res) => {
       if (error) {
         alert('Wrong email or otp');
       }
       else {
-        onOtpSuccess('Login');
-        alert('Otp verified successfully');
+        const { role, permissions } = res.data;
+        authContext.setAuth({
+          user: role,
+          permissions: permissions,
+        });
+        navigate('/cpanel/dashboard');
       }
     })
   };
@@ -42,19 +50,19 @@ export default function OtpInput({ email, tenantId,onOtpSuccess }) {
 
   return (
     <>
-   
-        <div className="mb-4">
-          <Input type="text" label="OTP" placeholder="Enter otp" value={otp} onChange={handleOtpChange} />
-        </div>
-        <div className='flex space-x-4'>
-          <Button type="primary" onClick={handleResend}  className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
-            Resend Otp
-          </Button>
-          <Button type="primary" onClick={handleSubmit}  className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
-            Submit
-          </Button>
-        </div>
- 
+
+      <div className="mb-4">
+        <Input type="text" label="OTP" placeholder="Enter otp" value={otp} onChange={handleOtpChange} />
+      </div>
+      <div className='flex space-x-4'>
+        <Button type="primary" onClick={handleResend} className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
+          Resend Otp
+        </Button>
+        <Button type="primary" onClick={handleSubmit} className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
+          Submit
+        </Button>
+      </div>
+
 
     </>
   );

@@ -129,8 +129,6 @@ export default function CreateUser({ onCreateSuccess }) {
                                 label: "Roles",
                                 type: "Select",
                                 options: roleOptions,
-                                rules:{required:true},
-                                errorMsg:'Please select a role or first create a role'
                             },
                             {
                                 name: "managers",

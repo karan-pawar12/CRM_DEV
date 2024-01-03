@@ -70,7 +70,7 @@ export default function UserTable({ users, setUsers, onPageChange, count, settot
             case "phone":
                 return <span>{user.phone[0]}</span>;
             case "role":
-                return <span>{user.role}</span>;
+                return <span>{user.role || 'Not assigned'}</span>;
             case "actions":
                 return (
                     <div className="relative flex items-center gap-3">

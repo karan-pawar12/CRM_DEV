@@ -40,7 +40,7 @@ function Login({ handlePage }) {
             toastType: "Warning",
             onClose: null
           });
-          handlePage(email,tenantId);
+          handlePage(email,tenantId,password);
           setFormSubmitted(false);
         } else if (error.response.status === 404) {
           // Handle other status codes as needed

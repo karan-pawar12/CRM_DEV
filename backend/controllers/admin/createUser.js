@@ -10,9 +10,7 @@ module.exports = async function (req, res, next) {
         const Role = await getRoleModel(tenantId);
         let user = null;
 
-        if (!role || role.trim() === '') {
-            return res.status(400).json({ error: 'Role is required' });
-        }
+    
 
         if (!validation.isEmailValid(email)) {
             return res.status(400).json({ error: 'Invalid email address' });
@@ -32,13 +30,20 @@ module.exports = async function (req, res, next) {
         }
 
 
-        const roleId = new mongoose.Types.ObjectId(role);
+        let roleId = null;
+        if (role) {
+            roleId = new mongoose.Types.ObjectId(role);
+        }
+
         try {
             user = await new User({ firstName, lastName, password, email, phone, role: roleId, managers, createdBy, updatedBy }).save();
-            const roleInfo = await Role.findOne({ _id: roleId });
+            
+            if (roleId) {
+                const roleInfo = await Role.findOne({ _id: roleId });
 
-            if (roleInfo) {
-                user.role = roleInfo.name; 
+                if (roleInfo) {
+                    user.role = roleInfo.name;
+                }
             }
 
             res.status(201).json(user);

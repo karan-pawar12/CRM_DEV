@@ -70,9 +70,7 @@ module.exports = async function (req, res, next) {
                     lastName: 1,
                     email: 1,
                     phone: 1,
-                    role: {
-                        $ifNull: ['$userRole.name', 'admin']
-                    }
+                    role: '$userRole.name'
                 }
             },
             

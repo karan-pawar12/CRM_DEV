@@ -10,16 +10,18 @@ export default function Entry() {
     const [otpData, setOtpData] = useState({
         email: '',
         tenantId: '',
+        password: ''
     });
 
     const handlePage = (key) => {
         setPage(key);
     };
 
-    const handleOtpInput = (email, tenantId) => {
+    const handleOtpInput = (email, tenantId, password) => {
         setOtpData({
             email,
             tenantId,
+            password
         });
         setPage('OTP');
     };
@@ -52,6 +54,7 @@ export default function Entry() {
                         <OtpInput
                             email={otpData.email}
                             tenantId={otpData.tenantId}
+                            password={otpData.password}
                             onOtpSuccess={() => setPage('Login')}
                         />
                     )
