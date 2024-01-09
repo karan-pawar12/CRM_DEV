@@ -113,6 +113,8 @@ router.post('/updateDate',verifyAccessToken,require('../controllers/admin/update
 
 router.get('/getAllProjectTaskWithoutSkip',verifyAccessToken,require('../controllers/admin/getAllProjectTaskWithoutSkip'));
 
+router.get('/getProjecttaskdashboard',verifyAccessToken,require('../controllers/admin/getProjectTaskDashboardData'));
+
 
 module.exports = router;
 

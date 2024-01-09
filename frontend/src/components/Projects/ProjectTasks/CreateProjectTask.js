@@ -19,6 +19,7 @@ export default function CreateProjectTask({ onCreateSuccess, open, onCloseModal 
 
     function onSubmitForm() {
         setFormSubmitted(true);
+      
     }
 
     useEffect(() => {

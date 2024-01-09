@@ -11,6 +11,14 @@ const priorityArr =  [
     { name: "High", id: "High" },
 ] 
 
+const statusArr = [
+    { name: "Open", id: "Open" },
+    { name: "Inprogress", id: "Inprogress" },
+    { name: "Completed", id: "Completed" },
+];
+
+const labels = ["Open","Inprogress","Completed"];
+
 export default function ProjectTaskDetails({ onUpdateSuccess,open,onCloseModal,projectTaskId }) {
     const [projectTaskDetailsData, setprojectTaskDetailsData] = useState({});
     const { onOpenChange } = useDisclosure();
@@ -40,6 +48,7 @@ export default function ProjectTaskDetails({ onUpdateSuccess,open,onCloseModal,p
                                     <UpdatableElement fieldType="Input" onUpdateSuccess={onUpdateSuccess} id={projectTaskId} fieldName="startDate" fieldValue={projectTaskDetailsData["startDate"]}  label="Start Date" updateFunction={updateProjectTask_api} />
                                     <UpdatableElement fieldType="Input" onUpdateSuccess={onUpdateSuccess} id={projectTaskId} fieldName="endDate" fieldValue={projectTaskDetailsData["endDate"]}  label="End Date" updateFunction={updateProjectTask_api} />
                                     <UpdatableElement fieldType="Select" onUpdateSuccess={onUpdateSuccess} id={projectTaskId} fieldName="priority" fieldValue={projectTaskDetailsData["priority"]}  label="Priority" updateFunction={updateProjectTask_api} options={priorityArr}/>
+                                    <UpdatableElement fieldType="Select" onUpdateSuccess={onUpdateSuccess} id={projectTaskId} fieldName="status" fieldValue={labels[projectTaskDetailsData["status"]]}  label="Status" updateFunction={updateProjectTask_api} options={statusArr}/>
                                 </div>
 
                             </ModalBody>

@@ -12,7 +12,7 @@ const projectTaskSchema = new Schema({
     createdBy: { type: mongoose.Types.ObjectId, default: null },
     updatedBy: { type: mongoose.Types.ObjectId, default: null },
     assignedTo: { type: Array, default: [] },
-    status: { type: String, default:"Open" },
+    status: { type: Number, default: 0 },
     softDelete: { type: Boolean, default: false },
     dependencies: {type:Array, default:[]}
 

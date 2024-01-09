@@ -46,7 +46,9 @@ export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageCha
         onOpenModal();
         setActiveTab('taskDetails');
     }
+    const labels = ["Open","Inprogress","Completed"];
 
+    
     const renderCell = useCallback((projectTask, columnKey) => {
         switch (columnKey) {
             case "taskName": // Concatenate first name and last name
@@ -59,6 +61,8 @@ export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageCha
                 return <span>{projectTask.priority}</span>
             case "projectName":
                 return <span>{projectTask.projectName}</span>
+            case "status":
+                return <span>{labels[projectTask.status]}</span>
             case "actions":
                 return (
                     <div className="relative flex items-center gap-3">
@@ -85,6 +89,7 @@ export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageCha
         { name: "Duration", key: "duration" },
         { name: "Priority", key: "priority" },
         {name: "Project Name", key:"projectName"},
+        {name:"Status", key:"status"},
         { name: "ACTIONS", key: "actions" },
     ];
 

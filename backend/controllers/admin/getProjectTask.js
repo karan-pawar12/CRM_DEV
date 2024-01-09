@@ -28,6 +28,7 @@ module.exports = async function (req, res, next) {
                 $project: {
                     _id: 1,
                     taskName: 1,
+                    status: 1,
                     description: 1,
                     startDate: 1,
                     endDate: 1,

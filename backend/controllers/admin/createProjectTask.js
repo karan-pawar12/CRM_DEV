@@ -48,6 +48,7 @@ module.exports = async function (req, res, next) {
                         _id: 1,
                         description: 1,
                         taskName:1,
+                        status: 1,
                         assignedTo: 1,
                         projectName: '$projectData.projectName',
                         priority:1,
