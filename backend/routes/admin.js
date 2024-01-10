@@ -116,6 +116,9 @@ router.get('/getAllProjectTaskWithoutSkip',verifyAccessToken,require('../control
 router.get('/getProjecttaskdashboard',verifyAccessToken,require('../controllers/admin/getProjectTaskDashboardData'));
 
 
+router.post('/pushNotification',verifyAccessToken,require('../controllers/admin/pushNotification'));
+
+
 module.exports = router;
 
 

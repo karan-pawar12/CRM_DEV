@@ -11,6 +11,10 @@ import { useNavigate } from 'react-router-dom';
 import permissions_api from './api_strings/admin/permissions_api';
 import AuthContext from './AuthContext';
 
+import { io } from "socket.io-client";
+
+
+
 function App() {
 
 
@@ -27,9 +31,25 @@ function App() {
 export default App;
 
 function Main() {
+
+
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   useEffect(() => {
+
+    //Establishing socket instance
+    const socket = io("ws://localhost:5000", {
+  reconnectionDelayMax: 10000,
+  auth: {
+    token: "123"
+  },
+  query: {
+    "my-key": "my-value"
+  }
+});
+
+
+
     const token = localStorage.getItem('token');
     if (token) {
       permissions_api((error, res) => {
