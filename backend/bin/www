@@ -73,6 +73,8 @@ io.use(function(socket, next){
         console.log("Authentication Error",err);
         return next(new Error('Authentication error'));
       }
+
+      console.log(props);
       socket.props = props;
       next();
     });
@@ -90,8 +92,6 @@ io.use(function(socket, next){
 
   
   }else{
-
-    socket.emit('test',{title:"My title",content:"My content",id:new Date()})
 
     socket.join(socket.props._id);
     console.log(`Client connected : ${socket.id} and has joined the room with userId ${socket.props._id}`);

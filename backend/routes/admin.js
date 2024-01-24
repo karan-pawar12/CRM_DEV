@@ -118,6 +118,10 @@ router.get('/getProjecttaskdashboard',verifyAccessToken,require('../controllers/
 
 router.post('/pushNotification',verifyAccessToken,require('../controllers/admin/pushNotification'));
 
+router.post('/createNewLead',verifyAccessToken,require('../controllers/admin/createNewLead'));
+
+router.post('/createMessage',verifyAccessToken,require('../controllers/admin/createMessage'));
+
 
 module.exports = router;
 

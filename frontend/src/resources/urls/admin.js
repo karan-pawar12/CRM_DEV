@@ -79,3 +79,5 @@ export const DATE_UPDATE = BASE+"updateDate";
 export const GET_ALLPROJECTTASKWITHOUTSKIP = BASE+"getAllProjectTaskWithoutSkip";
 
 export const GET_PROJECTTASK_DASHBOARD = BASE+ "getProjecttaskdashboard";
+
+export const CREATE_MESSAGE = BASE+ "createMessage";

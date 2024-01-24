@@ -18,6 +18,8 @@ const vendorSchema = require('../schema/vendor');
 const projectTaskSchema = require('../schema/projectTask');
 const projectLogSchema = require('../schema/projectLogs');
 const projectTaskLogSchema = require('../schema/projectTaskLogs');
+const messageSchema = require('../schema/message');
+const chatRoomSchema = require('../schema/chatroom');
 
 const url = "mongodb://localhost:27017";
 
@@ -116,6 +118,14 @@ const getprojectTaskLogModel = async(tenantId) => {
     return getModel(tenantId,'projecttasklog',projectTaskLogSchema);
 }
 
+const getMessageModel = async(tenantId) => {
+    return getModel(tenantId,'message',messageSchema);
+}
+
+const getChatRoomModel = async(tenantId) => {
+    return getModel(tenantId,'chatroom',chatRoomSchema);
+}
+
 module.exports = {
     getUserModel,
     getRoleModel,
@@ -135,5 +145,7 @@ module.exports = {
     getvendorModel,
     getprojectTaskModel,
     getprojectLogModel,
-    getprojectTaskLogModel
+    getprojectTaskLogModel,
+    getMessageModel,
+    getChatRoomModel
 }
