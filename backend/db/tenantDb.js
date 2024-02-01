@@ -20,6 +20,7 @@ const projectLogSchema = require('../schema/projectLogs');
 const projectTaskLogSchema = require('../schema/projectTaskLogs');
 const messageSchema = require('../schema/message');
 const chatRoomSchema = require('../schema/chatroom');
+const ticketSchema = require('../schema/ticket');
 
 const url = "mongodb://localhost:27017";
 
@@ -126,6 +127,10 @@ const getChatRoomModel = async(tenantId) => {
     return getModel(tenantId,'chatroom',chatRoomSchema);
 }
 
+const getTicketModel = async(tenantId) => {
+    return getModel(tenantId,'ticket',ticketSchema);
+}
+
 module.exports = {
     getUserModel,
     getRoleModel,
@@ -147,5 +152,6 @@ module.exports = {
     getprojectLogModel,
     getprojectTaskLogModel,
     getMessageModel,
-    getChatRoomModel
+    getChatRoomModel,
+    getTicketModel
 }

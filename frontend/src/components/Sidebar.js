@@ -43,7 +43,7 @@ function Sidebar() {
         <div className="w-60 p-3 flex-col border-solid border-r border-neutral-400 md:block hidden">
             <div className="flex items-center gap-2 px-1 py-3">
                 <FcBullish fontSize={24} />
-                <span className="text-neutral-200 text-lg">VKV TECH</span>
+                <span className="font-bold text-lg">VKV TECH</span>
             </div>
             <div className="py-8 flex flex-1 flex-col gap-0.5">
                 {
@@ -76,10 +76,10 @@ function SidebarLink({ link, pathname, icon,notificationCount }) {
     return (
         <Link
             to={linkPath}
-            className={`flex items-center ${pathname === linkPath ? 'bg-neutral-700 text-white' : 'text-neutral-400'} hover:bg-neutral-700 hover:no-underline gap-2 font-light px-3 py-2`}
+            className={`flex items-center ${pathname === linkPath ? 'bg-neutral-700 text-white' : 'text-neutral-600'} hover:bg-neutral-700 hover:text-white hover:no-underline gap-2 font-light px-3 py-2`}
         >
               <div className="flex items-center justify-between w-full gap-2">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 font-semibold">
                     <span className="text-xl">{icon}</span>
                     {link.label}
                 </div>

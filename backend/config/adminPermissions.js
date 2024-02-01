@@ -52,6 +52,12 @@ const adminPermissions = {
         "create": true,
         "delete": true,
         "update": true
+    },
+    "tickets":{
+        "view": true,
+        "create": true,
+        "delete": true,
+        "update": true
     }
 };
 

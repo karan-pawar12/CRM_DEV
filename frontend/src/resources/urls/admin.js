@@ -81,3 +81,15 @@ export const GET_ALLPROJECTTASKWITHOUTSKIP = BASE+"getAllProjectTaskWithoutSkip"
 export const GET_PROJECTTASK_DASHBOARD = BASE+ "getProjecttaskdashboard";
 
 export const CREATE_MESSAGE = BASE+ "createMessage";
+
+export const CREATE_TICKET = BASE+ "createTicket";
+
+export const DELETE_TICKET = BASE+"deleteTicket";
+
+export const GETALL_TICKET = BASE+ "getAllTicket";
+
+export const GET_TICKET = BASE+ "getTicket";
+
+export const UPDATE_TICKET = BASE+ "updateTicket";
+
+export const EXPORT_CSV = BASE+ "getCsv";

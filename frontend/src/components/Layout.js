@@ -8,6 +8,7 @@ import Notification from './Notifications/Notification'
 import Role from './Roles/Role'
 import Task from './Tasks/Task'
 import Project from './Projects/Project'
+import Ticket from './Tickets/Ticket'
 import AuthContext from '../AuthContext'
 import AdminContext from '../AdminContext'
 import ConfirmationModal from './ConfirmationModal'
@@ -23,7 +24,8 @@ const moduleMap = {
 	roles: <Role />,
 	notification: <Notification />,
 	tasks: <Task />,
-	projects: <Project />
+	projects: <Project />,
+	tickets: <Ticket />
 
 }
 

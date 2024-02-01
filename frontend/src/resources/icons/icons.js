@@ -9,7 +9,8 @@ import {
 	HiOutlineCog,
 	HiBell,
 	HiClipboardList ,
-	HiChartSquareBar 
+	HiChartSquareBar,
+	HiCollection 
 } from 'react-icons/hi'
 
 
@@ -62,6 +63,12 @@ export const DASHBOARD_SIDEBAR_LINKS = [
 		label: 'Projects',
 		path: '/projects',
 		icon: <HiChartSquareBar />
+	},
+	{
+		key: 'tickets',
+		label: 'Tickets',
+		path: '/tickets',
+		icon: <HiCollection />
 	}
 ]
 

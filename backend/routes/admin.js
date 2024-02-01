@@ -122,6 +122,17 @@ router.post('/createNewLead',verifyAccessToken,require('../controllers/admin/cre
 
 router.post('/createMessage',verifyAccessToken,require('../controllers/admin/createMessage'));
 
+router.post('/createTicket',verifyAccessToken,require('../controllers/admin/createTicket'));
+
+router.get('/getAllTicket',verifyAccessToken,require('../controllers/admin/getAllTicket'));
+
+router.post('/deleteTicket',verifyAccessToken,require('../controllers/admin/deleteTicket'));
+
+router.get('/getTicket',verifyAccessToken,require('../controllers/admin/getTicket'));
+
+router.post('/updateTicket',verifyAccessToken,require('../controllers/admin/updateTicket'));
+
+router.get('/getCsv',verifyAccessToken,require('../controllers/admin/exportCsv'));
 
 module.exports = router;
 
