@@ -10,16 +10,24 @@ function Ticket() {
   const [tickets, setTickets] = useState([]);
   const [count, settotalCount] = useState(1)
   const [userNames, setUserNames] = useState([])
+  const [filter, setFilter] = useState({
+    searchQuery: undefined,
+    type: undefined,
+    priority:undefined,
+    status: undefined,
+
+  });
   const skip = useRef(0);
   const limit = useRef(10);
-  console.log(userNames)
+
 
   useEffect(() => {
     getAllTicket();
-  }, [])
+  }, [filter])
+
 
   function getAllTicket() {
-    getAllTicket_api({ skip: skip.current, limit: limit.current }, (error, res) => {
+    getAllTicket_api({ skip: skip.current, limit: limit.current, searchQuery: filter.searchQuery, type: filter.type, priority: filter.priority, status: filter.status }, (error, res) => {
       if (error) {
         console.log("Error:", error);
       }
@@ -56,7 +64,7 @@ function Ticket() {
 
   return <>
     <div hidden={query.get("id") === "" || !query.get("id") ? false : true}>
-      <TicketTable onPageChange={onPageChange} tickets={tickets} setTickets={setTickets} count={count} settotalCount={settotalCount} onUpdateSuccess={onUpdateSuccess} userNames={userNames} setUserNames={setUserNames}/>
+      <TicketTable onPageChange={onPageChange} tickets={tickets} setTickets={setTickets} count={count} settotalCount={settotalCount} onUpdateSuccess={onUpdateSuccess} userNames={userNames} setUserNames={setUserNames} filter={filter} setFilter={setFilter} />
     </div>
 
     {(query.get("id") === "new") ? <CreateTicket onCreateSuccess={onCreateSuccess} /> : (query.get("id") !== null && query.get("id") !== "") && <TicketDeails onUpdateSuccess={onUpdateSuccess} />}

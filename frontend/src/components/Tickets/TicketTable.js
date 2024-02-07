@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, useEffect, useRef } from "react";
+import React, { useCallback, useContext } from "react";
 import { EditIcon, DeleteIcon, EyeIcon } from "../../resources/icons/icons";
 import { Select, Tooltip, SelectItem } from '@nextui-org/react';
 import { Button, Input } from '@nextui-org/react';
@@ -6,18 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from "../../AuthContext";
 import AdminContext from "../../AdminContext";
 import DynamicTable from "../DynamicTables/Table";
-import getAllTicket_api from "../../api_strings/admin/getAllTicket_api";
 import deleteTicket_api from "../../api_strings/admin/deleteTicket_api"
 import updateTicket_api from "../../api_strings/admin/updateTicket_api";
 import exportCsv_api from "../../api_strings/admin/exportCsv_api";
+import FilterTicket from './FilterTicket'
 
 
-export default function TicketTable({ tickets, setTickets, onPageChange, count, settotalCount, onUpdateSuccess, userNames }) {
-    const [searchKey, setSearchKey] = useState("");
+export default function TicketTable({ tickets, setTickets, onPageChange, count, settotalCount, onUpdateSuccess, userNames,filter, setFilter }) {
+    
     const authContext = useContext(AuthContext);
-    const admincontext = useContext(AdminContext)
-    const skip = useRef(0);
-    const limit = useRef(10);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
     const navigate = useNavigate();
 
@@ -77,16 +74,10 @@ export default function TicketTable({ tickets, setTickets, onPageChange, count, 
 
     const handleSearchQuery = (e) => {
         const currValue = e.target.value;
-        setSearchKey(currValue);
-        getAllTicket_api({ skip: skip.current, limit: limit.current, searchQuery: currValue }, (error, res) => {
-            if (error) {
-                console.log("Error:", error);
-            } else {
-
-                setTickets(res.data.projects);
-                settotalCount(res.data.totalCount);
-
-            }
+        setFilter((old) => {
+            let temp = JSON.parse(JSON.stringify(old));
+            temp.searchQuery = currValue;
+            return temp;
         });
     }
 
@@ -202,31 +193,34 @@ export default function TicketTable({ tickets, setTickets, onPageChange, count, 
 
 
     return (
-        <>
-            <div className="mt-4 mb-6">
-                {authContext.auth.permissions["tickets"]?.create && <div className='flex justify-between'>
-                    <div>
-                        <Input placeholder='Search Ticket' className='w-auto'
-                            value={searchKey}
-                            onChange={handleSearchQuery}
-                        />
-                    </div>
-                    <div>
+        <div className='flex'>
+            <div className="mt-4 w-screen mr-10 flex flex-col border-red-500">
+                {authContext.auth.permissions["tickets"]?.create &&
+                    <div className='flex justify-between mb-6'>
+                        <div>
+                            <Input placeholder='Search Ticket' className='w-auto'
+                                value={filter.searchQuery}
+                                onChange={handleSearchQuery}
+                            />
+                        </div>
+                        <div>
 
-                        <Button color='primary' className='mr-4' onClick={handleCreateTicketClick}>
-                            Create Ticket
-                        </Button>
+                            <Button color='primary' className='mr-4' onClick={handleCreateTicketClick}>
+                                Create Ticket
+                            </Button>
 
 
-                        <Button color='primary' onClick={handleExport}>
-                            Export to CSV
-                        </Button>
-                    </div>
-                </div>}
+                            <Button color='primary' onClick={handleExport}>
+                                Export to CSV
+                            </Button>
+                        </div>
+                    </div>}
+                <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={tickets} columns={columns} count={count} />
             </div>
 
-            <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={tickets} columns={columns} count={count} />
-
-        </>
+             <div style={{ marginLeft: 'auto' }}>
+                <FilterTicket setFilter={setFilter}/>
+            </div> 
+        </div>
     );
 }

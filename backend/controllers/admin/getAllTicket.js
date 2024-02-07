@@ -1,41 +1,68 @@
-const { getTicketModel,getUserModel } = require('../../db/tenantDb')
+const { getTicketModel, getUserModel } = require('../../db/tenantDb')
 const mongoose = require('mongoose')
 module.exports = async function (req, res, next) {
     try {
         const { tenantId } = req.payload;
         const skip = parseInt(req.query.skip, 10) || 0;
         const limit = parseInt(req.query.limit, 10) || 10;
-        let searchQuery = req.query.searchQuery || '';
+        
+        
+        let {
+            searchQuery = undefined,
+            priority = undefined,
+            status = undefined,
+            type = undefined
+        } = req.query;
 
-        if (searchQuery === "undefined" || searchQuery === undefined) {
-            searchQuery = ''
+        console.log(req.query)
+
+
+
+        let matchQueryStages = [
+            {softDelete: false}
+        ];
+
+        
+
+        if (priority !== undefined) {
+            matchQueryStages.push({ priority })
+        }
+
+        if (status !== undefined) {
+            matchQueryStages.push({ status })
+        }
+
+        if (type !== undefined) {
+            matchQueryStages.push({ type })
+        }
+
+        if (searchQuery !== undefined) {
+            matchQueryStages.push({
+                $or: [
+                    { subject: { $regex: searchQuery, $options: 'i' } },
+                    { product: { $regex: searchQuery, $options: 'i' } },
+                    { description: { $regex: searchQuery, $options: 'i' } }
+                ]
+            })
         }
 
         const Ticket = await getTicketModel(tenantId);
 
-        const tickets = await Ticket.aggregate([
-            {
-                $match: {
-                    $and: [
-                        {
-                            softDelete: false
-                        },
-                        {
-                            $or: [
-                                { subject: { $regex: searchQuery, $options: 'i' } },
-                                { type: { $regex: searchQuery, $options: 'i' } },
-                                { status: { $regex: searchQuery, $options: 'i' } },
-                                { priority: { $regex: searchQuery, $options: 'i' } },
-                                { product: { $regex: searchQuery, $options: 'i' } },
-                                { description: { $regex: searchQuery, $options: 'i' } }
-                            ]
-                        }
-                    ]
-                }
-            },
-            { $skip: skip },
-            { $limit: limit }
-        ])
+        let tickets = null;
+
+        try {
+            tickets = await Ticket.aggregate([
+                {
+                    $match: {
+                        $and: matchQueryStages
+                    }
+                },
+                { $skip: skip },
+                { $limit: limit }
+            ])
+        } catch (error) {
+            console.log(error,'tickets error')
+        }
 
         const totalCount = await Ticket.countDocuments({ softDelete: false });
 
