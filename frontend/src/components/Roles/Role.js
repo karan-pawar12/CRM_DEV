@@ -12,14 +12,17 @@ function Role() {
   const query = useQuery();
   const skip = useRef(0);
   const limit = useRef(10);
+  const [filter, setFilter] = useState({
+    searchQuery: undefined,
+  });
 
 
   useEffect(() => {
     getAllRole();
-  }, [])
+  }, [filter])
 
   function getAllRole() {
-    getAllRole_api({skip:skip.current,limit:limit.current},(error, res) => {
+    getAllRole_api({skip:skip.current,limit:limit.current,searchQuery: filter.searchQuery},(error, res) => {
       if (error) {
         console.log("Error:", error);
       }
@@ -56,7 +59,7 @@ function Role() {
 
   return <>
     <div hidden={query.get("id") === "" || !query.get("id") ? false : true}>
-      <RoleTable roles={roles} setRoles={setRoles} onPageChange={onPageChange} count={count} settotalCount={settotalCount}/>
+      <RoleTable roles={roles} setRoles={setRoles} onPageChange={onPageChange} count={count} settotalCount={settotalCount} filter={filter} setFilter={setFilter}/>
     </div>
 
     {(query.get("id") === "new") ? <CreateRole  onCreateSuccess={onCreateSuccess}/> : (query.get("id") !== null && query.get("id") !== "") && <RoleDetails onUpdateSuccess={onUpdateSuccess}/>}

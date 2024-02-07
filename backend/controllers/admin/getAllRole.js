@@ -4,32 +4,36 @@ module.exports = async function (req, res, next) {
         const { tenantId } = req.payload;
         const skip = parseInt(req.query.skip, 10) || 0;
         const limit = parseInt(req.query.limit, 10) || 10;
-        let searchQuery = req.query.searchQuery || '';
 
-        if (searchQuery === "undefined" || searchQuery === undefined) {
-            searchQuery = ''
-        }
+        let {
+            searchQuery = undefined,
+        } = req.query;
 
         const Role = await getRoleModel(tenantId);
 
+        let matchQueryStages = [
+            { softDelete: false }
+        ];
+
+        if (searchQuery !== undefined) {
+            matchQueryStages.push({
+                $or: [
+                    { name: { $regex: searchQuery, $options: 'i' } },
+                    { description: { $regex: searchQuery, $options: 'i' } }
+                ]
+            })
+        }
+
         const roles = await Role.aggregate([
             {
+
                 $match: {
-                    $and: [
-                        {
-                            softDelete:false
-                        },
-                        {
-                            $or: [
-                                { name: { $regex: searchQuery,$options: 'i' } },
-                                { description: {$regex: searchQuery,$options: 'i'} }
-                            ]
-                        }
-                    ]
+                    $and: matchQueryStages
                 }
+
             },
-            {$skip:skip},
-            {$limit:limit}
+            { $skip: skip },
+            { $limit: limit }
         ])
 
         const totalCount = await Role.countDocuments({ softDelete: false });
