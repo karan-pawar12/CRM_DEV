@@ -11,12 +11,15 @@ export default function ProjectTask({id}) {
     const [open,setOpen] = useState(false);
     const [projectTaskId,setprojectTaskId] = useState('');
     const [count,settotalCount] = useState(0);
+    const [filter, setFilter] = useState({
+      searchQuery: undefined,
+    });
     const skip = useRef(0);
     const limit = useRef(10);
 
     useEffect(() => {
       getProjectTask();
-    }, [])
+    }, [filter])
     
       function onPageChange(pageNumber){
         skip.current = (pageNumber-1) * limit.current;
@@ -24,7 +27,7 @@ export default function ProjectTask({id}) {
       }
 
       function getProjectTask() {
-        getAllProjectTask_api(id,{skip:skip.current,limit:limit.current},(error, res) => {
+        getAllProjectTask_api(id,{skip:skip.current,limit:limit.current,searchQuery: filter.searchQuery},(error, res) => {
           if (error) {
             console.log("Error:", error);
           }
@@ -67,7 +70,7 @@ export default function ProjectTask({id}) {
     return (
         <>
             <div hidden={activeTab === 'newTask'} >
-                <ProjectTaskTable  projectTasks={projectTasks} setProjectTasks={setProjectTasks} onPageChange={onPageChange} count={count} settotalCount={settotalCount} setActiveTab={setActiveTab} onOpenModal={onOpenModal} setprojectTaskId={setprojectTaskId}/>
+                <ProjectTaskTable  projectTasks={projectTasks} setProjectTasks={setProjectTasks} onPageChange={onPageChange} count={count} settotalCount={settotalCount} setActiveTab={setActiveTab} onOpenModal={onOpenModal} setprojectTaskId={setprojectTaskId} filter={filter} setFilter={setFilter}/>
             </div>
 
             {(activeTab=== "newTask") ? <CreateProjectTask open={open} onCloseModal={onCloseModal} onCreateSuccess={onCreateSuccess}/> : (activeTab === 'taskDetails') && <ProjectTaskDetails onUpdateSuccess={onUpdateSuccess} projectTaskId={projectTaskId} open={open} onCloseModal={onCloseModal}/> }

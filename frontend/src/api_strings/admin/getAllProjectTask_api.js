@@ -3,8 +3,13 @@ import axios from '../../Interceptor'
 
 async function getAllProjectTask_api(id,{skip,limit,searchQuery},callback) {
     try {
+        let temp = '';
 
-        const res = await axios.get(`${GETALL_PROJECTTASK}?id=${id}&skip=${skip}&limit=${limit}&searchQuery=${searchQuery}`);
+        if(searchQuery !== undefined){
+            temp += '&searchQuery=' + searchQuery 
+        }
+
+        const res = await axios.get(`${GETALL_PROJECTTASK}?id=${id}&skip=${skip}&limit=${limit}${temp}`);
 
         if(res){
             callback(null,res);

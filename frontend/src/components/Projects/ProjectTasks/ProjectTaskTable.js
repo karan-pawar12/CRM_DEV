@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, useEffect,useRef } from "react";
+import React, { useCallback, useContext, useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { EditIcon, DeleteIcon, EyeIcon } from "../../../resources/icons/icons";
 import { Button, Input } from '@nextui-org/react';
@@ -10,8 +10,7 @@ import getAllProjectTask_api from "../../../api_strings/admin/getAllProjectTask_
 import deleteProjectTask_api from "../../../api_strings/admin/deleteProjectTask_api";
 import DynamicTable from "../../DynamicTables/Table";
 
-export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageChange,count,settotalCount,setActiveTab,onOpenModal,setprojectTaskId}) {
-    const [searchKey, setSearchKey] = useState("");
+export default function ProjectTaskTable({ projectTasks, setProjectTasks, onPageChange, count, settotalCount, setActiveTab, onOpenModal, setprojectTaskId, filter, setFilter }) {
     const authContext = useContext(AuthContext);
     const skip = useRef(0);
     const limit = useRef(10);
@@ -21,7 +20,7 @@ export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageCha
 
 
 
-    function handleDeleteProjectTaskClick(projectTaskId){
+    function handleDeleteProjectTaskClick(projectTaskId) {
         openConfirmationModal('Are you sure you want to delete this task ?', () => {
             deleteProjectTask_api(projectTaskId, (error, res) => {
                 if (error) {
@@ -46,9 +45,9 @@ export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageCha
         onOpenModal();
         setActiveTab('taskDetails');
     }
-    const labels = ["Open","Inprogress","Completed"];
+    const labels = ["Open", "Inprogress", "Completed"];
 
-    
+
     const renderCell = useCallback((projectTask, columnKey) => {
         switch (columnKey) {
             case "taskName": // Concatenate first name and last name
@@ -88,38 +87,32 @@ export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageCha
         { name: "Owner", key: "createdBy" },
         { name: "Duration", key: "duration" },
         { name: "Priority", key: "priority" },
-        {name: "Project Name", key:"projectName"},
-        {name:"Status", key:"status"},
+        { name: "Project Name", key: "projectName" },
+        { name: "Status", key: "status" },
         { name: "ACTIONS", key: "actions" },
     ];
 
     const handleSearchQuery = (e) => {
         const currValue = e.target.value;
-        setSearchKey(currValue);
-        getAllProjectTask_api({skip:skip.current,limit:limit.current,searchQuery:currValue},(error, res) => {
-            if (error) {
-              console.log("Error:", error);
-            } else {
-      
-              setProjectTasks(res.data.projectTasks);
-              settotalCount(res.data.totalCount);
-      
-            }
-          });
+        setFilter((old) => {
+            let temp = JSON.parse(JSON.stringify(old));
+            temp.searchQuery = currValue;
+            return temp;
+        });
     }
 
 
-// remember to add permission
+    // remember to add permission
 
-    
+
     return (
         <>
             <div className="mt-8 mb-6">
-                 <div className='flex justify-between'>  
+                <div className='flex justify-between'>
                     <div>
-                        <Input placeholder='Search Project Tasks' className='w-auto' 
-                        value={searchKey}
-                        onChange={handleSearchQuery}
+                        <Input placeholder='Search Project Tasks' className='w-auto'
+                            value={filter.searchQuery}
+                            onChange={handleSearchQuery}
                         />
                     </div>
                     <div>
@@ -135,7 +128,7 @@ export default function ProjectTaskTable({projectTasks,setProjectTasks,onPageCha
                     </div>
                 </div>
             </div>
-            <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={projectTasks} columns={columns} count={count}/>
+            <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={projectTasks} columns={columns} count={count} />
         </>
     );
 }

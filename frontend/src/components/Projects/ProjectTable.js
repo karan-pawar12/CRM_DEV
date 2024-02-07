@@ -10,7 +10,7 @@ import AdminContext from "../../AdminContext";
 import DynamicTable from "../DynamicTables/Table";
 
 
-export default function ProjectTable({ projects, setProjects, onPageChange, count, settotalCount }) {
+export default function ProjectTable({ projects, setProjects, onPageChange, count, settotalCount, filter, setFilter }) {
     const [searchKey, setSearchKey] = useState("");
     const authContext = useContext(AuthContext);
     const skip = useRef(0);
@@ -31,16 +31,10 @@ export default function ProjectTable({ projects, setProjects, onPageChange, coun
 
     const handleSearchQuery = (e) => {
         const currValue = e.target.value;
-        setSearchKey(currValue);
-        getAllProject_api({ skip: skip.current, limit: limit.current, searchQuery: currValue }, (error, res) => {
-            if (error) {
-                console.log("Error:", error);
-            } else {
-
-                setProjects(res.data.projects);
-                settotalCount(res.data.totalCount);
-
-            }
+        setFilter((old) => {
+            let temp = JSON.parse(JSON.stringify(old));
+            temp.searchQuery = currValue;
+            return temp;
         });
     }
 
@@ -113,7 +107,7 @@ export default function ProjectTable({ projects, setProjects, onPageChange, coun
                 {authContext.auth.permissions["projects"]?.create && <div className='flex justify-between'>
                     <div>
                         <Input placeholder='Search Project' className='w-auto'
-                            value={searchKey}
+                            value={filter.searchQuery}
                             onChange={handleSearchQuery}
                         />
                     </div>
@@ -131,8 +125,8 @@ export default function ProjectTable({ projects, setProjects, onPageChange, coun
                 </div>}
             </div>
 
-            <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={projects} columns={columns} count={count}/>
-            
+            <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={projects} columns={columns} count={count} />
+
         </>
     );
 }

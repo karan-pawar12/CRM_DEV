@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, useEffect,useRef } from "react";
+import React, { useCallback, useContext, useState, useEffect, useRef } from "react";
 import { EditIcon, DeleteIcon, EyeIcon } from "../../resources/icons/icons";
 import { Button, Input } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Pagination } from "@nextui-org/react";
@@ -10,7 +10,7 @@ import AdminContext from "../../AdminContext";
 import DynamicTable from "../DynamicTables/Table";
 
 
-export default function LeadTable({ leads, setLeads, onPageChange,count,settotalCount }) {
+export default function LeadTable({ leads, setLeads, onPageChange, count, settotalCount, filter, setFilter }) {
     const [searchKey, setSearchKey] = useState("");
     const authContext = useContext(AuthContext);
     const { openConfirmationModal, closeConfirmationModal } = useContext(AdminContext);
@@ -26,17 +26,11 @@ export default function LeadTable({ leads, setLeads, onPageChange,count,settotal
 
     const handleSearchQuery = (e) => {
         const currValue = e.target.value;
-        setSearchKey(currValue);
-        getAllLead_api({skip:skip.current,limit:limit.current,searchQuery:currValue},(error, res) => {
-            if (error) {
-              console.log("Error:", error);
-            } else {
-      
-              setLeads(res.data.leads);
-              settotalCount(res.data.totalCount);
-      
-            }
-          });
+        setFilter((old) => {
+            let temp = JSON.parse(JSON.stringify(old));
+            temp.searchQuery = currValue;
+            return temp;
+        });
     }
 
     function handleDeleteLeadClick(leadId) {
@@ -48,9 +42,9 @@ export default function LeadTable({ leads, setLeads, onPageChange,count,settotal
                     setLeads((leads) => leads.filter((lead) => lead._id !== leadId));
                 }
             })
-          });
+        });
 
-      
+
     }
 
 
@@ -105,9 +99,9 @@ export default function LeadTable({ leads, setLeads, onPageChange,count,settotal
                     authContext.auth.permissions["leads"].create &&
                     <div className='flex justify-between'>
                         <div>
-                            <Input placeholder='Search Leads' className='w-auto' 
-                            value={searchKey}
-                            onChange={handleSearchQuery}
+                            <Input placeholder='Search Leads' className='w-auto'
+                                value={filter.searchQuery}
+                                onChange={handleSearchQuery}
                             />
                         </div>
                         <div>
@@ -125,7 +119,7 @@ export default function LeadTable({ leads, setLeads, onPageChange,count,settotal
 
                 }
             </div>
-            <DynamicTable  onPageChange={onPageChange} renderCell={renderCell} data={leads} columns={columns} count={count}/>
+            <DynamicTable onPageChange={onPageChange} renderCell={renderCell} data={leads} columns={columns} count={count} />
         </>
     );
 }

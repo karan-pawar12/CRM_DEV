@@ -4,7 +4,7 @@ import axios from '../../Interceptor'
 async function getAllTicket_api({skip,limit,searchQuery,type,priority,status},callback) {
     try {
         let temp = '';
-        console.log(searchQuery)
+
         if(searchQuery !== undefined){
             temp += '&searchQuery=' + searchQuery 
         }

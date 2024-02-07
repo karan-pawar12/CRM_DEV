@@ -1,15 +1,38 @@
-const {getUserModel} = require('../../db/tenantDb');
+const { getUserModel } = require('../../db/tenantDb');
 const mongoose = require('mongoose');
 
 module.exports = async function (req, res, next) {
     try {
-        const {tenantId} = req.payload;
+        const { tenantId } = req.payload;
         const skip = parseInt(req.query.skip, 10) || 0;
         const limit = parseInt(req.query.limit, 10) || 10;
-        let searchQuery = req.query.searchQuery || '';
 
-        if(searchQuery === "undefined" || searchQuery === undefined){
-            searchQuery = ''
+        let {
+            searchQuery = undefined
+        } = req.query
+
+        let matchQueryStages = [{
+            $and: [
+                { softDelete: false },
+                {
+                    $expr: {
+                        $ne: [
+                            '$_id', new mongoose.Types.ObjectId(req.payload._id)
+                        ]
+                    }
+                }
+            ]
+        }];
+
+        if (searchQuery !== undefined) {
+            matchQueryStages.push({
+                $or: [
+                    { firstName: { $regex: searchQuery, $options: 'i' } },
+                    { lastName: { $regex: searchQuery, $options: 'i' } },
+                    { phone: { $regex: searchQuery, $options: 'i' } },
+                    { email: { $regex: searchQuery, $options: 'i' } },
+                ]
+            })
         }
 
         const User = await getUserModel(tenantId);
@@ -17,36 +40,16 @@ module.exports = async function (req, res, next) {
         const users = await User.aggregate([
             {
                 $match: {
-                    $and:[
-                        {
-                            softDelete: false, 
-                        },
-                        {
-                            $expr: {
-                                $ne: [
-                                    '$_id', new mongoose.Types.ObjectId(req.payload._id)
-                                ]
-                            }
-                        },
-                        {
-                            $or: [
-                                { firstName: { $regex: searchQuery,$options: 'i' } }, 
-                                { lastName: { $regex: searchQuery, $options: 'i' } },  
-                                { phone: { $regex: searchQuery, $options: 'i' } },
-                                { email: { $regex:searchQuery, $options: 'i'}},    
-                            ]
-                        }
+                    $and: matchQueryStages
 
-                    ]
-                    
-                   
+
                 }
             },
             {
-                $skip:skip
+                $skip: skip
             },
             {
-                $limit:limit
+                $limit: limit
             },
             {
                 $lookup: {
@@ -73,12 +76,12 @@ module.exports = async function (req, res, next) {
                     role: '$userRole.name'
                 }
             },
-            
+
         ]);
 
         const totalCount = await User.countDocuments({ softDelete: false });
 
-        res.json({users,totalCount});
+        res.json({ users, totalCount });
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({ error: 'Internal Server Error' });

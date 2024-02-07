@@ -1,46 +1,50 @@
-const {getprojectTaskModel} = require('../../db/tenantDb');
+const { getprojectTaskModel } = require('../../db/tenantDb');
 const mongoose = require('mongoose');
 
 module.exports = async function (req, res, next) {
     try {
-        const {tenantId} = req.payload;
-        const {id} = req.query;
+        const { tenantId } = req.payload;
+        const { id } = req.query;
         const projectTask = await getprojectTaskModel(tenantId);
         const skip = parseInt(req.query.skip, 10) || 0;
         const limit = parseInt(req.query.limit, 10) || 10;
-        let searchQuery = req.query.searchQuery || '';
 
+        let {
+            searchQuery = undefined
+        } = req.query
 
-        if(searchQuery === "undefined" || searchQuery === undefined){
-            searchQuery = ''
+        let matchQueryStages = [{
+            $and: [
+                {
+                    softDelete: false,
+                    projectId: new mongoose.Types.ObjectId(id)
+                },
+
+            ]
+
+        }];
+
+        if (searchQuery !== undefined) {
+            matchQueryStages.push({
+                $or: [
+                    { projectId: { $regex: searchQuery, $options: 'i' } },
+                    { priority: { $regex: searchQuery, $options: 'i' } },
+                    { taskName: { $regex: searchQuery, $options: 'i' } }
+                ]
+            })
         }
 
         const projectTasks = await projectTask.aggregate([
             {
                 $match: {
-                    $and:[
-                        {
-                            softDelete: false, 
-                            projectId: new mongoose.Types.ObjectId(id)
-                        },
-                        {
-                            $or: [
-                                { projectId: { $regex: searchQuery,$options: 'i' } }, 
-                                { priority: { $regex:searchQuery, $options: 'i'}},  
-                                { taskName: { $regex:searchQuery, $options: 'i'}}  
-                            ]
-                        }
-
-                    ]
-                    
-                   
+                    $and: matchQueryStages
                 }
             },
             {
-                $skip:skip
+                $skip: skip
             },
             {
-                $limit:limit
+                $limit: limit
             },
             {
                 $lookup: {
@@ -64,18 +68,18 @@ module.exports = async function (req, res, next) {
             {
                 $unwind: {
                     path: '$Owner',
-                    
+
                 }
             },
             {
                 $project: {
                     _id: 1,
                     description: 1,
-                    taskName:1,
+                    taskName: 1,
                     status: 1,
                     assignedTo: 1,
                     projectName: '$projectData.projectName',
-                    priority:1,
+                    priority: 1,
                     createdBy: {
                         firstName: '$Owner.firstName',
                     },
@@ -94,7 +98,7 @@ module.exports = async function (req, res, next) {
 
         const totalCount = await projectTask.countDocuments({ softDelete: false });
 
-        res.json({projectTasks,totalCount});
+        res.json({ projectTasks, totalCount });
 
     } catch (error) {
         console.log(error.message);

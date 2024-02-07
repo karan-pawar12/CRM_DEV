@@ -3,8 +3,14 @@ import axios from '../../Interceptor'
 
 async function getAllLead_api({skip,limit,searchQuery},callback) {
     try {
+        let temp = '';
 
-        const res = await axios.get(`${GETALL_LEAD}?skip=${skip}&limit=${limit}&searchQuery=${searchQuery}`);
+        if(searchQuery !== undefined){
+            temp += '&searchQuery=' + searchQuery 
+        }
+
+
+        const res = await axios.get(`${GETALL_LEAD}?skip=${skip}&limit=${limit}${temp}`);
 
         if(res){
             callback(null,res);

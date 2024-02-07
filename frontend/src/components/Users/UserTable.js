@@ -10,7 +10,7 @@ import AdminContext from "../../AdminContext";
 import DynamicTable from "../DynamicTables/Table";
 
 
-export default function UserTable({ users, setUsers, onPageChange, count, settotalCount }) {
+export default function UserTable({ users, setUsers, onPageChange, count, settotalCount, filter, setFilter }) {
     const [searchKey, setSearchKey] = useState("");
     const authContext = useContext(AuthContext);
     const skip = useRef(0);
@@ -30,17 +30,11 @@ export default function UserTable({ users, setUsers, onPageChange, count, settot
 
     const handleSearchQuery = (e) => {
         const currValue = e.target.value;
-        setSearchKey(currValue);
-        getAllUser_api({skip:skip.current,limit:limit.current,searchQuery:currValue},(error, res) => {
-            if (error) {
-              console.log("Error:", error);
-            } else {
-      
-              setUsers(res.data.users);
-              settotalCount(res.data.totalCount);
-      
-            }
-          });
+        setFilter((old) => {
+            let temp = JSON.parse(JSON.stringify(old));
+            temp.searchQuery = currValue;
+            return temp;
+        });
     }
 
     function handleDeleteUserClick(userId) {
@@ -106,9 +100,9 @@ export default function UserTable({ users, setUsers, onPageChange, count, settot
             <div className="mt-4 mb-6">
                 {authContext.auth.permissions["users"]?.create && <div className='flex justify-between'>
                     <div>
-                        <Input placeholder='Search users' className='w-auto' 
-                        value={searchKey}
-                        onChange={handleSearchQuery}
+                        <Input placeholder='Search users' className='w-auto'
+                            value={filter.searchQuery}
+                            onChange={handleSearchQuery}
                         />
                     </div>
                     <div>

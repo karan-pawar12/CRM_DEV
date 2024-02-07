@@ -9,17 +9,20 @@ import ProjectTable from "./ProjectTable";
 
 function Project() {
   const [projects, setProjects] = useState([]);
-  const [count,settotalCount] = useState(1)
+  const [count,settotalCount] = useState(1);
+  const [filter, setFilter] = useState({
+    searchQuery: undefined,
+  });
   const {id} = useParams();
   const skip = useRef(0);
   const limit = useRef(10);
 
   useEffect(() => {
     getAllProject();
-  }, [])
+  }, [filter])
 
   async function getAllProject() {
-    await getAllProject_api({skip:skip.current,limit:limit.current},(error, res) => {
+    await getAllProject_api({skip:skip.current,limit:limit.current,searchQuery: filter.searchQuery},(error, res) => {
       if (error) {
         console.log("Error:", error);
       }
@@ -57,7 +60,7 @@ function Project() {
 
   return <div className="w-full overflow-hidden">
     <div hidden={id === "" || !id ? false : true }>
-      <ProjectTable projects={projects} setProjects={setProjects} onPageChange={onPageChange} count={count} settotalCount={settotalCount}/>
+      <ProjectTable projects={projects} setProjects={setProjects} onPageChange={onPageChange} count={count} settotalCount={settotalCount} filter={filter} setFilter={setFilter}/>
     </div>
 
     {(id === "new") ? <CreateProject  onCreateSuccess={onCreateSuccess}/> : (id !== null && id !== undefined ) && <ProjectDetails onUpdateSuccess={onUpdateSuccess}/>}

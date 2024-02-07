@@ -11,17 +11,20 @@ import getAllUser_api from "../../api_strings/admin/getAllUser_api";
 function User() {
   const [users, setUsers] = useState([]);
   const [count,settotalCount] = useState(1);
+  const [filter, setFilter] = useState({
+    searchQuery: undefined,
+  });
   const skip = useRef(0);
   const limit = useRef(10);
   const query = useQuery();
   
   useEffect(() => {
     getAllUser();
-  }, []);
+  }, [filter]);
 
   function getAllUser() {
 
-    getAllUser_api({skip:skip.current,limit:limit.current},(error, res) => {
+    getAllUser_api({skip:skip.current,limit:limit.current, searchQuery: filter.searchQuery},(error, res) => {
       if (error) {
         console.log("Error:", error);
       } else {
@@ -57,7 +60,7 @@ function User() {
 
   return <>
     <div hidden={query.get("id") === "" || !query.get("id") ? false : true}>
-      <UserTable users={users} setUsers={setUsers} onPageChange={onPageChange} count={count} settotalCount={settotalCount}/>
+      <UserTable users={users} setUsers={setUsers} onPageChange={onPageChange} count={count} settotalCount={settotalCount} filter={filter} setFilter={setFilter}/>
     </div>
 
     {(query.get("id") === "new") ? <CreateUser onCreateSuccess={onCreateSuccess}/> : (query.get("id") !== null && query.get("id") !== "") && <UserDetails onUpdateSuccess={onUpdateSuccess}/>}
