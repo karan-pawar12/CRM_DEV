@@ -15,11 +15,13 @@ function Ticket() {
     type: undefined,
     priority:undefined,
     status: undefined,
+    createdAt: [],
 
   });
   const skip = useRef(0);
   const limit = useRef(10);
 
+  console.log(userNames);
 
   useEffect(() => {
     getAllTicket();
@@ -27,12 +29,12 @@ function Ticket() {
 
 
   function getAllTicket() {
-    getAllTicket_api({ skip: skip.current, limit: limit.current, searchQuery: filter.searchQuery, type: filter.type, priority: filter.priority, status: filter.status }, (error, res) => {
+    getAllTicket_api({ skip: skip.current, limit: limit.current, searchQuery: filter.searchQuery, type: filter.type, priority: filter.priority, status: filter.status, createdAt:filter.createdAt}, (error, res) => {
       if (error) {
         console.log("Error:", error);
       }
       else {
-        setUserNames(res.data.users)
+        setUserNames(res.data.users);
         setTickets(res.data.tickets);
         settotalCount(res.data.totalCount);
       }

@@ -33,7 +33,8 @@ module.exports = async function (req, res, next) {
                     status: 1,
                     priority: 1,
                     product: 1,
-                    assignedTo: 1
+                    assignedTo: 1,
+                    description: 1
                 }
             }
         ]);

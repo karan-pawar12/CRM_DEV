@@ -81,7 +81,7 @@ export default function UpdatableElement({ fieldType, id, onUpdateSuccess, field
 
 
     return (
-        <>
+        <div className='w-[80%]'>
             {
                 fieldType === "Input" ? (
                     <Input
@@ -108,6 +108,9 @@ export default function UpdatableElement({ fieldType, id, onUpdateSuccess, field
                                 />
                             </span>
                         }
+                        classNames={{
+                            label:"font-medium"
+                        }}
                         disabled={!editingState}
                         labelPlacement="outside"
                         isInvalid={error}
@@ -123,6 +126,9 @@ export default function UpdatableElement({ fieldType, id, onUpdateSuccess, field
                             labelPlacement="outside"
                             className="mt-6"
                             onChange={(selectedKeys) => handleSelectChange(fieldName, selectedKeys)}
+                            classNames={{
+                                label:"font-medium"
+                            }}
                         >
                             {options.map((option) => (
                                 <SelectItem key={option.id} value={option.id}>
@@ -133,7 +139,7 @@ export default function UpdatableElement({ fieldType, id, onUpdateSuccess, field
                     )
                 )
             }
-        </>
+        </div>
     );
 }
 

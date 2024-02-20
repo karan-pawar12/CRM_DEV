@@ -112,7 +112,7 @@ export default function TicketTable({ tickets, setTickets, onPageChange, count, 
     }
 
 
-    const renderCell = useCallback((ticket, columnKey) => {
+    const renderCell = (ticket, columnKey) => {
         switch (columnKey) {
             case "subject":
                 return <span>{`${ticket.subject}`}</span>;
@@ -150,7 +150,8 @@ export default function TicketTable({ tickets, setTickets, onPageChange, count, 
             case "assignedTo":
                 return (
                     <Select
-                        defaultSelectedKeys={ticket.assignedTo}
+                        items={userNames}
+                        defaultSelectedKeys={[ticket.assignedTo]}
                         placeholder="Select an user"
                         onSelectionChange={(keys) => handleUpdate({ value: Array.from(keys), fieldName: 'assignedTo', id: ticket._id })}
                     >
@@ -179,7 +180,7 @@ export default function TicketTable({ tickets, setTickets, onPageChange, count, 
             default:
                 return "";
         }
-    }, []);
+    };
 
     const columns = [
         { name: "Subject", key: "subject" }, // Use "fullName" column for full name

@@ -1,35 +1,52 @@
 import { GETALL_TICKET } from "../../resources/urls/admin";
 import axios from '../../Interceptor'
 
-async function getAllTicket_api({skip,limit,searchQuery,type,priority,status},callback) {
+async function getAllTicket_api({ skip, limit, searchQuery, type, priority, status, createdAt }, callback) {
     try {
         let temp = '';
 
-        if(searchQuery !== undefined){
-            temp += '&searchQuery=' + searchQuery 
+        console.log(createdAt)
+
+        if (searchQuery !== undefined) {
+            temp += '&searchQuery=' + searchQuery
         }
 
-        if(type !== undefined){
-            temp += '&type=' + type 
+        if (type !== undefined) {
+            temp += '&type=' + type
         }
 
-        if(status !== undefined){
-            temp += '&status=' + status 
+        if (status !== undefined) {
+            temp += '&status=' + status
         }
 
-        if(priority !== undefined){
-            temp += '&priority=' + priority 
+        if (priority !== undefined) {
+            temp += '&priority=' + priority
         }
+
+        if (createdAt.length !== 0) {
+            if (createdAt !== undefined) {
+                temp += '&createdAt[]=' + createdAt[0];
+            }
+
+            if (createdAt.length == 2) {
+                if (createdAt !== undefined) {
+                    temp += '&createdAt[]=' + createdAt[1];
+                }
+            }
+        }
+
+
+
 
         const res = await axios.get(`${GETALL_TICKET}?skip=${skip}&limit=${limit}${temp}`);
 
-        if(res){
-            callback(null,res);
+        if (res) {
+            callback(null, res);
         }
-       
+
     } catch (error) {
         console.log("Unable to fetch all tasks", error);
-        callback(error,null);
+        callback(error, null);
     }
 }
 

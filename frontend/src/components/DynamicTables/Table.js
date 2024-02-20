@@ -39,7 +39,8 @@ export default function DynamicTable({onPageChange,renderCell,data,columns,count
                             </TableColumn>
                         )}
                     </TableHeader>
-                    <TableBody items={data}>
+                    <TableBody items={data}  emptyContent={"No rows to display"}>
+                   
                         {(item) => (
 
                             <TableRow key={item._id}>
