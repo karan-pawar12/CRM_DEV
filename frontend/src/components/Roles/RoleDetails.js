@@ -63,7 +63,7 @@ function RoleDetails({onUpdateSuccess}) {
             {
 
                 Object.keys(roleDetailsData.permissions[moduleName]).map((permissionType) => (
-                    <div key={permissionType} className="flex justify-between mt-4">
+                    <div key={permissionType} className="flex justify-between mt-3">
                         {permissionType}
                         <Switch
                             defaultSelected={roleDetailsData.permissions[moduleName][permissionType]}
@@ -84,7 +84,7 @@ function RoleDetails({onUpdateSuccess}) {
                 <UpdatableElement  fieldType="Input"  onUpdateSuccess={onUpdateSuccess} id={id} fieldName="name" fieldValue={roleDetailsData["name"]}  label="Role Name" updateFunction={updateRole_api} />
                 <UpdatableElement  fieldType="Input"  onUpdateSuccess={onUpdateSuccess} id={id} fieldName="description" fieldValue={roleDetailsData["description"]}  label="Description" updateFunction={updateRole_api} />
             </div>
-            <div className="mt-16">
+            <div className="mt-16 h-[600px]">
                 {roleDetailsData && <Accordion variant="shadow">{permissionItems}</Accordion>}
 
             </div>

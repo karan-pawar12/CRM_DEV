@@ -7,6 +7,21 @@ import ticketDetails_api from "../../api_strings/admin/ticketDetails_api";
 import AdminContext from "../../AdminContext";
 import { Button } from "@nextui-org/react";
 import MailSender from "./MailSender";
+import { AiOutlineProfile, AiFillForward, AiOutlineCloseCircle, AiOutlineDelete, AiTwotoneInfoCircle } from "react-icons/ai";
+import MessageReply from "./MessageReply";
+import { CiChat1 } from "react-icons/ci";
+import AddNote from "./AddNote";
+import ForwardTicket from "./ForwardTicket";
+
+function BorderButton(props) {
+    return (
+        <Button {...props} variant="bordered" className="bg-white mr-4" color="primary">
+            {props.children}
+        </Button>
+    )
+}
+
+
 const size = "xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1";
 
 const typeOptions = [
@@ -41,7 +56,9 @@ export default function TicketDeails({ onUpdateSuccess }) {
 
     const [ticketDetailsData, setTicketDetailsData] = useState([]);
     const [userNames, setUsernames] = useState([]);
-    const [isModalOpen,setModalOpen] = useState(false);
+    const [isReplyModalOpen, setReplyModalOpen] = useState(false);
+    const [isNoteModalOpen, setNoteModalOpen] = useState(false);
+    const [isForwardModalOpen,setForwardModalOpen] = useState(false);
 
 
     useEffect(() => {
@@ -55,10 +72,17 @@ export default function TicketDeails({ onUpdateSuccess }) {
         })
     }, []);
 
-    const handleModal = () => {
-        setModalOpen(prevState => !prevState);
+    const handleReplyModal = () => {
+        setReplyModalOpen(prevState => !prevState);
     }
 
+    const handleNoteModal = () => {
+        setNoteModalOpen(prevState => !prevState);
+    }
+
+    const handleForward = () => {
+        setForwardModalOpen(prevState => !prevState);
+    }
 
 
 
@@ -68,38 +92,47 @@ export default function TicketDeails({ onUpdateSuccess }) {
             <Backbutton />
 
             <div className="mt-4 flex flex-col h-screen">
-                {/* Header */}
-                <header className="flex border-b-2 p-3">
-                    <Button className="">Reply</Button>
-                    <Button className="ml-3">Add Note</Button>
-                    <Button className="ml-3" onClick={handleModal}>Forward</Button>
-                    <Button className="ml-3">Close</Button>
-                    <Button className="ml-3">Delete</Button>
+                <header className="flex border-b-1 p-3 bg-gray-200">
+                    <BorderButton className="" onClick={handleReplyModal} >Reply</BorderButton>
+                    <BorderButton className="ml-3" onClick={handleNoteModal} startContent={<AiOutlineProfile />}>Add Note</BorderButton>
+                    <BorderButton className="ml-3" onClick={handleForward} startContent={<AiFillForward /> }>Forward</BorderButton>
+                    <BorderButton className="ml-3" startContent={<AiOutlineCloseCircle />}>Close</BorderButton>
+                    <BorderButton className="ml-3" startContent={<AiOutlineDelete />}>Delete</BorderButton>
                 </header>
 
                 {/* Main Content */}
                 <div className="mt-2 flex relative">
                     {/* Left Content */}
-                    <div className="w-[50%] border-3">
-                        <h2 className="text-2xl font-bold">{ticketDetailsData.subject}</h2>
-                        <div className="flex flex-col gap-4">
+                    <div className="w-[50%] border-1 p-2">
+                        {/* <h2 className="text-2xl font-bold ml-10">{ticketDetailsData.subject}</h2> */}
+                        <div className="flex flex-col gap-4 ml-10">
                             <div>
-                                <p>karan pawar reported via email</p>
-                                <p className="font-thin">19 days ago</p>
+                                {ticketDetailsData.content?.map((data, index) => (
+                                    <div key={index} className="flex items-start mt-4"> {/* Use flexbox to align items */}
+                                        <span className="mr-2 mt-1"><CiChat1 /></span> {/* Adjust margin-top for alignment */}
+                                        <div className={data.msgType === 'note' ? 'bg-pink-300 rounded-md p-2'
+                                            : data.msgType === 'reply' ? 'bg-gray-300 rounded-md p-2'
+                                                : 'bg-blue-300 rounded-md p-2'}>
+                                            <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
+
+
                             <div>
                                 <h3>{ticketDetailsData.description}</h3>
                             </div>
                             <div>
-                                <Button className="">Reply</Button>
-                                <Button className="ml-3">Add Note</Button>
-                                <Button className="ml-3">Forward</Button>
+                                <BorderButton className="">Reply</BorderButton>
+                                <BorderButton className="ml-3">Add Note</BorderButton>
+                                <BorderButton className="ml-3">Forward</BorderButton>
                             </div>
                         </div>
                     </div>
 
                     {/* Right Content */}
-                    <div className="border-2 w-[25%]">
+                    <div className="border-1 w-[25%] p-2">
                         <h2 className="text-lg">Open ticket status</h2>
                         <div className="mt-6 flex flex-col items-center p-4">
                             <h2 className="text-lg">Properties</h2>
@@ -113,9 +146,12 @@ export default function TicketDeails({ onUpdateSuccess }) {
                         </div>
                     </div>
 
-                    <div className="border-2 w-[25%]">
-                        <h2>CONTACT DETAILS</h2>
-                        <div className="flex flex-col h-[200px] border-2">
+                    <div className="border-1 w-[25%] hover:border-2 hover:border-black p-2">
+                        <div className="flex items-center">
+                            <span className="mr-4"><AiTwotoneInfoCircle /></span>
+                            <h2>CONTACT DETAILS</h2>
+                        </div>
+                        <div className="flex flex-col h-[200px]">
                             <Link className="text-blue-500 p-3">
                                 karan pawar
                             </Link>
@@ -130,9 +166,10 @@ export default function TicketDeails({ onUpdateSuccess }) {
                         </div>
                     </div>
 
-       
-                        <MailSender isModalOpen={isModalOpen} setModalOpen={setModalOpen}/>
-                  
+
+                    <MessageReply isModalOpen={isReplyModalOpen} setModalOpen={setReplyModalOpen} id={id} setTicketDetailsData={setTicketDetailsData} userNames={userNames} />
+                    <AddNote isModalOpen={isNoteModalOpen} setModalOpen={setNoteModalOpen} id={id} userNames={userNames} setTicketDetailsData={setTicketDetailsData} />
+                    <ForwardTicket isModalOpen={isForwardModalOpen} setModalOpen={setForwardModalOpen} id={id} userNames={userNames} setTicketDetailsData={setTicketDetailsData} ticketDetailsData={ticketDetailsData}/>
                 </div>
             </div>
 

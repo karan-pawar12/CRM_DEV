@@ -1,12 +1,17 @@
-const { getTicketModel } = require('../../db/tenantDb');
+const { getTicketModel, getTicketmsgModel } = require('../../db/tenantDb');
 
 module.exports = async (req, res, next) => {
     try {
         const { _id, tenantId } = req.payload;
-        const { subject, type, status, priority, product, description, assignedTo } = req.body
+        let { subject, type, status, priority, product, description, assignedTo } = req.body
         const Ticket = await getTicketModel(tenantId);
+        const TicketMsg = await getTicketmsgModel(tenantId);
 
         let ticket = null;
+
+        if (assignedTo.length === 0) {
+            assignedTo = null;
+        }
 
         ticket = await new Ticket({
             subject,
@@ -14,8 +19,16 @@ module.exports = async (req, res, next) => {
             status,
             priority,
             product,
-            description,
             assignedTo
+        }).save();
+
+        let ticketmsg = null;
+
+
+        ticketmsg = await new TicketMsg({
+            ticketId: ticket._id,
+            content: description,
+            createdBy: _id
         }).save();
 
         res.status(201).json(ticket);

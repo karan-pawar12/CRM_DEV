@@ -141,7 +141,7 @@ if (authContext.auth.permissions["tickets"].create) {
                         {
                             name: "description",
                             label: "Description",
-                            type: "Input",
+                            type: "RichText",
                             inputType: "text"
                         },
                         {

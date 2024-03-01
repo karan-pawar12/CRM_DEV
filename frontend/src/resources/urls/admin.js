@@ -93,3 +93,9 @@ export const GET_TICKET = BASE+ "getTicket";
 export const UPDATE_TICKET = BASE+ "updateTicket";
 
 export const EXPORT_CSV = BASE+ "getCsv";
+
+export const REPLY_TICKET = BASE+ "replyTicket";
+
+export const ADD_NOTE = BASE+"addNote";
+
+export const Forward_NOTE = BASE+"forwardNote";

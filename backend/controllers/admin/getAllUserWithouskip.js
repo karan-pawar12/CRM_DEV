@@ -20,7 +20,8 @@ module.exports = async function (req, res, next) {
                     id: '$_id', // Rename _id to id
                     name: {
                         $concat: ['$firstName', ' ', '$lastName'] // Concatenate firstName and lastName
-                    }
+                    },
+                    email: 1
                 }
             }
         ]);

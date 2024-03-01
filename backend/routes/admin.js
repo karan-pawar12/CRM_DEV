@@ -134,6 +134,12 @@ router.post('/updateTicket',verifyAccessToken,require('../controllers/admin/upda
 
 router.get('/getCsv',verifyAccessToken,require('../controllers/admin/exportCsv'));
 
+router.post('/replyTicket',verifyAccessToken,require('../controllers/admin/replyTicketMsg'));
+
+router.post('/addNote',verifyAccessToken,require('../controllers/admin/createTicketNote'));
+
+router.post('/forwardNote',verifyAccessToken,require('../controllers/admin/createForwardTicket'));
+
 module.exports = router;
 
 

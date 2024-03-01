@@ -16,14 +16,11 @@ module.exports = async function (req, res, next) {
             },
             {
                 $lookup: {
-                    from: 'users',
-                    localField: 'assignedTo',
-                    foreignField: '_id',
-                    as: 'userData'
+                    from: 'ticketmsgs',
+                    localField: '_id',
+                    foreignField: 'ticketId',
+                    as: 'TicketMsgData'
                 }
-            },
-            {
-                $unwind: '$userData'
             },
             {
                 $project: {
@@ -34,7 +31,7 @@ module.exports = async function (req, res, next) {
                     priority: 1,
                     product: 1,
                     assignedTo: 1,
-                    description: 1
+                    content: '$TicketMsgData'
                 }
             }
         ]);
@@ -55,7 +52,8 @@ module.exports = async function (req, res, next) {
                     id: '$_id', // Rename _id to id
                     name: {
                         $concat: ['$firstName', ' ', '$lastName'] // Concatenate firstName and lastName
-                    }
+                    },
+                    email: 1
                 }
             }
         ]);

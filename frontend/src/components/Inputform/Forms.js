@@ -1,5 +1,7 @@
 import { Input, Select, SelectItem, Button } from "@nextui-org/react";
 import { useRef, useState, useEffect } from "react";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 export default function Forms(props) {
     const { fields, onSubmit, formSubmitted, setFormSubmitted, sizeProps } = props;
@@ -118,6 +120,15 @@ export default function Forms(props) {
         }
     }
 
+    function handleRichText(e){
+        const value = e;
+        let temp = formData.current;
+        formData.current = {
+            ...temp,
+            ['description'] : value
+        }
+        console.log(formData)
+    }
 
     function isEmailValid(email) {
         const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -131,6 +142,7 @@ export default function Forms(props) {
     function isValidName(name) {
         return /^[A-Za-z]+$/.test(name);
     }
+
 
     return (
         <>
@@ -154,6 +166,15 @@ export default function Forms(props) {
                             </div>
                         );
                     }
+
+                    if(f.type === "RichText") {
+                        return(
+                            <div key={key}>
+                                <ReactQuill name={f.name} value={formData.current[f.name]} onChange={handleRichText}/>
+                            </div>
+                        )
+                    }
+
                     if (f.type === "Select" && f.options) {
                         return (
 
