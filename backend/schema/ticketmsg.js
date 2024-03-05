@@ -3,10 +3,11 @@ const Schema = mongoose.Schema;
 
 const ticketmsgSchema = new Schema({
     ticketId:{ type: mongoose.Types.ObjectId, default: null },
-    content: {type:String,default: null},
+    content: {type:Array,default: null},
     createdBy: {type: mongoose.Types.ObjectId, default: null},
     msgType:{type:String,default:null},
-    cc:{type:Array,default:null}
+    cc:{type:Array,default:null},
+    attachments:{type:Array,default:null}
 }, {
     timestamps: true,
 });

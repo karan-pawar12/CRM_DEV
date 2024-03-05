@@ -1,20 +1,27 @@
 import { ADD_NOTE } from "../../resources/urls/admin";
-import axios from "../../Interceptor";
+import axios from 'axios';
 
-async function addTicketNote_api(data,ticketId,msgType,selectedEmails,callback){
+async function addTicketNote_api(formData, callback) {
     try {
-        const res = await axios.post(ADD_NOTE,{
-            data,ticketId,msgType,selectedEmails
-        })
+        const instance = axios.create({
 
-        if(res){
-            callback(null,res)
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+
+        const res = await instance.post(ADD_NOTE, formData)
+
+        if (res) {
+            callback(null, res)
         }
 
     } catch (error) {
-        console.log("Unable to ticket msg", error);
+        console.log("Unable to create role", error);
         callback(error, null);
     }
-}   
+}
 
 export default addTicketNote_api;

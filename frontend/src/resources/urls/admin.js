@@ -98,4 +98,4 @@ export const REPLY_TICKET = BASE+ "replyTicket";
 
 export const ADD_NOTE = BASE+"addNote";
 
-export const Forward_NOTE = BASE+"forwardNote";
+export const Forward_TICKET = BASE+"forwardTicket";

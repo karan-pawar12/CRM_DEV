@@ -12,6 +12,12 @@ import MessageReply from "./MessageReply";
 import { CiChat1 } from "react-icons/ci";
 import AddNote from "./AddNote";
 import ForwardTicket from "./ForwardTicket";
+import FileIcon from "../../resources/icons/FileIcon";
+import SpreadSheetIcon from "../../resources/icons/SpreadSheetIcon";
+import PDFIcon from "../../resources/icons/PDFIcon";
+import PhotoIcon from "../../resources/icons/PhotoIcon";
+import VideoIcon from "../../resources/icons/VideoIcon";
+import DeleteOutlinedIcon from "../../resources/icons/DeleteOutlinedIcon";
 
 function BorderButton(props) {
     return (
@@ -58,7 +64,7 @@ export default function TicketDeails({ onUpdateSuccess }) {
     const [userNames, setUsernames] = useState([]);
     const [isReplyModalOpen, setReplyModalOpen] = useState(false);
     const [isNoteModalOpen, setNoteModalOpen] = useState(false);
-    const [isForwardModalOpen,setForwardModalOpen] = useState(false);
+    const [isForwardModalOpen, setForwardModalOpen] = useState(false);
 
 
     useEffect(() => {
@@ -95,7 +101,7 @@ export default function TicketDeails({ onUpdateSuccess }) {
                 <header className="flex border-b-1 p-3 bg-gray-200">
                     <BorderButton className="" onClick={handleReplyModal} >Reply</BorderButton>
                     <BorderButton className="ml-3" onClick={handleNoteModal} startContent={<AiOutlineProfile />}>Add Note</BorderButton>
-                    <BorderButton className="ml-3" onClick={handleForward} startContent={<AiFillForward /> }>Forward</BorderButton>
+                    <BorderButton className="ml-3" onClick={handleForward} startContent={<AiFillForward />}>Forward</BorderButton>
                     <BorderButton className="ml-3" startContent={<AiOutlineCloseCircle />}>Close</BorderButton>
                     <BorderButton className="ml-3" startContent={<AiOutlineDelete />}>Delete</BorderButton>
                 </header>
@@ -104,17 +110,25 @@ export default function TicketDeails({ onUpdateSuccess }) {
                 <div className="mt-2 flex relative">
                     {/* Left Content */}
                     <div className="w-[50%] border-1 p-2">
-                        {/* <h2 className="text-2xl font-bold ml-10">{ticketDetailsData.subject}</h2> */}
+                        <h2 className="text-2xl font-bold ml-10">{ticketDetailsData.subject}</h2>
                         <div className="flex flex-col gap-4 ml-10">
                             <div>
                                 {ticketDetailsData.content?.map((data, index) => (
-                                    <div key={index} className="flex items-start mt-4"> {/* Use flexbox to align items */}
-                                        <span className="mr-2 mt-1"><CiChat1 /></span> {/* Adjust margin-top for alignment */}
-                                        <div className={data.msgType === 'note' ? 'bg-pink-300 rounded-md p-2'
-                                            : data.msgType === 'reply' ? 'bg-gray-300 rounded-md p-2'
-                                                : 'bg-blue-300 rounded-md p-2'}>
+                                    <div key={index} className="flex items-start mt-4">
+                                        <span className="mr-2 mt-1"><CiChat1 /></span>
+                                        <div className={`${data?.msgType === 'note' ? 'bg-[#FEF1E1] rounded-md p-2' :
+                                            data?.msgType === 'reply' ? 'rounded-md p-2' :
+                                                data?.msgType === "forward" ? 'bg-[#FEF1E1] rounded-md p-2' : ''} w-full`}>
                                             <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
+
+                                            {/* Attachments may or may not exist */}
+                                            {data.attachments && data.attachments.length > 0 &&
+                                                <div className="w-[100px] mt-3">
+                                                    <FileCard name={data.attachments[0].originalName} size={data.attachments[0].size} />
+                                                </div>
+                                            }
                                         </div>
+
                                     </div>
                                 ))}
                             </div>
@@ -169,7 +183,7 @@ export default function TicketDeails({ onUpdateSuccess }) {
 
                     <MessageReply isModalOpen={isReplyModalOpen} setModalOpen={setReplyModalOpen} id={id} setTicketDetailsData={setTicketDetailsData} userNames={userNames} />
                     <AddNote isModalOpen={isNoteModalOpen} setModalOpen={setNoteModalOpen} id={id} userNames={userNames} setTicketDetailsData={setTicketDetailsData} />
-                    <ForwardTicket isModalOpen={isForwardModalOpen} setModalOpen={setForwardModalOpen} id={id} userNames={userNames} setTicketDetailsData={setTicketDetailsData} ticketDetailsData={ticketDetailsData}/>
+                    <ForwardTicket isModalOpen={isForwardModalOpen} setModalOpen={setForwardModalOpen} id={id} userNames={userNames} setTicketDetailsData={setTicketDetailsData} ticketDetailsData={ticketDetailsData} />
                 </div>
             </div>
 
@@ -179,3 +193,55 @@ export default function TicketDeails({ onUpdateSuccess }) {
 
 
 
+
+
+
+function FileCard({ name, size }) {
+
+
+
+    return <div className="border border-default-200 rounded-md py-1 px-2">
+        <div className="flex gap-2 items-start">
+            <ExtIcon filename={name} />
+            <div className="flex flex-col gap-1">
+                <div className="text-sm">{name}</div>
+                <div className="text-default-500 text-xs">{getSize(size)}</div>
+            </div>
+
+        </div>
+    </div>
+}
+
+
+const units = ['bytes', 'KB', 'MB', 'GB'];
+
+function getSize(x) {
+
+    let l = 0, n = parseInt(x, 10) || 0;
+
+    while (n >= 1024 && ++l) {
+        n = n / 1024;
+    }
+
+    return (n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
+}
+
+
+function ExtIcon({ filename }) {
+
+    let ext = filename.substring(filename.lastIndexOf('.') + 1);
+
+    if (['xls', 'xlsx', 'xlsb', 'XLS', 'XLSX', 'XLSB', 'csv', 'CSV'].includes(ext)) {
+        return <span className="text-green-500"><SpreadSheetIcon size={16} /></span>
+    } else if (['pdf', 'PDF'].includes(ext)) {
+        return <span className="text-red-500"><PDFIcon size={16} /></span>
+    } else if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'cif', 'JPG', 'JPEG', 'PNG', 'GIF', "CIF", 'WEBP'].includes(ext)) {
+        return <PhotoIcon size={16} />
+    } else if (['mp4', 'mpeg4', 'mpeg', 'avi', 'mkv', 'MP4', 'MPEG4', 'MPEG', 'AVI', 'MKV'].includes(ext)) {
+        return <VideoIcon size={16} />
+    } else {
+        return <FileIcon size={16} />
+    }
+
+
+}
