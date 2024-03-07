@@ -94,7 +94,7 @@ export default function Filter(props) {
                             <div className="mt-10 w-full flex flex-col">
                                 <Input type="date" label="From" labelPlacement='outside' placeholder='Enter the date' value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
                                 <Input type="date" label="To" labelPlacement='outside' placeholder='Enter the date' value={toDate} onChange={(e) => setToDate(e.target.value)} />
-                                <Button className='mt-2' onClick={() => handleApplyFilter(setFilter)}>
+                                <Button color='primary' className='mt-2' onClick={() => handleApplyFilter(setFilter)}>
                                     Apply Filter
                                 </Button>
                             </div>

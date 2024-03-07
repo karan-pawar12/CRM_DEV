@@ -127,7 +127,8 @@ export default function TicketDeails({ onUpdateSuccess }) {
                                             {/* Attachments may or may not exist */}
                                             {data.attachments && data.attachments.length > 0 &&
                                                 <div className="w-[100px] mt-3">
-                                                    <FileCard name={data.attachments[0].originalName} size={data.attachments[0].size} />
+                                                    {/* <FileCard name={data.attachments[0].originalName} size={data.attachments[0].size} /> */}
+                                                    <a href={`${data.attachments[0].destination}/${data.attachments[0].fileName}`} download>{data.attachments[0].originalName}</a>
                                                 </div>
                                             }
                                         </div>

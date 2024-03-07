@@ -2,7 +2,7 @@ const { getTicketModel, getUserModel } = require('../../db/tenantDb')
 const mongoose = require('mongoose')
 module.exports = async function (req, res, next) {
     try {
-        const { tenantId } = req.payload;
+        const { tenantId, role, _id } = req.payload;
         const skip = parseInt(req.query.skip, 10) || 0;
         const limit = parseInt(req.query.limit, 10) || 10;
 
@@ -63,15 +63,31 @@ module.exports = async function (req, res, next) {
         let tickets = null;
 
         try {
-            tickets = await Ticket.aggregate([
-                {
-                    $match: {
-                        $and: matchQueryStages
-                    }
-                },
-                { $skip: skip },
-                { $limit: limit }
-            ])
+            console.log(role[0])
+            if (role[0] === 'Superadmin') {
+                tickets = await Ticket.aggregate([
+                    {
+                        $match: {
+                            $and: matchQueryStages
+                        }
+                    },
+                    { $skip: skip },
+                    { $limit: limit }
+                ])
+            }
+            else {
+                matchQueryStages.push({ assignedTo: new mongoose.Types.ObjectId(_id) })
+                tickets = await Ticket.aggregate([
+                    {
+                        $match: {
+                            $and: matchQueryStages
+                        }
+                    },
+                    { $skip: skip },
+                    { $limit: limit }
+                ])
+            }
+
         } catch (error) {
             console.log(error, 'tickets error')
         }

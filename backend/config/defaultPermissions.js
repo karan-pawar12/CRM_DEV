@@ -46,6 +46,12 @@ const defaultPermissions = {
         "create": false,
         "delete": false,
         "update": false
+    },
+    "tickets":{
+        "view": true,
+        "create": true,
+        "delete": true,
+        "update": true
     }
 };
 
