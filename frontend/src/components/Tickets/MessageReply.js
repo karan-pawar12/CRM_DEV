@@ -5,7 +5,7 @@ import replyTicketMsg_api from "../../api_strings/admin/replyTicketMsg_api";
 import RichTextEditor from "./RichText";
 import FileCard from "../FileCards/FileCard";
 
-export default function MessageReply({ isModalOpen, setModalOpen, id, setTicketDetailsData, userNames }) {
+export default function MessageReply({ isModalOpen, setModalOpen, id, setTicketMsg, userNames }) {
     const [content, setContent] = useState('');
     const [attachments, setAttachments] = useState([]);
     const [showSearchOptions, setShowSearchOptions] = useState(false);
@@ -36,10 +36,10 @@ export default function MessageReply({ isModalOpen, setModalOpen, id, setTicketD
         if (content !== '') {
             replyTicketMsg_api(formData, (error, res) => {
                 if (res) {
-                    setTicketDetailsData(old => ({
+                    setTicketMsg(old => [
                         ...old, // Spread the old state
-                        content: [...old.content, res.data]
-                    }));
+                        ...res.data
+                    ]);
 
 
                     setContent('');

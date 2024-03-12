@@ -1,8 +1,9 @@
 import axios from "axios";
+import Cookies from 'js-cookie';
 
 axios.interceptors.request.use(function (config) {
   // Get the token from local storage and set it in the request headers
-  const token = localStorage.getItem("token");
+  const token = Cookies.get('token');
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`;
   }

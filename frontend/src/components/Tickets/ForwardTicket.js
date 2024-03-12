@@ -4,7 +4,7 @@ import RichTextEditor from "./RichText";
 import forwardTicketMsg_api from "../../api_strings/admin/forwardTicketMsg_api";
 import FileCard from "../FileCards/FileCard";
 
-export default function ForwardTicket({ isModalOpen, setModalOpen, id, setTicketDetailsData, userNames, ticketDetailsData }) {
+export default function ForwardTicket({ isModalOpen, setModalOpen, id, setTicketMsg, userNames, ticketMsg }) {
     const [content, setContent] = useState('');
     const [attachments, setAttachments] = useState([]);
     const [showSearchOptions, setShowSearchOptions] = useState(false);
@@ -39,27 +39,26 @@ export default function ForwardTicket({ isModalOpen, setModalOpen, id, setTicket
         e.preventDefault();
 
         const formData = new FormData(e.target);
-        for(let i=0;i<attachments.length;i++){
+        for (let i = 0; i < attachments.length; i++) {
             formData.append('attachments', attachments[i]);
         }
 
         formData.append('content', content);
-        formData.append('ticketId',id)
-        formData.append('msgType',"forward")
-        
-        for(let i=0;i<selectedEmails.length;i++){
+        formData.append('ticketId', id)
+        formData.append('msgType', "forward")
+
+        for (let i = 0; i < selectedEmails.length; i++) {
             formData.append('selectedEmails', selectedEmails[i]);
         }
 
         if (content !== '') {
             forwardTicketMsg_api(formData, (error, res) => {
                 if (res) {
-                    setTicketDetailsData(old => ({
-                        ...old, // Spread the old state
-                        content: [...old.content, res.data]
-                    }));
-
-
+                    res = res.data;
+                    setTicketMsg(old => [
+                        ...old,
+                        res
+                    ]);
                     setContent('');
                 }
             })
@@ -80,7 +79,7 @@ export default function ForwardTicket({ isModalOpen, setModalOpen, id, setTicket
                             <form method="post" onSubmit={onSubmit} autoComplete="off">
                                 <div className="flex bg-[#F5F7F9] p-2">
                                     <span className="mr-2">Subject:</span>
-                                    <p className="font-bold">{ticketDetailsData.subject}</p>
+                                    <p className="font-bold">{ticketMsg.subject}</p>
                                 </div>
                                 <div className="flex bg-[#F5F7F9] p-2 mt-4">
                                     <span className="mr-2">To:</span>

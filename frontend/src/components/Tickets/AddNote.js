@@ -4,7 +4,7 @@ import addTicketNote_api from "../../api_strings/admin/addTicketNote_api";
 import RichTextEditor from "./RichText";
 import FileCard from "../FileCards/FileCard";
 
-export default function AddNote({ isModalOpen, setModalOpen, id, setTicketDetailsData, userNames }) {
+export default function AddNote({ isModalOpen, setModalOpen, id, setTicketMsg, userNames }) {
     const [content, setContent] = useState('');
     const [attachments, setAttachments] = useState([]);
     const [showSearchOptions, setShowSearchOptions] = useState(false);
@@ -54,10 +54,10 @@ export default function AddNote({ isModalOpen, setModalOpen, id, setTicketDetail
         if (content !== '') {
             addTicketNote_api(formData, (error, res) => {
                 if (res) {
-                    setTicketDetailsData(old => ({
-                        ...old, // Spread the old state
-                        content: [...old.content, res.data]
-                    }));
+                    setTicketMsg(old => [
+                        ...old,
+                        res
+                    ]);
 
 
                     setContent('');

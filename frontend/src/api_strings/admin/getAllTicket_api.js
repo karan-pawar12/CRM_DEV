@@ -45,7 +45,7 @@ async function getAllTicket_api({ skip, limit, searchQuery, type, priority, stat
         }
 
     } catch (error) {
-        console.log("Unable to fetch all tasks", error);
+        console.log("Unable to fetch all tickets", error);
         callback(error, null);
     }
 }

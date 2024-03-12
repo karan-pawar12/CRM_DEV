@@ -140,6 +140,8 @@ router.post('/addNote',verifyAccessToken,require('../controllers/admin/createTic
 
 router.post('/forwardTicket',verifyAccessToken,require('../controllers/admin/createTicketMsg'));
 
+router.get('/getTicketMsg',verifyAccessToken,require('../controllers/admin/getTicketMsg'));
+
 module.exports = router;
 
 

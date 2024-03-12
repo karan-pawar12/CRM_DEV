@@ -19,7 +19,8 @@ module.exports = async (req, res, next) => {
             status,
             priority,
             product,
-            assignedTo
+            assignedTo,
+            createdBy: _id
         }).save();
 
         let ticketmsg = null;

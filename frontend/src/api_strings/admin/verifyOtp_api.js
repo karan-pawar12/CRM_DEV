@@ -1,5 +1,6 @@
 import { VERIFY_OTP } from "../../resources/urls/admin";
 import axios from "../../Interceptor";
+import Cookies from 'js-cookie';
 
 async function verifyOtp_api(email, tenantId, password, otp, callback) {
     try {
@@ -9,7 +10,7 @@ async function verifyOtp_api(email, tenantId, password, otp, callback) {
 
         if (res) {
             const token = res.data.token;
-            localStorage.setItem('token', token);
+            Cookies.set('token', token, { expires: 7, secure: true });
             callback(null, res);
         }
 

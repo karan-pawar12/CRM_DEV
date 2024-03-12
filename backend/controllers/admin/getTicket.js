@@ -16,10 +16,10 @@ module.exports = async function (req, res, next) {
             },
             {
                 $lookup: {
-                    from: 'ticketmsgs',
-                    localField: '_id',
-                    foreignField: 'ticketId',
-                    as: 'TicketMsgData'
+                    from: 'users',
+                    localField: 'createdBy',
+                    foreignField: '_id',
+                    as: 'CreatedByDetails'
                 }
             },
             {
@@ -31,7 +31,9 @@ module.exports = async function (req, res, next) {
                     priority: 1,
                     product: 1,
                     assignedTo: 1,
-                    content: '$TicketMsgData'
+                    createdBy: '$CreatedByDetails.firstName',
+                    email: '$CreatedByDetails.email',
+                    phone: '$CreatedByDetails.phone'
                 }
             }
         ]);

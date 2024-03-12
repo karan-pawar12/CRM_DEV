@@ -10,6 +10,7 @@ import { AuthContextProvider } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import permissions_api from './api_strings/admin/permissions_api';
 import AuthContext from './AuthContext';
+import Cookies from 'js-cookie';
 
 import { io } from "socket.io-client";
 
@@ -50,7 +51,7 @@ function Main() {
 
 
 
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('token');
     if (token) {
       permissions_api((error, res) => {
         if (error) {

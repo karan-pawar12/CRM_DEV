@@ -8,7 +8,8 @@ const ticketSchema = new Schema({
     priority: { type: String },
     product: { type: String },
     assignedTo: { type: mongoose.Types.ObjectId, default: null },
-    softDelete: { type: Boolean, default: false }
+    softDelete: { type: Boolean, default: false },
+    createdBy: {type: mongoose.Types.ObjectId, default: null},
 }, {
     timestamps: true,
 });

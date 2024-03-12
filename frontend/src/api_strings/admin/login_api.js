@@ -1,5 +1,6 @@
 import { ADMIN_LOGIN } from '../../resources/urls/admin'
 import axios from "../../Interceptor";
+import Cookies from'js-cookie';
 
 async function login_api(email, password,tenantId, callback) {
   try {
@@ -10,7 +11,7 @@ async function login_api(email, password,tenantId, callback) {
     })
 
     const token = res.data.token;
-    localStorage.setItem('token', token);
+    Cookies.set('token', token, { expires: 7, secure: true });
     
     callback(null, res);
   } catch (error) {

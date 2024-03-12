@@ -1,12 +1,13 @@
 import { Forward_TICKET } from "../../resources/urls/admin";
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 async function forwardTicketMsg_api(formData, callback) {
     try {
         const instance = axios.create({
 
             headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Authorization': 'Bearer ' + Cookies.get('token'),
                 'Content-Type': 'multipart/form-data'
             }
         });

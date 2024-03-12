@@ -1,15 +1,14 @@
-const {getTicketModel} = require('../../db/tenantDb');
-const mongoose = require('mongoose')
-// const LeadLogs = require('../../methods/leadLogs');
+ const {getTicketModel} = require('../../db/tenantDb');
+const mongoose = require('mongoose');
 
 module.exports = async function (req, res, next) {
 
     try {
-        const { _id: payloadId,tenantId } = req.payload; // Rename _id to payloadId
+        const {_id:payloadId,tenantId } = req.payload; // Rename _id to payloadId
         let { _id, fieldName, fieldValue } = req.body;
         const Ticket = await getTicketModel(tenantId);
 
-        const ticket = await Ticket.findByIdAndUpdate(_id, { $set: { [fieldName]: fieldValue } },{new: true});
+        const ticket = await Ticket.findByIdAndUpdate(_id, { $set: { [fieldName]: fieldValue } });
 
         const updatedTicket = await Ticket.aggregate([
             {
@@ -23,13 +22,11 @@ module.exports = async function (req, res, next) {
                     status: 1,
                     priority: 1,
                     product: 1,
-                    assignedTo: 1
+                    assignedTo: 1,
                 }
             }
         ]);
 
-        // Call the LeadLogs function and pass the required parameters
-        // await LeadLogs(payloadId, lead[fieldName], fieldValue, fieldName);
 
         if (updatedTicket.length > 0) {
             res.status(200).json(updatedTicket[0]);

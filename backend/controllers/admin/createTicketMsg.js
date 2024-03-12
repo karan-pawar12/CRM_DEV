@@ -1,6 +1,6 @@
-const { getTicketmsgModel } = require('../../db/tenantDb');
+const { getTicketmsgModel, getUserModel } = require('../../db/tenantDb');
 const mongoose = require('mongoose');
-const {upload} = require('../../config/multerConfig');
+const { upload } = require('../../config/multerConfig');
 
 
 
@@ -9,6 +9,7 @@ module.exports = async function (req, res, next) {
     try {
         const { tenantId, _id } = req.payload;
         const TicketMsg = await getTicketmsgModel(tenantId);
+        const User = await getUserModel(tenantId);
         let attachments = [];
 
         let ticketmsg = null;
@@ -21,7 +22,7 @@ module.exports = async function (req, res, next) {
 
             console.log(req.body);
 
-            const { content, msgType, ticketId,selectedEmails } = req.body;
+            const { content, msgType, ticketId, selectedEmails } = req.body;
 
 
 
@@ -42,19 +43,36 @@ module.exports = async function (req, res, next) {
                 }
             }
 
+            
+
+
+            let createdBy = _id;
+
             ticketmsg = await new TicketMsg({
                 ticketId: new mongoose.Types.ObjectId(ticketId),
                 content: content,
-                createdBy: _id,
+                createdBy: createdBy,
                 msgType,
                 cc: selectedEmails,
                 attachments
             }).save();
 
+            // Fetch the user's name based on _id
+            const user = await User.findOne({ _id });
+            createdBy =  user.firstName + (user.lastName ? ' ' + user.lastName : '')
 
-            res.send(ticketmsg);
+            // Send the response with the user's name instead of _id
+            const responseData = ({
+               ticketId: ticketmsg.ticketId,
+               content: ticketmsg.content,
+               createdBy:createdBy,
+               msgType:ticketmsg.msgType,
+               cc:ticketmsg.cc,
+               attachments:ticketmsg.attachments
+            });
 
 
+            res.send(responseData)
         });
 
 

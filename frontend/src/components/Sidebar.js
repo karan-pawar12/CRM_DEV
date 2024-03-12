@@ -6,6 +6,7 @@ import { DASHBOARD_SIDEBAR_BOTTOM_LINKS, DASHBOARD_SIDEBAR_LINKS } from "../reso
 import AuthContext from "../AuthContext";
 import { Badge } from '@nextui-org/react';
 import getNotificationCount_api from "../api_strings/admin/getNotificationCount";
+import Cookies from 'js-cookie';
 
 function Sidebar() {
     const [notificationCount, setNotificationCount] = useState(0);
@@ -33,7 +34,7 @@ function Sidebar() {
     }
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        Cookies.remove('token');
         navigate('/cpanel/entry');
     };
 

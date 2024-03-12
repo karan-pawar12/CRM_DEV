@@ -17,6 +17,7 @@ import ToastNotification from './ToastNotification'
 import { io } from "socket.io-client";
 import { IoMdChatboxes } from "react-icons/io";
 import ChatList from './Chatbox/ChatList'
+import Cookies from 'js-cookie';
 
 const moduleMap = {
 	leads: <Lead />,
@@ -53,7 +54,7 @@ export default function Layout() {
 
 		// for connecting socket instance
 		admincontext.setSocket(io('http://localhost:5000', {
-			query: { token: localStorage.getItem("token") },
+			query: { token: Cookies.get('token') },
 
 			transports: ["websocket", "polling"] // use WebSocket first, if available
 		}));
